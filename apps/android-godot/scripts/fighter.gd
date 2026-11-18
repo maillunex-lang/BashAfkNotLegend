@@ -151,6 +151,8 @@ func _update_depth() -> void:
 	shadow.z_index = -1
 
 func _build_frames() -> void:
+	if sprite_folder == "":
+		return
 	var frames := SpriteFrames.new()
 	var base := "res://assets/sprites/%s/" % sprite_folder
 	var mapping := {

@@ -2,15 +2,13 @@
 
 Godot 4.3 Android-first клиент. Стиль: **Bashkir Anime Sarcastic Fantasy 2D** (DEC-007/008).
 
-## Прототип боя (VIS-00b)
+## Играбельный цикл (offline)
 
-Сцена: `scenes/battle/BattlePrototype.tscn`
+`MainMenu` → `SquadSelect` / `Collection` → `BattlePrototype` (до 5v5) → результат → меню.
 
-Состав:
-- Браксор (front) + Никсара (back)
-- Камнегрыз + Теневолк
-- Многослойный фон, AnimatedSprite2D клипы (idle/attack/hit/personality/ultimate)
-- HUD: WAVE/timer/pause/x1–x3/Auto + портреты игрока с энергией ульта
+- Autoload `GameState`: отряд игрока + волна врагов (герои AI).
+- Бой спавнит `Fighter.tscn` из `CharacterRegistry` по ID отряда.
+- 30 героев CHARACTER_BIBLE packed; V1 Браксор/Никсара не ремейкались.
 
 ### Локальный запуск (desktop preview)
 
@@ -19,7 +17,15 @@ godot --path apps/android-godot --resolution 1080x1920 \
   --rendering-driver opengl3 --rendering-method gl_compatibility
 ```
 
-На CI/Xvfb без Vulkan используйте `opengl3` + software GL (`LIBGL_ALWAYS_SOFTWARE=1`).
+Прямой бой (CI/demo):
+
+```bash
+BASH_DEMO_QUIT=1 BASH_DEMO_SECONDS=12 BASH_SCREENSHOT_PATH=/tmp/battle.png \
+  godot --path apps/android-godot res://scenes/battle/BattlePrototype.tscn \
+  --resolution 1080x1920 --rendering-driver opengl3 --rendering-method gl_compatibility
+```
+
+На CI/Xvfb без Vulkan: `opengl3` + `LIBGL_ALWAYS_SOFTWARE=1`.
 
 ### Данные персонажа (VISUAL-APPROVAL-001)
 
@@ -28,7 +34,7 @@ godot --path apps/android-godot --resolution 1080x1920 \
 - `AbilityCatalog` — ID → kit/анимации/VFX (**без** путей PNG)  
 - QA: `godot --headless -s res://tools/check_facing_batch.gd`  
 - Import QA: `godot --headless -s res://tools/check_sprite_import.gd`  
-- Roster stubs: `content/hero_roster_batch01.json`  
+- Rosters: `content/hero_roster_batch01…04.json`  
 - Formation: `BattleFormation` (2 front + 3 back, both sides)  
 - PvP side-swap: `BASH_SWAP_SIDES=1` или `tools/run_pvp_swap_demo.sh`
 

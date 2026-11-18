@@ -1,13 +1,11 @@
 extends Node2D
 
-## BATTLE-POLISH-002 + VISUAL-APPROVAL-001:
+## Playable battle: spawns squads from GameState (up to 5v5).
 ## CharacterRegistry supplies CharacterData + CharacterVisualDef.
 ## Facing follows target/side; source_facing from visual package.
 
-@onready var braxor: Fighter = $Fighters/Braxor
-@onready var nixara: Fighter = $Fighters/Nixara
-@onready var stonekin: Fighter = $Fighters/Stonekin
-@onready var shadewolf: Fighter = $Fighters/Shadewolf
+const FIGHTER_SCENE: PackedScene = preload("res://scenes/battle/Fighter.tscn")
+
 @onready var hud = $HUD
 @onready var floaters: Node2D = $Floaters
 @onready var fighters_root: Node2D = $Fighters
@@ -38,16 +36,15 @@ var turn_queue: Array[Fighter] = []
 var turn_index: int = 0
 var turn_lock: bool = false
 var between_turn_cd: float = 0.0
+var _result_ui: Node = null
 
 func _ready() -> void:
 	wall_start_ms = Time.get_ticks_msec()
 	Engine.time_scale = 1.0
 	Engine.max_fps = 30
-	players = [braxor, nixara]
-	enemies = [stonekin, shadewolf]
-	all_fighters = players + enemies
 	fighters_root.y_sort_enabled = true
-	_configure_fighters()
+	_clear_fighters()
+	_spawn_rosters()
 	for f in all_fighters:
 		f.died.connect(_on_fighter_died)
 		f.energy_changed.connect(_on_energy_changed)
@@ -58,53 +55,82 @@ func _ready() -> void:
 	hud.ult_pressed.connect(_on_ult_pressed)
 	hud.speed_changed.connect(_on_speed_changed)
 	hud.auto_toggled.connect(_on_auto_toggled)
-	wave_label.text = "WAVE 1/1"
-	_log("Очередь: удар → назад. FPS 30. Лицом →")
+	wave_label.text = "WAVE 1/1 · %dv%d" % [players.size(), enemies.size()]
+	_log("Отряд готов. Очередь: удар → назад.")
 	_print_facing_diagnostics()
 	var tw := create_tween().set_loops()
 	tw.tween_property($ParallaxRoot/Mountains, "position:x", -14.0, 9.0).as_relative()
 	tw.tween_property($ParallaxRoot/Mountains, "position:x", 14.0, 9.0).as_relative()
 
+func _clear_fighters() -> void:
+	for c in fighters_root.get_children():
+		fighters_root.remove_child(c)
+		c.free()
+	players.clear()
+	enemies.clear()
+	all_fighters.clear()
+
+func _spawn_rosters() -> void:
+	var swap := OS.get_environment("BASH_SWAP_SIDES") == "1"
+	var heroes_left := not swap
+	var p_ids: Array[String] = GameState.get_player_squad()
+	var e_ids: Array[String] = GameState.get_enemy_squad()
+	# Headless demo fallback if GameState somehow empty
+	if p_ids.is_empty():
+		p_ids = ["braxor", "nixara"]
+	if e_ids.is_empty():
+		e_ids = ["stonekin", "shadewolf"]
+	for i in range(mini(p_ids.size(), BattleFormation.total_slots())):
+		var f := _spawn_one(p_ids[i], "player", heroes_left, i)
+		if f:
+			players.append(f)
+	for i in range(mini(e_ids.size(), BattleFormation.total_slots())):
+		var f := _spawn_one(e_ids[i], "enemy", not heroes_left, i)
+		if f:
+			enemies.append(f)
+	all_fighters = players + enemies
+	if swap:
+		_log("PvP SWAP: герои справа → лицом влево")
+
+func _spawn_one(character_id: String, team: String, side_left: bool, slot_index: int) -> Fighter:
+	var data := CharacterRegistry.get_character(character_id)
+	if data == null:
+		push_warning("Skip unknown character_id=%s" % character_id)
+		return null
+	var f: Fighter = FIGHTER_SCENE.instantiate()
+	f.team = team
+	f.name = "%s_%s" % [team, character_id]
+	f.character_id = character_id
+	f.show_facing_debug = OS.get_environment("BASH_FACING_DEBUG") == "1"
+	f.apply_character_data(data) # before add_child so _ready builds correct frames
+	fighters_root.add_child(f)
+	BattleFormation.apply_to_fighter(f, side_left, slot_index)
+	if f.sprite != null:
+		f._build_frames()
+	f.hp = f.max_hp
+	f.energy = 40.0
+	f._update_bars()
+	f.name_label.text = f.display_name
+	f._apply_facing()
+	f.play_anim("idle")
+	f.remember_home()
+	return f
+
 func _rebuild_turn_queue() -> void:
 	turn_queue.clear()
-	# Speed order: assassin/beast first, then tank/brute; alternate sides
-	var order: Array[Fighter] = [nixara, shadewolf, braxor, stonekin]
-	for f in order:
+	var living: Array[Fighter] = []
+	for f in all_fighters:
 		if f != null and f.alive:
-			turn_queue.append(f)
+			living.append(f)
+	living.sort_custom(func(a: Fighter, b: Fighter) -> bool:
+		return a.move_speed > b.move_speed
+	)
+	turn_queue = living
 	turn_index = 0
 
 func _print_facing_diagnostics() -> void:
 	for f in all_fighters:
 		print("[FACING] ", f.debug_facing_report())
-
-func _configure_fighters() -> void:
-	# Logic + visuals from CharacterRegistry (swap PNGs without rewriting combat).
-	braxor.apply_character_data(CharacterRegistry.get_character("braxor"))
-	nixara.apply_character_data(CharacterRegistry.get_character("nixara"))
-	stonekin.apply_character_data(CharacterRegistry.get_character("stonekin"))
-	shadewolf.apply_character_data(CharacterRegistry.get_character("shadewolf"))
-
-	# 5v5-ready formation (2 front + 3 back). 2v2 occupies front0 + back0.
-	# BASH_SWAP_SIDES=1 → PvP mirror: heroes on RIGHT face LEFT.
-	var swap := OS.get_environment("BASH_SWAP_SIDES") == "1"
-	var heroes_left := not swap
-	BattleFormation.apply_to_fighter(braxor, heroes_left, 0) # front
-	BattleFormation.apply_to_fighter(nixara, heroes_left, 2) # back
-	BattleFormation.apply_to_fighter(stonekin, not heroes_left, 0)
-	BattleFormation.apply_to_fighter(shadewolf, not heroes_left, 2)
-	if swap:
-		_log("PvP SWAP: герои справа → лицом влево (formation)")
-
-	# Rebuild frames if sprites already ready (apply after scene export defaults).
-	for f in [braxor, nixara, stonekin, shadewolf]:
-		if f.sprite != null and f.sprite.sprite_frames != null:
-			f._build_frames()
-			f.hp = f.max_hp
-			f._update_bars()
-			f.name_label.text = f.display_name
-			f._apply_facing()
-			f.play_anim("idle")
 
 func _process(delta: float) -> void:
 	var d := delta
@@ -629,13 +655,15 @@ func _spawn_dust(pos: Vector2) -> void:
 		)
 
 func _demo_scripted_skills() -> void:
-	# Force ult showcase once mid-fight without breaking turn lock
-	if demo_phase == 0 and demo_timer > 14.0 and braxor.alive and not turn_lock:
+	# Force ult showcase once mid-fight for first two living players
+	if players.is_empty() or turn_lock:
+		return
+	if demo_phase == 0 and demo_timer > 14.0 and players[0].alive:
 		demo_phase = 1
-		braxor.energy = braxor.max_energy
-	elif demo_phase == 1 and demo_timer > 22.0 and nixara.alive and not turn_lock:
+		players[0].energy = players[0].max_energy
+	elif demo_phase == 1 and demo_timer > 22.0 and players.size() > 1 and players[1].alive:
 		demo_phase = 2
-		nixara.energy = nixara.max_energy
+		players[1].energy = players[1].max_energy
 
 func _on_ult_pressed(fighter_id: String) -> void:
 	if turn_lock:
@@ -678,10 +706,49 @@ func _check_end() -> void:
 			enemies_alive = true
 	if not ended and (not players_alive or not enemies_alive):
 		ended = true
-		_log("Победа!" if players_alive else "Поражение...")
+		var won := players_alive
+		_log("Победа!" if won else "Поражение...")
 		for f in players:
 			if f.alive:
 				f.play_anim("victory")
+		GameState.record_battle_result(won)
+		_show_result(won)
+
+func _show_result(won: bool) -> void:
+	if _result_ui != null:
+		return
+	var layer := CanvasLayer.new()
+	layer.layer = 80
+	add_child(layer)
+	_result_ui = layer
+	var panel := ColorRect.new()
+	panel.color = Color(0.05, 0.08, 0.1, 0.82)
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	layer.add_child(panel)
+	var box := VBoxContainer.new()
+	box.set_anchors_preset(Control.PRESET_CENTER)
+	box.position = Vector2(540, 900)
+	box.custom_minimum_size = Vector2(520, 220)
+	box.alignment = BoxContainer.ALIGNMENT_CENTER
+	panel.add_child(box)
+	# Center manually for portrait
+	box.position = Vector2(280, 780)
+	var title := Label.new()
+	title.text = "ПОБЕДА" if won else "ПОРАЖЕНИЕ"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 48)
+	title.add_theme_color_override("font_color", Color(0.95, 0.85, 0.45) if won else Color(0.9, 0.45, 0.4))
+	box.add_child(title)
+	var btn_menu := Button.new()
+	btn_menu.text = "В меню"
+	btn_menu.custom_minimum_size = Vector2(280, 64)
+	btn_menu.pressed.connect(func(): GameState.go_menu())
+	box.add_child(btn_menu)
+	var btn_again := Button.new()
+	btn_again.text = "Ещё бой"
+	btn_again.custom_minimum_size = Vector2(280, 64)
+	btn_again.pressed.connect(func(): GameState.start_battle())
+	box.add_child(btn_again)
 
 func _log(msg: String) -> void:
 	log_label.text = msg

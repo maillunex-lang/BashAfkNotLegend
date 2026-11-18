@@ -17,12 +17,16 @@ const MASS04_HEROES: PackedStringArray = [
 	"ravencor", "meltris", "flintar",
 ]
 
-static func list_ids() -> PackedStringArray:
+static func list_hero_ids() -> PackedStringArray:
 	var ids: PackedStringArray = ["braxor", "nixara"]
 	ids.append_array(MASS01_HEROES)
 	ids.append_array(MASS02_HEROES)
 	ids.append_array(MASS03_HEROES)
 	ids.append_array(MASS04_HEROES)
+	return ids
+
+static func list_ids() -> PackedStringArray:
+	var ids := list_hero_ids()
 	ids.append_array(PackedStringArray(["stonekin", "shadewolf"]))
 	return ids
 
