@@ -1,0 +1,43 @@
+# Secrets & local env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Dependencies / build
+node_modules/
+dist/
+build/
+.cache/
+coverage/
+*.log
+
+# Go
+services/game-server/bin/
+services/game-server/vendor/
+
+# Godot
+apps/android-godot/.godot/
+apps/android-godot/export/
+*.translation
+
+# Mobile artifacts (do not commit release binaries casually)
+*.apk
+*.aab
+*.ipa
+
+# Python / tooling
+__pycache__/
+.venv/
+
+# Test / load outputs
+tests/**/out/
+tests/**/results/
