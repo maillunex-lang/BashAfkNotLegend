@@ -21,10 +21,11 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 
 | ID | Этап | Статус | Платформа | Док |
 |----|------|--------|-----------|-----|
-| VIS-00 | Арт-библия + 3 концепта боя + 2 эталона героев | `IN_PROGRESS` | Android-first art | [VISUAL_ROAD.md](docs/visual/VISUAL_ROAD.md) |
+| VIS-00 | Арт-библия; эталоны героев; **side-view** концепт боя | `IN_PROGRESS` | Android-first art | [VISUAL_ROAD.md](docs/visual/VISUAL_ROAD.md) |
+| VIS-00b | Godot battle prototype (2 героя side-view + HUD) | `NOT_STARTED` | После approve `sideview_d` | apps/android-godot |
 | VIS-01…09 | UI → герои → бои → карта → бестиарий → … | `NOT_STARTED` | Godot Android Showcase | [VISUAL_ROAD.md](docs/visual/VISUAL_ROAD.md) |
 
-**Стоп-гейт VIS-00:** утверждение арт-направления и выбор боевого концепта A/B/C. Массовая генерация ассетов до этого запрещена.
+**Стоп-гейт сейчас:** утверждение `battle_concept_sideview_d` (DEC-005). Концепты A/B/C отклонены. Массовая генерация запрещена. PWA не разрабатывается.
 
 ## Сводка: механики (TECH-005 B) — после visual gate на Android
 
@@ -48,7 +49,8 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 |-----------|--------|--------|
 | Аудит GDD / docs foundation | `DONE` | GAME.md + пакет контрактов |
 | Visual-first + Android-first зафиксированы | `DONE` | DEC-003, VISUAL_ROAD |
-| VIS-00 арт-библия и образцы | `IN_PROGRESS` | docs/visual/, assets/source/concepts/ |
+| VIS-00 арт-библия и образцы | `IN_PROGRESS` | side-view D на review; A/B/C rejected |
+| Браксор/Никсара облик | `DONE` (approve облика) | side-view перерисовка — после D |
 | Блокирующие BQ (сервер/платежи и т.д.) | `BLOCKED` | DECISIONS — не блокируют арт VIS-00 |
 | PWA реализация | `BLOCKED` | ждёт разрешения |
 | Docker / игровой серверный код | `NOT_STARTED` | после visual samples + следующих инструкций |

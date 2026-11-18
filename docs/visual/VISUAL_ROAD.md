@@ -1,33 +1,26 @@
 # VISUAL_ROAD.md
 
-Приоритет: **visual-first на Android (Godot 4)**, затем механики Android, затем APK.  
-PWA/iPhone — отдельная фаза **только с разрешением** (DEC-003).  
-Системный порядок TECH-005 B сохраняется для механик; VIS-этапы идут **перед** массовой реализацией логики.
-
-Статусы: `NOT_STARTED` | `IN_PROGRESS` | `BLOCKED` | `DONE`
+Приоритет: **visual-first на Android (Godot 4)** · PWA `BLOCKED` (DEC-003).  
+Бой: **2D side-view** (DEC-005).
 
 | ID | Этап | Статус | Стоп-гейт |
 |----|------|--------|-----------|
-| VIS-00 | Аудит + арт-библия + 3 концепта боя + 2 эталона героев | `IN_PROGRESS` | **Согласование арт-направления и выбор A/B/C** |
-| VIS-01 | UI-shell | `NOT_STARTED` | После VIS-00 |
-| VIS-02 | Герои (сначала 2 эталона → масштаб на 30) | `NOT_STARTED` | Утверждение 2 эталонов |
-| VIS-03 | Бои + 8 арен | `NOT_STARTED` | Выбор концепта поля |
-| VIS-04 | Карта/кампания | `NOT_STARTED` | |
-| VIS-05 | Бестиарий | `NOT_STARTED` | |
-| VIS-06 | Прогресс/магазины UI | `NOT_STARTED` | |
-| VIS-07 | Онлайн/гильдии UI | `NOT_STARTED` | |
-| VIS-08 | Админка visual studio | `NOT_STARTED` | |
-| VIS-09 | Сквозной visual QA | `NOT_STARTED` | |
+| VIS-00 | Арт-библия + эталоны облика | `IN_PROGRESS` | — |
+| VIS-00a | Side-view концепт боя D | `IN_PROGRESS` | **Approve `sideview_d`** |
+| VIS-00b | Godot: 2 side-view героя + атака/ульт + HUD | `NOT_STARTED` | После approve D |
+| VIS-01 | UI-shell Android | `NOT_STARTED` | |
+| VIS-02 | Герои (масштаб после side-view эталонов) | `NOT_STARTED` | |
+| VIS-03 | Бои + 8 side-view арен | `NOT_STARTED` | |
+| VIS-04…09 | карта → бестиарий → … | `NOT_STARTED` | |
 
-## VIS-00 чеклист
+## Чеклист
 
-- [x] VISUAL_FIRST прочитан; конфликты зафиксированы в ART_BIBLE
-- [x] Android-first зафиксирован (DEC-003, ROAD)
-- [x] ART_BIBLE, токены, каталоги, манифест
-- [x] Генератор изображений доступен (`GenerateImage`)
-- [x] Три концепта боевого экрана сгенерированы (`battle_concept_a|b|c.jpg`)
-- [x] Два эталонных героя сгенерированы (Браксор, Никсара)
-- [ ] Владелец утвердил направление / выбрал концепт боя A/B/C
-- [x] Массовая генерация **не** начата (стоп-гейт)
-
-Доказательства: `assets/source/concepts/` · манифест: [ASSET_MANIFEST.json](ASSET_MANIFEST.json)
+- [x] A/B/C отклонены как layout
+- [x] DEC-005 side-view зафиксирован
+- [x] Браксор/Никсара облик approved
+- [x] Сгенерирован `battle_concept_sideview_d.jpg`
+- [ ] Владелец утвердил side-view D
+- [ ] Side-view перерисовка Браксор/Никсара
+- [ ] Godot prototype (VIS-00b)
+- [x] Массовая генерация не начата
+- [x] PWA не разрабатывается

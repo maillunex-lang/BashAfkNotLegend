@@ -11,12 +11,16 @@ no 3D models, no AFK Arena copy, no meme UI, no photoreal modern clothing,
 do not present invented ornaments as authentic sacred folklore
 ```
 
-## Боевой экран A/B/C
+## Боевой экран — side-view (актуально)
 
-- A: painterly dusk mountains, soft atmosphere, copper HUD
-- B: bright high-contrast, vivid copper/teal/amber, crisp bars
-- C: muted foggy gorge, restrained chrome, deep atmosphere  
-Общее: 5v5, 2 front 3 back, allies bottom, enemies top, 9:16
+```text
+STRICT classic 2D side-view AFK Legend style, NOT isometric NOT perspective.
+Player five heroes LEFT facing right, enemies five RIGHT facing left.
+Flat horizontal ground, slight row offset only, layered parallax Bashkir landscape.
+Top HUD: wave timer pause x1 x2 x3 Auto. Bottom: five portraits energy ultimates.
+```
+
+A/B/C (перспектива) — архив, не использовать для новых генераций.
 
 ## Эталонные герои
 

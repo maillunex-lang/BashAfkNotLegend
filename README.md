@@ -9,9 +9,10 @@
 
 ## Статус
 
-- **Visual-first + Android-first:** VIS-00 (арт-библия, 3 концепта боя, 2 эталонных героя) на утверждении — см. [`docs/visual/`](docs/visual/).
-- PWA/iPhone **не разрабатывается** до отдельного разрешения ([DEC-003](DECISIONS.md)).
-- Серверные механики — после визуального gate; детали в [`ROAD.md`](ROAD.md).
+- **Visual-first + Android-first:** бой = **2D side-view** ([DEC-005](DECISIONS.md)); концепт D на утверждении.
+- Браксор/Никсара: облик утверждён; side-view спрайты — после approve D.
+- PWA **не разрабатывается** ([DEC-003](DECISIONS.md)). Массовый арт — стоп.
+- Детали: [`docs/visual/`](docs/visual/), [`ROAD.md`](ROAD.md).
 
 ## Структура репозитория
 

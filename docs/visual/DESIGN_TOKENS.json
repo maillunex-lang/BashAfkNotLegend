@@ -36,10 +36,17 @@
     "safe_areas": ["notch", "home_indicator", "camera_cutout"]
   },
   "combat": {
-    "formation": "2_front_3_back",
-    "aspect": "9:16",
-    "camera": "fixed",
-    "speed_options": [1, 2, 3]
+    "view": "classic_2d_side_view",
+    "player_side": "left",
+    "enemy_side": "right",
+    "formation": "2_front_3_back_vertical_offset_only",
+    "aspect_ui": "9:16",
+    "camera": "fixed_orthographic_side",
+    "perspective": false,
+    "isometric": false,
+    "speed_options": [1, 2, 3],
+    "hud_top": ["wave", "timer", "pause", "speed", "auto"],
+    "hud_bottom": ["five_portraits", "energy", "ultimates"]
   },
   "motion": {
     "screen_enter_ms": 280,

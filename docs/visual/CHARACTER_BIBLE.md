@@ -25,8 +25,8 @@
 ### Эталон: Браксор
 
 - Акценты: медь `#C78348`, камень, хребет на щите.
-- Пакет арта (план): портрет 1:1 и 3:4, fullbody, avatar, battle sprite, 4 skill icons, VFX.
-- Концепт VIS-00: `assets/source/concepts/heroes/braxor_reference.jpg` — статус `generated` / review.
+- Облик: **approved** (`braxor_reference.jpg`). Боевой спрайт: **side / ¾ side — pending** после approve боя.
+- Пакет арта (план): портрет 1:1 и 3:4, fullbody, avatar, **side battle sprite**, 4 skill icons, VFX.
 - Реплика (предложение): «Гора подождёт. Ты — нет.»
 
 ## Лесные духи (`forest_spirits`)
@@ -52,7 +52,7 @@
 ### Эталон: Никсара
 
 - Акценты: уголь, багровый туман `#D65B62`, маска, парные клинки.
-- Концепт VIS-00: `assets/source/concepts/heroes/nixara_reference.jpg` — статус `generated` / review.
+- Облик: **approved** (`nixara_reference.jpg`). Боевой спрайт: **side / ¾ side — pending**.
 - Реплика (предложение): «Свидетелей не будет. И оправданий тоже.»
 
 ## Небожители (`skyborn`)

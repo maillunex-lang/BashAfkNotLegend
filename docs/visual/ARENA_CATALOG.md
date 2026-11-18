@@ -1,28 +1,33 @@
 # ARENA_CATALOG.md
 
-## VIS-00 — три концепта одного боевого поля (стоп на выбор)
+## Утверждённый layout боя (DEC-005)
 
-Одинаковая задача: вертикаль 9:16, формация 5v5 (2+3), HUD ультимейтов, читаемость персонажей.
+**Классический 2D side-view** (ориентир AFK Legend / классические 2D AFK RPG).  
+Это изменение **визуального представления**, не механик (5v5, автобой, ручные ульты, x1/x2/x3 — как в GDD).
 
-| ID | Стиль | Файл | Статус |
-|----|-------|------|--------|
-| `arena.concept.a` | A — живописная иллюстрация | `assets/source/concepts/battle/battle_concept_a.jpg` | generated → **review** |
-| `arena.concept.b` | B — яркое фэнтези, сильный контраст | `assets/source/concepts/battle/battle_concept_b.jpg` | generated → **review** |
-| `arena.concept.c` | C — атмосферное muted | `assets/source/concepts/battle/battle_concept_c.jpg` | generated → **review** |
+| Правило | Значение |
+|---------|----------|
+| Камера | Strict side, fixed; без наклона, вращения, перспективного сокращения |
+| Стороны | Игрок **слева** ×5 · враги **справа** ×5 |
+| Плоскость | Горизонтальная; лёгкий вертикальный сдвиг рядов (2 front + 3 back) для читаемости |
+| Спрайты | Рисованные 2D, side или ¾ side — **не фронт** |
+| Фон | Многослойный 2D Башкортостан + параллакс; бойцы отделены от фона |
+| HUD верх | Волна, таймер, пауза, x1/x2/x3, Auto |
+| HUD низ | 5 портретов героев, энергия, активация ультимейтов |
+| Рантайм | Анимации и VFX в **Godot 4 Android** |
 
-После выбора владельца: зафиксировать DEC и строить 8 арен в том же визуальном языке (Godot Android).
+## Концепты
 
-## 8 тематических арен (план после approve)
+| ID | Описание | Файл | Статус |
+|----|----------|------|--------|
+| `arena.concept.a` | Перспектива / глубина | `battle_concept_a.jpg` | **rejected** (layout) |
+| `arena.concept.b` | Перспектива / яркий UI | `battle_concept_b.jpg` | **rejected** (layout) |
+| `arena.concept.c` | Перспектива / muted | `battle_concept_c.jpg` | **rejected** (layout) |
+| `arena.concept.sideview_d` | **Side-view эталон** | `assets/source/concepts/battle/battle_concept_sideview_d.jpg` | **generated → review** |
 
-| ID | Название | Мотивы |
-|----|----------|--------|
-| `arena.ufa_citadel` | Уфимская Цитадель | стены, медные крыши, вечер |
-| `arena.belaya_valley` | Долина Белой | Агидель, луга, туман |
-| `arena.sterlitamak_shikhans` | Стерлитамакские Шиханы | холмы, камень |
-| `arena.beloretsk_pass` | Белорецкий Перевал | горы, хвоя, ветер |
-| `arena.sibay_rift` | Сибайский Разлом | руда, кристаллы |
-| `arena.shurale_woods` | Лес Шурале | кривые деревья, светлячки |
-| `arena.ubyr_mire` | Болота Убыра | вода, туман |
-| `arena.ancient_seal_ruins` | Руины Древней Печати | кольца, руны |
+Стоп: утвердить `sideview_d` (или запросить правку) → затем Godot-сцена с Браксором/Никсарой side-view.  
+Массовые арены/герои — только после этого.
 
-Каждая: far/mid/ground/near, spawn points, VFX zones, parallax, low-quality preset, thumbnail. Камера фиксированная. Передний план не перекрывает бойцов.
+## 8 тематических арен (план после approve side-view)
+
+Те же 8 локаций (Уфимская Цитадель … Руины Печати), но каждая как **горизонтальный side-view** набор слоёв far/mid/ground/near + parallax, без изометрии.

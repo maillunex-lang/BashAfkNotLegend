@@ -57,25 +57,26 @@
 - Режим low-VFX; иконки 24/32/48.
 - Карточки героев — рамка меди/камня, не «универсальный мобильный card UI».
 
-## 5. Боевой кадр
+## 5. Боевой кадр (DEC-005 — утверждено направление side-view)
 
-- Фиксированная камера, вертикаль 9:16.
-- Слои: far BG → mid → ground plane → characters → near FX → HUD.
-- Формация 2 front + 3 back; союзники снизу/ближе, враги сверху/дальше (или зеркально — **уточнить после выбора концепта A/B/C**).
-- Передний план не перекрывает хитбоксы/портреты ультимейтов.
-- Читаемость HP/энергии важнее плотности VFX.
+- Вертикаль 9:16 UI; **камера строго сбоку**, fixed, без перспективы/изометрии.
+- Игрок **слева** (5), враги **справа** (5); горизонтальная плоскость; лёгкий сдвиг рядов 2+3.
+- Спрайты: side / ¾ side, рисованные 2D — не фронт, не 3D.
+- Слои: far → mid → ground strip → characters → VFX → HUD.
+- HUD верх: волна, таймер, пауза, x1/x2/x3, Auto.
+- HUD низ: 5 портретов + энергия + ультимейты.
+- Автобой + ручной ульт; читаемость важнее плотности VFX.
 
-## 6. Эталонные образцы VIS-00 (на утверждение)
+## 6. Эталонные образцы
 
 | Образец | Файл | Статус |
 |---------|------|--------|
-| Бой концепт A — живописный | `assets/source/concepts/battle/battle_concept_a.jpg` | generated → review |
-| Бой концепт B — яркий контраст | `assets/source/concepts/battle/battle_concept_b.jpg` | generated → review |
-| Бой концепт C — атмосферный muted | `assets/source/concepts/battle/battle_concept_c.jpg` | generated → review |
-| Эталон герой Браксор | `assets/source/concepts/heroes/braxor_reference.jpg` | generated → review |
-| Эталон герой Никсара | `assets/source/concepts/heroes/nixara_reference.jpg` | generated → review |
+| Бой A/B/C (перспектива) | `battle_concept_a\|b\|c.jpg` | **rejected** |
+| Бой **side-view D** | `assets/source/concepts/battle/battle_concept_sideview_d.jpg` | **review** |
+| Браксор (облик) | `braxor_reference.jpg` | **approved** облик; side-view TBD |
+| Никсара (облик) | `nixara_reference.jpg` | **approved** облик; side-view TBD |
 
-Массовая генерация остальных ассетов **запрещена** до утверждения направления и выбранного боевого концепта.
+Массовая генерация **запрещена** до утверждения side-view D.
 
 ## 7. Конфликты с GDD / дополнением
 
