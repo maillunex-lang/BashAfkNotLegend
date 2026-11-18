@@ -7,10 +7,14 @@ class_name CharacterRegistry
 const MASS01_HEROES: PackedStringArray = [
 	"velkor", "tarvex", "xorin", "elvirax", "liorel", "firnax", "mossar", "zefriel",
 ]
+const MASS02_HEROES: PackedStringArray = [
+	"morvex", "grimzor", "draxel", "vespira", "aurix", "selestra", "voltario", "orionex",
+]
 
 static func list_ids() -> PackedStringArray:
 	var ids: PackedStringArray = ["braxor", "nixara"]
 	ids.append_array(MASS01_HEROES)
+	ids.append_array(MASS02_HEROES)
 	ids.append_array(PackedStringArray(["stonekin", "shadewolf"]))
 	return ids
 
@@ -36,6 +40,22 @@ static func get_character(character_id: String) -> CharacterData:
 			return _hero("mossar", "Моссар", "forest_spirits", "tank", CharacterData.RoleStyle.TANK, 1450.0, 125.0, 140.0, 28.0, true, "mossar_rootbash", "mossar_barkwall", "mossar_still_forest", 94.0)
 		"zefriel":
 			return _hero("zefriel", "Зефриэль", "forest_spirits", "mage", CharacterData.RoleStyle.MAGE, 880.0, 158.0, 155.0, 46.0, false, "zefriel_gust", "zefriel_crownstorm", "zefriel_canopy_tempest", 66.0)
+		"morvex":
+			return _hero("morvex", "Морвекс", "dark_creatures", "mage", CharacterData.RoleStyle.MAGE, 880.0, 160.0, 155.0, 41.0, false, "morvex_page", "morvex_curse", "morvex_last_page", 66.0)
+		"grimzor":
+			return _hero("grimzor", "Гримзор", "dark_creatures", "tank", CharacterData.RoleStyle.TANK, 1380.0, 120.0, 138.0, 30.0, true, "grimzor_bash", "grimzor_tombguard", "grimzor_grave_watch", 92.0)
+		"draxel":
+			return _hero("draxel", "Драксель", "dark_creatures", "warrior", CharacterData.RoleStyle.WARRIOR, 1180.0, 155.0, 118.0, 46.0, true, "draxel_cleave", "draxel_execute", "draxel_last_argument", 74.0)
+		"vespira":
+			return _hero("vespira", "Веспира", "dark_creatures", "support", CharacterData.RoleStyle.SUPPORT, 960.0, 105.0, 148.0, 40.0, false, "vespira_mist", "vespira_lull", "vespira_unwanted_dream", 68.0)
+		"aurix":
+			return _hero("aurix", "Аурикс", "skyborn", "warrior", CharacterData.RoleStyle.WARRIOR, 1250.0, 158.0, 115.0, 48.0, true, "aurix_spear", "aurix_verdict", "aurix_judgment", 72.0)
+		"selestra":
+			return _hero("selestra", "Селестра", "skyborn", "healer", CharacterData.RoleStyle.HEALER, 990.0, 102.0, 148.0, 42.0, false, "selestra_ray", "selestra_mend", "selestra_dawn", 68.0)
+		"voltario":
+			return _hero("voltario", "Вольтарион", "skyborn", "mage", CharacterData.RoleStyle.MAGE, 870.0, 162.0, 158.0, 44.0, false, "voltario_bolt", "voltario_static", "voltario_sky_objects", 66.0)
+		"orionex":
+			return _hero("orionex", "Орионекс", "skyborn", "tank", CharacterData.RoleStyle.TANK, 1420.0, 128.0, 136.0, 30.0, true, "orionex_bash", "orionex_bulwark", "orionex_dome", 94.0)
 		"stonekin":
 			return _stonekin()
 		"shadewolf":

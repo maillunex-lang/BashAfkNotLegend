@@ -70,6 +70,55 @@ static func get_ability(ability_id: String) -> AbilityDef:
 			return _def("zefriel_crownstorm", "Вихрь листьев", AbilityDef.Kit.MELEE_STEP, "run", "attack2", "attack1", 1.15, 0.0, 145.0, 0.26, 0.28, 15.0, 5.0, Color(0.4, 0.8, 0.7, 0.95), "melee")
 		"zefriel_canopy_tempest":
 			return _def("zefriel_canopy_tempest", "Буря крон", AbilityDef.Kit.GENERIC_BURST, "run", "ultimate", "attack2", 1.55, 0.0, 145.0, 0.25, 0.3, 0.0, 0.0, Color(0.55, 0.95, 0.85, 1.0), "ult")
+		# MASS-02
+		"morvex_page":
+			return _def("morvex_page", "Проклятая страница", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.05, 0.0, 150.0, 0.28, 0.28, 15.0, 0.0, Color(0.7, 0.25, 0.55, 0.95), "melee")
+		"morvex_curse":
+			return _def("morvex_curse", "Чернильное проклятие", AbilityDef.Kit.MELEE_STEP, "walk", "attack2", "attack1", 1.15, 0.0, 145.0, 0.3, 0.3, 15.0, 5.0, Color(0.55, 0.2, 0.65, 0.95), "melee")
+		"morvex_last_page":
+			return _def("morvex_last_page", "Последняя страница", AbilityDef.Kit.GENERIC_BURST, "idle", "ultimate", "attack2", 1.55, 0.0, 145.0, 0.25, 0.3, 0.0, 0.0, Color(0.85, 0.3, 0.7, 1.0), "ult")
+		"grimzor_bash":
+			return _def("grimzor_bash", "Могильный удар", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.2, 0.0, 95.0, 0.42, 0.38, 14.0, 0.0, Color(0.45, 0.4, 0.5, 0.95), "slam")
+		"grimzor_tombguard":
+			return _def("grimzor_tombguard", "Дозор плиты", AbilityDef.Kit.SHIELD_BASH, "walk", "block", "attack1", 1.15, 0.0, 95.0, 0.4, 0.36, 14.0, 5.5, Color(0.5, 0.45, 0.55, 0.95), "melee")
+		"grimzor_grave_watch":
+			return _def("grimzor_grave_watch", "Могильный дозор", AbilityDef.Kit.ULT_AOE_STOMP, "walk", "ultimate", "attack2", 1.6, 0.0, 100.0, 0.4, 0.38, 0.0, 0.0, Color(0.4, 0.35, 0.55, 1.0), "ult")
+		"draxel_cleave":
+			return _def("draxel_cleave", "Рассечение", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.15, 0.0, 85.0, 0.34, 0.3, 16.0, 0.0, Color(0.85, 0.25, 0.35, 0.95), "melee")
+		"draxel_execute":
+			return _def("draxel_execute", "Приговор клинка", AbilityDef.Kit.MELEE_STEP, "run", "attack2", "attack1", 1.25, 0.0, 80.0, 0.3, 0.28, 16.0, 5.0, Color(0.9, 0.3, 0.35, 0.95), "slash")
+		"draxel_last_argument":
+			return _def("draxel_last_argument", "Последний аргумент", AbilityDef.Kit.ULT_AOE_STOMP, "walk", "ultimate", "attack2", 1.7, 0.0, 85.0, 0.32, 0.32, 0.0, 0.0, Color(1.0, 0.35, 0.4, 1.0), "ult")
+		"vespira_mist":
+			return _def("vespira_mist", "Сонный туман", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 0.9, 0.0, 145.0, 0.3, 0.3, 14.0, 0.0, Color(0.65, 0.45, 0.85, 0.95), "melee")
+		"vespira_lull":
+			return _def("vespira_lull", "Колыбельная", AbilityDef.Kit.MELEE_STEP, "walk", "block", "attack1", 0.75, 0.0, 150.0, 0.3, 0.3, 14.0, 5.0, Color(0.55, 0.4, 0.8, 0.95), "melee")
+		"vespira_unwanted_dream":
+			return _def("vespira_unwanted_dream", "Непрошеный сон", AbilityDef.Kit.GENERIC_BURST, "idle", "ultimate", "victory", 1.4, 0.0, 145.0, 0.25, 0.3, 0.0, 0.0, Color(0.7, 0.5, 0.95, 1.0), "ult")
+		"aurix_spear":
+			return _def("aurix_spear", "Солнечный укол", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.12, 0.0, 85.0, 0.32, 0.3, 16.0, 0.0, Color(1.0, 0.85, 0.35, 0.95), "melee")
+		"aurix_verdict":
+			return _def("aurix_verdict", "Вердикт", AbilityDef.Kit.MELEE_STEP, "run", "attack2", "attack1", 1.2, 0.0, 80.0, 0.28, 0.28, 16.0, 5.0, Color(1.0, 0.9, 0.45, 0.95), "melee")
+		"aurix_judgment":
+			return _def("aurix_judgment", "Суд без очереди", AbilityDef.Kit.ULT_AOE_STOMP, "walk", "ultimate", "attack2", 1.75, 0.0, 85.0, 0.3, 0.3, 0.0, 0.0, Color(1.0, 0.95, 0.5, 1.0), "ult")
+		"selestra_ray":
+			return _def("selestra_ray", "Луч рассвета", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 0.88, 0.0, 145.0, 0.3, 0.3, 14.0, 0.0, Color(1.0, 0.75, 0.7, 0.95), "melee")
+		"selestra_mend":
+			return _def("selestra_mend", "Исцеление зари", AbilityDef.Kit.MELEE_STEP, "walk", "block", "attack1", 0.72, 0.0, 150.0, 0.3, 0.3, 14.0, 5.0, Color(1.0, 0.8, 0.75, 0.95), "melee")
+		"selestra_dawn":
+			return _def("selestra_dawn", "Рассвет после позора", AbilityDef.Kit.GENERIC_BURST, "idle", "ultimate", "victory", 1.4, 0.0, 145.0, 0.25, 0.3, 0.0, 0.0, Color(1.0, 0.9, 0.8, 1.0), "ult")
+		"voltario_bolt":
+			return _def("voltario_bolt", "Небесный разряд", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.08, 0.0, 155.0, 0.26, 0.28, 15.0, 0.0, Color(0.45, 0.75, 1.0, 0.95), "melee")
+		"voltario_static":
+			return _def("voltario_static", "Статика", AbilityDef.Kit.MELEE_STEP, "run", "attack2", "attack1", 1.18, 0.0, 150.0, 0.26, 0.28, 15.0, 5.0, Color(0.4, 0.7, 0.95, 0.95), "melee")
+		"voltario_sky_objects":
+			return _def("voltario_sky_objects", "Небо возражает", AbilityDef.Kit.GENERIC_BURST, "run", "ultimate", "attack2", 1.6, 0.0, 150.0, 0.24, 0.3, 0.0, 0.0, Color(0.55, 0.85, 1.0, 1.0), "ult")
+		"orionex_bash":
+			return _def("orionex_bash", "Звёздный удар", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.2, 0.0, 95.0, 0.4, 0.36, 14.0, 0.0, Color(0.55, 0.7, 0.95, 0.95), "slam")
+		"orionex_bulwark":
+			return _def("orionex_bulwark", "Купольный заслон", AbilityDef.Kit.SHIELD_BASH, "walk", "block", "attack1", 1.15, 0.0, 95.0, 0.38, 0.34, 14.0, 5.5, Color(0.5, 0.65, 0.9, 0.95), "melee")
+		"orionex_dome":
+			return _def("orionex_dome", "Купол небес", AbilityDef.Kit.ULT_AOE_STOMP, "walk", "ultimate", "attack2", 1.6, 0.0, 100.0, 0.38, 0.36, 0.0, 0.0, Color(0.6, 0.8, 1.0, 1.0), "ult")
 		"basic":
 			return _def("basic", "Базовая атака", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.0, 0.0, 70.0, 0.35, 0.3, 12.0, 0.0, Color(1, 1, 1, 0.9), "melee")
 		_:

@@ -42,30 +42,31 @@ func _init() -> void:
 			"RIGHT" if data.visual.source_facing == CharacterVisualDef.Facing.RIGHT else "LEFT",
 		])
 
-	# Roster stubs: STUB_NO_ART must not claim a folder.
-	var roster_path := "res://content/hero_roster_batch01.json"
-	if FileAccess.file_exists(ProjectSettings.globalize_path(roster_path)):
+	# Roster batches: STUB_NO_ART must not claim a folder.
+	for roster_path in ["res://content/hero_roster_batch01.json", "res://content/hero_roster_batch02.json"]:
+		if not FileAccess.file_exists(ProjectSettings.globalize_path(roster_path)):
+			warnings.append("roster json missing: %s" % roster_path)
+			continue
 		var f := FileAccess.open(roster_path, FileAccess.READ)
 		var parsed = JSON.parse_string(f.get_as_text())
 		f.close()
-		if typeof(parsed) == TYPE_DICTIONARY and parsed.has("entries"):
-			for e in parsed["entries"]:
-				checked += 1
-				var status := str(e.get("visual_status", ""))
-				var slug := str(e.get("slug", ""))
-				var is_hero := bool(e.get("is_hero", true))
-				var facing := str(e.get("source_facing", ""))
-				if is_hero and facing != "RIGHT":
-					failures.append("%s: hero stub must source_facing=RIGHT" % slug)
-				if not is_hero and facing != "LEFT" and not e.has("source_facing_override"):
-					failures.append("%s: mob stub must source_facing=LEFT" % slug)
-				if status == "STUB_NO_ART" and e.get("sprite_folder", null) != null:
-					failures.append("%s: STUB_NO_ART must have sprite_folder=null" % slug)
-				if status in ["V1_APPROVED", "BATCH_PACKED"] and e.get("sprite_folder", null) == null:
-					failures.append("%s: V1_APPROVED needs sprite_folder" % slug)
-				print("[ROSTER] %s status=%s facing=%s" % [slug, status, facing])
-	else:
-		warnings.append("roster json missing: %s" % roster_path)
+		if typeof(parsed) != TYPE_DICTIONARY or not parsed.has("entries"):
+			continue
+		for e in parsed["entries"]:
+			checked += 1
+			var status := str(e.get("visual_status", ""))
+			var slug := str(e.get("slug", ""))
+			var is_hero := bool(e.get("is_hero", true))
+			var facing := str(e.get("source_facing", ""))
+			if is_hero and facing != "RIGHT":
+				failures.append("%s: hero stub must source_facing=RIGHT" % slug)
+			if not is_hero and facing != "LEFT" and not e.has("source_facing_override"):
+				failures.append("%s: mob stub must source_facing=LEFT" % slug)
+			if status == "STUB_NO_ART" and e.get("sprite_folder", null) != null:
+				failures.append("%s: STUB_NO_ART must have sprite_folder=null" % slug)
+			if status in ["V1_APPROVED", "BATCH_PACKED"] and e.get("sprite_folder", null) == null:
+				failures.append("%s: V1_APPROVED/BATCH_PACKED needs sprite_folder" % slug)
+			print("[ROSTER] %s status=%s facing=%s" % [slug, status, facing])
 
 	for w in warnings:
 		print("[WARN] ", w)
