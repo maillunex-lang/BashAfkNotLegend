@@ -1,6 +1,7 @@
 extends Node2D
 
-## Braxor facing lab: LEFT-side→RIGHT and RIGHT-side→LEFT, with walk/attack/turn.
+## Facing lab via CharacterRegistry (VISUAL-APPROVAL-001).
+## LEFT-side→RIGHT and RIGHT-side→LEFT, walk/attack/turn — same authored sprites.
 
 @onready var braxor: Fighter = $Braxor
 @onready var dummy_a: Node2D = $DummyRight
@@ -16,19 +17,25 @@ var shots: Dictionary = {}
 func _ready() -> void:
 	wall0 = Time.get_ticks_msec()
 	Engine.time_scale = 1.0
-	braxor.source_facing = Fighter.Facing.RIGHT
+	Engine.max_fps = 30
+	braxor.apply_character_data(CharacterRegistry.get_character("braxor"))
 	braxor.battle_side = Fighter.BattleSide.LEFT
 	braxor.show_facing_debug = true
 	braxor.move_speed = 70.0
 	braxor._build_frames()
+	braxor.hp = braxor.max_hp
+	braxor._update_bars()
+	braxor.name_label.text = braxor.display_name
 	braxor.set_desired_facing(Fighter.Facing.RIGHT)
 	braxor.play_anim("idle")
-	label.text = "FACING TEST — Braxor source=RIGHT"
+	label.text = "FACING TEST — registry visual source=%s" % (
+		"RIGHT" if braxor.source_facing == Fighter.Facing.RIGHT else "LEFT"
+	)
 	_log_diag()
 
 func _process(delta: float) -> void:
 	phase_t += delta
-	var wall := (Time.get_ticks_msec() - wall0) / 1000.0
+	var _wall := (Time.get_ticks_msec() - wall0) / 1000.0
 	match phase:
 		0:
 			phase_label.text = "1) LEFT side, face RIGHT (idle)"
@@ -76,7 +83,6 @@ func _process(delta: float) -> void:
 				_next()
 		5:
 			phase_label.text = "6) Turn toward new target"
-			# Alternate target every 0.9s
 			var tog := int(phase_t / 0.9) % 2
 			var tgt := dummy_a if tog == 0 else dummy_b
 			braxor.face_towards(tgt.global_position)

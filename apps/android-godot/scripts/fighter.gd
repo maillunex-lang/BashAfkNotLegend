@@ -146,7 +146,7 @@ func _update_depth() -> void:
 	z_index = 0
 	# Shadow / body stay with fighter; UI drawn above all fighters.
 	ui.z_as_relative = false
-	ui.z_index = 4000
+	ui.z_index = 50 # HP/name above body; never flip with Body.scale
 	shadow.z_as_relative = true
 	shadow.z_index = -1
 
@@ -351,8 +351,13 @@ func flash_vfx(color: Color = Color(1.0, 0.85, 0.3, 0.9), scale_to: float = 1.8)
 func distance_to_fighter(other: Fighter) -> float:
 	return global_position.distance_to(other.global_position)
 
-# --- Compatibility shim ---
-func lock_team_facing() -> void:
+# --- Side default (not team identity) ---
+func default_side_facing() -> void:
+	## Left half faces right; right half faces left until a target overrides.
 	desired_facing = Facing.RIGHT if battle_side == BattleSide.LEFT else Facing.LEFT
 	_apply_facing()
 	_sync_dir_arrow()
+
+func lock_team_facing() -> void:
+	## Deprecated name — kept for call sites; facing follows battle_side, not team.
+	default_side_facing()

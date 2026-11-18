@@ -26,9 +26,18 @@ func _init() -> void:
 			"RIGHT" if src_right else "LEFT",
 			data.visual.sprite_folder,
 		])
+		# Ability IDs must resolve without PNG/frame binding.
+		for aid in [data.basic_attack_id, data.skill1_id, data.skill2_id, data.ultimate_id]:
+			if aid == "" or aid in ["skill1", "skill2", "basic", "ultimate"]:
+				continue
+			var ab: AbilityDef = AbilityCatalog.get_ability(aid)
+			if ab == null or ab.ability_id == "basic" and aid != "basic":
+				failures.append("%s: ability '%s' missing from AbilityCatalog" % [id, aid])
+			else:
+				print("[ABILITY-QA] %s → kit=%s anim=%s/%s" % [aid, ab.kit, ab.anim_strike, ab.anim_follow])
 		for anim in CharacterVisualDef.ANIM_CONTRACT:
-			var path := "%s%s.png" % [data.visual.sprite_base_path(), anim]
-			# Only check that contract names are declared; missing files fall back in Fighter.
+			var _path := "%s%s.png" % [data.visual.sprite_base_path(), anim]
+			# Contract names declared; missing files fall back in Fighter.
 			pass
 	for w in warnings:
 		print("[WARN] ", w)

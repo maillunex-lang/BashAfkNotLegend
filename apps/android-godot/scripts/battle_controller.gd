@@ -86,15 +86,31 @@ func _configure_fighters() -> void:
 	shadewolf.apply_character_data(CharacterRegistry.get_character("shadewolf"))
 
 	# Side of field only — facing is toward target / desired_facing.
-	braxor.battle_side = Fighter.BattleSide.LEFT
-	nixara.battle_side = Fighter.BattleSide.LEFT
-	stonekin.battle_side = Fighter.BattleSide.RIGHT
-	shadewolf.battle_side = Fighter.BattleSide.RIGHT
-
-	braxor.set_desired_facing(Fighter.Facing.RIGHT)
-	nixara.set_desired_facing(Fighter.Facing.RIGHT)
-	stonekin.set_desired_facing(Fighter.Facing.LEFT)
-	shadewolf.set_desired_facing(Fighter.Facing.LEFT)
+	# BASH_SWAP_SIDES=1 → PvP mirror: heroes on RIGHT face LEFT (proves universal facing).
+	var swap := OS.get_environment("BASH_SWAP_SIDES") == "1"
+	if swap:
+		_mirror_fighter_x(braxor)
+		_mirror_fighter_x(nixara)
+		_mirror_fighter_x(stonekin)
+		_mirror_fighter_x(shadewolf)
+		braxor.battle_side = Fighter.BattleSide.RIGHT
+		nixara.battle_side = Fighter.BattleSide.RIGHT
+		stonekin.battle_side = Fighter.BattleSide.LEFT
+		shadewolf.battle_side = Fighter.BattleSide.LEFT
+		braxor.set_desired_facing(Fighter.Facing.LEFT)
+		nixara.set_desired_facing(Fighter.Facing.LEFT)
+		stonekin.set_desired_facing(Fighter.Facing.RIGHT)
+		shadewolf.set_desired_facing(Fighter.Facing.RIGHT)
+		_log("PvP SWAP: герои справа → лицом влево")
+	else:
+		braxor.battle_side = Fighter.BattleSide.LEFT
+		nixara.battle_side = Fighter.BattleSide.LEFT
+		stonekin.battle_side = Fighter.BattleSide.RIGHT
+		shadewolf.battle_side = Fighter.BattleSide.RIGHT
+		braxor.set_desired_facing(Fighter.Facing.RIGHT)
+		nixara.set_desired_facing(Fighter.Facing.RIGHT)
+		stonekin.set_desired_facing(Fighter.Facing.LEFT)
+		shadewolf.set_desired_facing(Fighter.Facing.LEFT)
 
 	# Rebuild frames if sprites already ready (apply after scene export defaults).
 	for f in [braxor, nixara, stonekin, shadewolf]:
@@ -105,6 +121,12 @@ func _configure_fighters() -> void:
 			f.name_label.text = f.display_name
 			f._apply_facing()
 			f.play_anim("idle")
+
+func _mirror_fighter_x(f: Fighter) -> void:
+	## Mirror around arena center (x=540) for side-swap demos.
+	f.global_position.x = 1080.0 - f.global_position.x
+	f.home_pos = f.global_position
+	f.home_y = f.global_position.y
 
 func _process(delta: float) -> void:
 	var d := delta
@@ -275,120 +297,142 @@ func _return_home(f: Fighter, tw: Tween, after: float = 0.28) -> void:
 		_end_turn(f)
 	)
 
+func _pick_basic_ability_id(f: Fighter) -> String:
+	if f.character_data == null:
+		return "basic"
+	# Prefer skill when off cooldown for kits that define a skill1/skill2.
+	if f.skill_cd <= 0.0 and f.character_data.skill1_id != "" and f.character_data.skill1_id != "skill1":
+		return f.character_data.skill1_id
+	return f.character_data.basic_attack_id if f.character_data.basic_attack_id != "" else "basic"
+
 func _start_attack(f: Fighter, target: Fighter) -> void:
 	f.busy = true
 	f.face_towards(target.global_position)
-	match f.style:
-		Fighter.Style.TANK:
-			_braxor_attack(f, target)
-		Fighter.Style.ASSASSIN:
-			_nixara_attack(f, target)
-		Fighter.Style.BRUTE:
-			_stonekin_attack(f, target)
-		Fighter.Style.BEAST:
-			_shadewolf_attack(f, target)
+	var ability := AbilityCatalog.get_ability(_pick_basic_ability_id(f))
+	_execute_ability(f, target, ability)
 
-func _braxor_attack(f: Fighter, target: Fighter) -> void:
-	var use_shield := f.skill_cd <= 0.0
-	if use_shield:
-		f.skill_cd = 5.0
-		_log("%s: удар щитом" % f.display_name)
-	else:
-		_log("%s: удар топором" % f.display_name)
-	f.play_anim("walk")
-	var contact := _contact_pos(f, target, 85.0)
+func _execute_ability(f: Fighter, target: Fighter, ability: AbilityDef) -> void:
+	_log("%s: %s" % [f.display_name, ability.display_name])
+	if ability.skill_cooldown > 0.0:
+		f.skill_cd = ability.skill_cooldown
+	match ability.kit:
+		AbilityDef.Kit.SHIELD_BASH:
+			_kit_shield_bash(f, target, ability)
+		AbilityDef.Kit.DASH_COMBO:
+			_kit_dash_combo(f, target, ability)
+		AbilityDef.Kit.LEAP_BITE:
+			_kit_leap_bite(f, target, ability)
+		AbilityDef.Kit.ULT_AOE_STOMP:
+			_kit_ult_aoe(f, target, ability)
+		AbilityDef.Kit.ULT_MULTI_MARK:
+			_kit_ult_marks(f, ability)
+		AbilityDef.Kit.GENERIC_BURST:
+			_kit_generic_burst(f, target, ability)
+		_:
+			_kit_melee_step(f, target, ability)
+
+func _attach_world(f: Fighter, kind: String) -> Vector2:
+	return f.global_position + f.attach_point(kind)
+
+func _hit_anchor(target: Fighter) -> Vector2:
+	return target.global_position + target.attach_point("hit")
+
+func _kit_melee_step(f: Fighter, target: Fighter, a: AbilityDef) -> void:
+	f.play_anim(a.anim_windup)
+	var contact := _contact_pos(f, target, a.contact_gap)
 	var tw := create_tween()
-	tw.tween_property(f, "global_position", contact, 0.38)
+	tw.tween_property(f, "global_position", contact, a.approach_time)
 	tw.tween_callback(func():
 		if not f.alive or not target.alive:
 			_end_turn(f)
 			return
 		f.face_towards(target.global_position)
-		f.play_anim("block" if use_shield else "attack1")
+		f.play_anim(a.anim_strike)
 	)
 	tw.tween_interval(0.28)
 	tw.tween_callback(func():
 		if not f.alive or not target.alive:
 			_end_turn(f)
 			return
-		f.play_anim("attack1" if use_shield else "attack2")
-		_spawn_ring(f.global_position + Vector2(36 * f.facing_sign(), -40), Color(0.95, 0.8, 0.4, 0.85), 1.5)
-		_spawn_hit_flash(target.global_position + Vector2(0, -80), Color(1.0, 0.85, 0.35, 0.95))
-		_resolve_hit(f, target, f.attack_power * (1.2 if use_shield else 1.05), Color(1.0, 0.85, 0.35, 0.95), "melee")
-		f.gain_energy(18.0)
+		f.play_anim(a.anim_follow)
+		if a.vfx_kind == "slam":
+			_spawn_dust(_attach_world(f, "weapon") + Vector2(0, 40))
+			_spawn_ring(target.global_position + Vector2(0, 20), a.vfx_color, 2.0)
+		else:
+			_spawn_ring(_attach_world(f, "weapon"), a.vfx_color, 1.5)
+		_resolve_hit(f, target, f.attack_power * a.power_mult, a.vfx_color, a.vfx_kind)
+		f.gain_energy(a.energy_gain)
 	)
-	_return_home(f, tw, 0.32)
+	_return_home(f, tw, a.return_time)
 
-func _nixara_attack(f: Fighter, target: Fighter) -> void:
-	_log("%s: теневой рывок" % f.display_name)
-	f.play_anim("run")
-	var contact := _contact_pos(f, target, 60.0)
+func _kit_shield_bash(f: Fighter, target: Fighter, a: AbilityDef) -> void:
+	f.play_anim(a.anim_windup)
+	var contact := _contact_pos(f, target, a.contact_gap)
 	var tw := create_tween()
-	tw.tween_property(f, "global_position", contact, 0.26)
+	tw.tween_property(f, "global_position", contact, a.approach_time)
 	tw.tween_callback(func():
 		if not f.alive or not target.alive:
 			_end_turn(f)
 			return
 		f.face_towards(target.global_position)
-		f.play_anim("attack2")
-		_spawn_slash(f.global_position + Vector2(28 * f.facing_sign(), -70), f.facing_sign(), Color(0.9, 0.3, 1.0, 0.9))
-		_resolve_hit(f, target, f.attack_power * 0.7, Color(0.9, 0.3, 1.0, 0.9), "slash")
+		f.play_anim(a.anim_strike)
+	)
+	tw.tween_interval(0.28)
+	tw.tween_callback(func():
+		if not f.alive or not target.alive:
+			_end_turn(f)
+			return
+		f.play_anim(a.anim_follow)
+		_spawn_ring(_attach_world(f, "shield"), a.vfx_color, 1.5)
+		_resolve_hit(f, target, f.attack_power * a.power_mult, a.vfx_color, a.vfx_kind)
+		f.gain_energy(a.energy_gain)
+	)
+	_return_home(f, tw, a.return_time)
+
+func _kit_dash_combo(f: Fighter, target: Fighter, a: AbilityDef) -> void:
+	f.play_anim(a.anim_windup)
+	var contact := _contact_pos(f, target, a.contact_gap)
+	var tw := create_tween()
+	tw.tween_property(f, "global_position", contact, a.approach_time)
+	tw.tween_callback(func():
+		if not f.alive or not target.alive:
+			_end_turn(f)
+			return
+		f.face_towards(target.global_position)
+		f.play_anim(a.anim_strike)
+		_spawn_slash(_attach_world(f, "weapon"), f.facing_sign(), a.vfx_color)
+		_resolve_hit(f, target, f.attack_power * a.power_mult, a.vfx_color, a.vfx_kind)
 	)
 	tw.tween_interval(0.18)
 	tw.tween_callback(func():
 		if not f.alive or not target.alive:
 			_end_turn(f)
 			return
-		f.play_anim("attack1")
-		_spawn_slash(f.global_position + Vector2(24 * f.facing_sign(), -50), f.facing_sign(), Color(1.0, 0.4, 0.8, 0.95))
-		_resolve_hit(f, target, f.attack_power * 0.85, Color(1.0, 0.4, 0.8, 0.95), "slash")
-		f.gain_energy(16.0)
+		f.play_anim(a.anim_follow)
+		var c2 := a.vfx_color.lightened(0.15)
+		_spawn_slash(_attach_world(f, "weapon") + Vector2(0, 20), f.facing_sign(), c2)
+		var mult_b := a.power_mult_b if a.power_mult_b > 0.0 else a.power_mult
+		_resolve_hit(f, target, f.attack_power * mult_b, c2, a.vfx_kind)
+		f.gain_energy(a.energy_gain)
 	)
-	_return_home(f, tw, 0.28)
+	_return_home(f, tw, a.return_time)
 
-func _stonekin_attack(f: Fighter, target: Fighter) -> void:
-	_log("%s: каменный удар" % f.display_name)
-	f.play_anim("walk")
-	var contact := _contact_pos(f, target, 95.0)
+func _kit_leap_bite(f: Fighter, target: Fighter, a: AbilityDef) -> void:
+	f.play_anim(a.anim_windup)
+	var contact := _contact_pos(f, target, a.contact_gap)
 	var tw := create_tween()
-	tw.tween_property(f, "global_position", contact, 0.45)
+	tw.tween_property(f, "global_position", contact, a.approach_time)
 	tw.tween_callback(func():
 		if not f.alive or not target.alive:
 			_end_turn(f)
 			return
 		f.face_towards(target.global_position)
-		f.play_anim("attack1")
+		f.play_anim(a.anim_strike)
+		_spawn_hit_flash(_hit_anchor(target), a.vfx_color)
+		_resolve_hit(f, target, f.attack_power * a.power_mult, a.vfx_color, a.vfx_kind)
+		f.gain_energy(a.energy_gain)
 	)
-	tw.tween_interval(0.35)
-	tw.tween_callback(func():
-		if not f.alive or not target.alive:
-			_end_turn(f)
-			return
-		f.play_anim("attack2")
-		_spawn_dust(f.global_position + Vector2(20 * f.facing_sign(), 30))
-		_spawn_ring(target.global_position + Vector2(0, 20), Color(0.7, 0.55, 0.35, 0.75), 2.0)
-		_resolve_hit(f, target, f.attack_power * 1.4, Color(0.8, 0.7, 0.45, 0.95), "slam")
-		f.gain_energy(14.0)
-	)
-	_return_home(f, tw, 0.4)
-
-func _shadewolf_attack(f: Fighter, target: Fighter) -> void:
-	_log("%s: прыжок-укус" % f.display_name)
-	f.play_anim("run")
-	var contact := _contact_pos(f, target, 55.0)
-	var tw := create_tween()
-	tw.tween_property(f, "global_position", contact, 0.24)
-	tw.tween_callback(func():
-		if not f.alive or not target.alive:
-			_end_turn(f)
-			return
-		f.face_towards(target.global_position)
-		f.play_anim("attack2")
-		_spawn_hit_flash(target.global_position + Vector2(0, -70), Color(0.6, 0.2, 0.7, 0.95))
-		_resolve_hit(f, target, f.attack_power * 1.05, Color(0.6, 0.2, 0.7, 0.95), "bite")
-		f.gain_energy(13.0)
-	)
-	_return_home(f, tw, 0.3)
+	_return_home(f, tw, a.return_time)
 
 func _perform_ultimate(actor: Fighter) -> void:
 	if not actor.can_ult():
@@ -405,72 +449,74 @@ func _perform_ultimate(actor: Fighter) -> void:
 	actor.busy = true
 	turn_lock = true
 	actor.face_towards(target.global_position)
-	if actor.style == Fighter.Style.ASSASSIN:
-		_nixara_ult(actor, target)
-	elif actor.style == Fighter.Style.TANK:
-		_braxor_ult(actor, target)
-	else:
-		_generic_ult(actor, target)
+	var ult_id := "basic"
+	if actor.character_data != null and actor.character_data.ultimate_id != "":
+		ult_id = actor.character_data.ultimate_id
+	_execute_ability(actor, target, AbilityCatalog.get_ability(ult_id))
 
-func _braxor_ult(f: Fighter, target: Fighter) -> void:
-	_log("УЛЬТ Браксор: Хребет не сдаётся")
-	f.play_anim("walk")
-	var contact := _contact_pos(f, target, 90.0)
+func _kit_ult_aoe(f: Fighter, target: Fighter, a: AbilityDef) -> void:
+	_log("УЛЬТ %s: %s" % [f.display_name, a.display_name])
+	f.play_anim(a.anim_windup)
+	var contact := _contact_pos(f, target, a.contact_gap)
 	var tw := create_tween()
-	tw.tween_property(f, "global_position", contact, 0.35)
+	tw.tween_property(f, "global_position", contact, a.approach_time)
 	tw.tween_callback(func():
 		if not f.alive:
 			_end_turn(f)
 			return
 		f.face_towards(target.global_position)
-		f.play_anim("ultimate")
-		_spawn_ring(f.global_position, Color(1.0, 0.75, 0.3, 0.95), 2.4)
+		f.play_anim(a.anim_strike)
+		_spawn_ring(_attach_world(f, "vfx"), a.vfx_color, 2.4)
 	)
 	tw.tween_interval(0.45)
 	tw.tween_callback(func():
 		if not f.alive:
 			_end_turn(f)
 			return
-		f.play_anim("attack2")
-		_spawn_ring(f.global_position + Vector2(30 * f.facing_sign(), -20), Color(1.0, 0.85, 0.4, 1.0), 2.6)
+		f.play_anim(a.anim_follow)
+		_spawn_ring(_attach_world(f, "weapon"), a.vfx_color, 2.6)
 		_spawn_dust(f.global_position)
-		for e in enemies:
+		var foes: Array[Fighter] = enemies if f.team == "player" else players
+		for e in foes:
 			if e.alive and f.distance_to_fighter(e) < 280.0:
-				_resolve_hit(f, e, f.attack_power * 1.7, Color(1.0, 0.8, 0.3, 1.0), "ult")
+				_resolve_hit(f, e, f.attack_power * a.power_mult, a.vfx_color, a.vfx_kind)
 	)
-	_return_home(f, tw, 0.35)
+	_return_home(f, tw, a.return_time)
 
-func _nixara_ult(f: Fighter, _target: Fighter) -> void:
-	_log("УЛЬТ Никсара: Ночь без свидетелей")
+func _kit_ult_marks(f: Fighter, a: AbilityDef) -> void:
+	_log("УЛЬТ %s: %s" % [f.display_name, a.display_name])
+	var foes: Array[Fighter] = enemies if f.team == "player" else players
 	var marks: Array[Fighter] = []
-	for e in enemies:
+	for e in foes:
 		if e.alive:
 			marks.append(e)
 	var tw := create_tween()
-	f.play_anim("run")
+	f.play_anim(a.anim_windup)
 	for e in marks:
 		tw.tween_callback(func():
 			if not f.alive or not e.alive:
 				return
-			f.global_position = Vector2(e.global_position.x - 55.0, e.home_pos.y)
+			# Face target first, then stand on the approach side (PvP-safe).
+			f.face_towards(e.global_position)
+			f.global_position = Vector2(e.global_position.x - f.facing_sign() * a.contact_gap, e.home_pos.y)
 			f.global_position.x = clampf(f.global_position.x, 120.0, 960.0)
 			f.face_towards(e.global_position)
-			f.play_anim("attack2")
-			_spawn_slash(f.global_position + Vector2(30, -60), 1.0, Color(0.85, 0.25, 1.0, 1.0))
-			_resolve_hit(f, e, f.attack_power * 1.45, Color(0.85, 0.25, 1.0, 1.0), "ult")
+			f.play_anim(a.anim_strike)
+			_spawn_slash(_attach_world(f, "weapon"), f.facing_sign(), a.vfx_color)
+			_resolve_hit(f, e, f.attack_power * a.power_mult, a.vfx_color, a.vfx_kind)
 		)
 		tw.tween_interval(0.32)
-	_return_home(f, tw, 0.3)
+	_return_home(f, tw, a.return_time)
 
-func _generic_ult(f: Fighter, target: Fighter) -> void:
-	f.play_anim("ultimate")
+func _kit_generic_burst(f: Fighter, target: Fighter, a: AbilityDef) -> void:
+	f.play_anim(a.anim_strike if a.anim_strike != "" else "ultimate")
 	var tw := create_tween()
 	tw.tween_interval(0.35)
 	tw.tween_callback(func():
 		if f.alive and target.alive:
-			_resolve_hit(f, target, f.attack_power * 1.8, Color(1, 1, 1, 0.9), "ult")
+			_resolve_hit(f, target, f.attack_power * a.power_mult, a.vfx_color, a.vfx_kind)
 	)
-	_return_home(f, tw, 0.3)
+	_return_home(f, tw, a.return_time)
 
 func _resolve_hit(attacker: Fighter, target: Fighter, amount: float, vfx_color: Color, _kind: String) -> void:
 	if not attacker.alive or not target.alive:
@@ -480,7 +526,8 @@ func _resolve_hit(attacker: Fighter, target: Fighter, amount: float, vfx_color: 
 	var knock := attacker.facing_sign()
 	target.apply_damage(dmg, is_crit, knock)
 	attacker.flash_vfx(vfx_color, 1.5)
-	_spawn_hit_flash(target.global_position + Vector2(0, -80), vfx_color)
+	# Hit VFX + damage numbers use world anchors; UI numbers never inherit body flip.
+	_spawn_hit_flash(_hit_anchor(target), vfx_color)
 	_spawn_damage_number(target.global_position + Vector2(0, -130), int(dmg), is_crit)
 	_log("%s → %s%s" % [attacker.display_name, target.display_name, " CRIT!" if is_crit else ""])
 
@@ -489,7 +536,7 @@ func _spawn_damage_number(pos: Vector2, value: int, is_crit: bool) -> void:
 	lbl.text = str(value)
 	lbl.global_position = pos + Vector2(randf_range(-20, 20), 0)
 	lbl.z_as_relative = false
-	lbl.z_index = 5000
+	lbl.z_index = 100 # floaters above sprites; keep ≤ CANVAS_ITEM_Z_MAX (4096)
 	lbl.add_theme_font_size_override("font_size", 36 if is_crit else 26)
 	lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2) if is_crit else Color(1, 0.95, 0.9))
 	lbl.add_theme_color_override("font_outline_color", Color(0.1, 0.1, 0.15))
@@ -515,7 +562,7 @@ func _spawn_slash(pos: Vector2, dir: float, color: Color) -> void:
 	])
 	poly.global_position = pos
 	poly.z_as_relative = false
-	poly.z_index = 3300
+	poly.z_index = 80
 	floaters.add_child(poly)
 	var tw := create_tween()
 	tw.tween_property(poly, "scale", Vector2(1.35, 1.15), 0.18)
@@ -542,7 +589,7 @@ func _spawn_hit_flash(pos: Vector2, color: Color) -> void:
 	s.modulate = color
 	s.global_position = pos
 	s.z_as_relative = false
-	s.z_index = 3400
+	s.z_index = 90
 	floaters.add_child(s)
 	var tw := create_tween()
 	tw.tween_property(s, "scale", Vector2(2.2, 2.2), 0.16)
@@ -570,7 +617,7 @@ func _spawn_ring(pos: Vector2, color: Color, scale_to: float) -> void:
 	s.modulate = color
 	s.global_position = pos
 	s.z_as_relative = false
-	s.z_index = 3100
+	s.z_index = 70
 	floaters.add_child(s)
 	var tw := create_tween()
 	tw.tween_property(s, "scale", Vector2(scale_to, scale_to), 0.42)
@@ -593,7 +640,7 @@ func _spawn_dust(pos: Vector2) -> void:
 		p.polygon = PackedVector2Array([Vector2(-s, -s), Vector2(s, -s * 0.5), Vector2(s * 0.6, s), Vector2(-s * 0.7, s * 0.5)])
 		p.global_position = pos + Vector2(randf_range(-20, 20), randf_range(-5, 10))
 		p.z_as_relative = false
-		p.z_index = 3000
+		p.z_index = 60
 		floaters.add_child(p)
 		var tw := create_tween()
 		tw.tween_property(p, "global_position", p.global_position + Vector2(randf_range(-30, 30), randf_range(-40, -10)), 0.45)

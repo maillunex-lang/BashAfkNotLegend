@@ -25,7 +25,7 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 | VIS-00e | Бой E + Браксор/Никсара anime | `DONE` | Approved + правки DEC-008 | concepts/ |
 | VIS-00b | Godot prototype 2v2 + screenshot/video | `DONE` (на review) | Evidence в artifacts | `apps/android-godot/` |
 | BATTLE-POLISH-002 | Facing/slots/YSort/speed x1 | `IN_PROGRESS` | V1 art locked; facing system | `apps/android-godot/` |
-| VIS-APPROVAL-001 | Универсальная система анимаций/направлений | `IN_PROGRESS` | CharacterData ≠ VisualDef | DEC-012 |
+| VIS-APPROVAL-001 | Универсальная система анимаций/направлений | `IN_PROGRESS` | AbilityCatalog + PvP side-swap | DEC-012 |
 | VIS-01…09 | UI → герои → бои → карта → бестиарий → … | `NOT_STARTED` | Godot Android Showcase | [VISUAL_ROAD.md](docs/visual/VISUAL_ROAD.md) |
 
 **После VISUAL-APPROVAL-001 (DEC-012):** графика/анимации V1 утверждены. Приоритет — универсальная система facing/анимаций и поэтапные партии ассетов с проверкой направления. Не бесконечно полировать одного героя. PWA не разрабатывается.
