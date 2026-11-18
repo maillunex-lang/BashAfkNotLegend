@@ -85,32 +85,16 @@ func _configure_fighters() -> void:
 	stonekin.apply_character_data(CharacterRegistry.get_character("stonekin"))
 	shadewolf.apply_character_data(CharacterRegistry.get_character("shadewolf"))
 
-	# Side of field only — facing is toward target / desired_facing.
-	# BASH_SWAP_SIDES=1 → PvP mirror: heroes on RIGHT face LEFT (proves universal facing).
+	# 5v5-ready formation (2 front + 3 back). 2v2 occupies front0 + back0.
+	# BASH_SWAP_SIDES=1 → PvP mirror: heroes on RIGHT face LEFT.
 	var swap := OS.get_environment("BASH_SWAP_SIDES") == "1"
+	var heroes_left := not swap
+	BattleFormation.apply_to_fighter(braxor, heroes_left, 0) # front
+	BattleFormation.apply_to_fighter(nixara, heroes_left, 2) # back
+	BattleFormation.apply_to_fighter(stonekin, not heroes_left, 0)
+	BattleFormation.apply_to_fighter(shadewolf, not heroes_left, 2)
 	if swap:
-		_mirror_fighter_x(braxor)
-		_mirror_fighter_x(nixara)
-		_mirror_fighter_x(stonekin)
-		_mirror_fighter_x(shadewolf)
-		braxor.battle_side = Fighter.BattleSide.RIGHT
-		nixara.battle_side = Fighter.BattleSide.RIGHT
-		stonekin.battle_side = Fighter.BattleSide.LEFT
-		shadewolf.battle_side = Fighter.BattleSide.LEFT
-		braxor.set_desired_facing(Fighter.Facing.LEFT)
-		nixara.set_desired_facing(Fighter.Facing.LEFT)
-		stonekin.set_desired_facing(Fighter.Facing.RIGHT)
-		shadewolf.set_desired_facing(Fighter.Facing.RIGHT)
-		_log("PvP SWAP: герои справа → лицом влево")
-	else:
-		braxor.battle_side = Fighter.BattleSide.LEFT
-		nixara.battle_side = Fighter.BattleSide.LEFT
-		stonekin.battle_side = Fighter.BattleSide.RIGHT
-		shadewolf.battle_side = Fighter.BattleSide.RIGHT
-		braxor.set_desired_facing(Fighter.Facing.RIGHT)
-		nixara.set_desired_facing(Fighter.Facing.RIGHT)
-		stonekin.set_desired_facing(Fighter.Facing.LEFT)
-		shadewolf.set_desired_facing(Fighter.Facing.LEFT)
+		_log("PvP SWAP: герои справа → лицом влево (formation)")
 
 	# Rebuild frames if sprites already ready (apply after scene export defaults).
 	for f in [braxor, nixara, stonekin, shadewolf]:
@@ -121,12 +105,6 @@ func _configure_fighters() -> void:
 			f.name_label.text = f.display_name
 			f._apply_facing()
 			f.play_anim("idle")
-
-func _mirror_fighter_x(f: Fighter) -> void:
-	## Mirror around arena center (x=540) for side-swap demos.
-	f.global_position.x = 1080.0 - f.global_position.x
-	f.home_pos = f.global_position
-	f.home_y = f.global_position.y
 
 func _process(delta: float) -> void:
 	var d := delta

@@ -24,8 +24,8 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 | VIS-00 | Арт-библия **Anime Fantasy 2D** + эталоны | `DONE` (V1) | DEC-012 VISUAL-APPROVAL-001 | [docs/visual/ART_BIBLE.md](docs/visual/ART_BIBLE.md) |
 | VIS-00e | Бой E + Браксор/Никсара anime | `DONE` | Approved + правки DEC-008 | concepts/ |
 | VIS-00b | Godot prototype 2v2 + screenshot/video | `DONE` (на review) | Evidence в artifacts | `apps/android-godot/` |
-| BATTLE-POLISH-002 | Facing/slots/YSort/speed x1 | `IN_PROGRESS` | V1 art locked; facing system | `apps/android-godot/` |
-| VIS-APPROVAL-001 | Универсальная система анимаций/направлений | `IN_PROGRESS` | AbilityCatalog + PvP side-swap | DEC-012 |
+| BATTLE-POLISH-002 | Facing/slots/YSort/speed x1 | `IN_PROGRESS` | Formation 2+3 + facing | `apps/android-godot/` |
+| VIS-APPROVAL-001 | Универсальная система анимаций/направлений | `IN_PROGRESS` | Formation + roster stubs + import QA | DEC-012 |
 | VIS-01…09 | UI → герои → бои → карта → бестиарий → … | `NOT_STARTED` | Godot Android Showcase | [VISUAL_ROAD.md](docs/visual/VISUAL_ROAD.md) |
 
 **После VISUAL-APPROVAL-001 (DEC-012):** графика/анимации V1 утверждены. Приоритет — универсальная система facing/анимаций и поэтапные партии ассетов с проверкой направления. Не бесконечно полировать одного героя. PWA не разрабатывается.
@@ -54,7 +54,9 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 | Visual-first + Android-first зафиксированы | `DONE` | DEC-003, VISUAL_ROAD |
 | VIS-00 арт-библия Anime Fantasy | `DONE` (V1) | DEC-012 VISUAL-APPROVAL-001 |
 | Браксор/Никсара anime | `DONE` (V1) | approved combat sprites; swappable later |
-| CharacterData / VisualDef split | `IN_PROGRESS` | `apps/android-godot/scripts/data/` |
+| CharacterData / VisualDef split | `DONE` | + AbilityCatalog, BattleFormation |
+| Hero roster stubs batch01 | `IN_PROGRESS` | `content/hero_roster_batch01.json` (2 art + 2 stub) |
+| Sprite import / facing QA | `DONE` | `tools/check_facing_batch.gd`, `check_sprite_import.gd` |
 | Блокирующие BQ (сервер/платежи и т.д.) | `BLOCKED` | DECISIONS — не блокируют арт VIS-00 |
 | PWA реализация | `BLOCKED` | ждёт разрешения |
 | Docker / игровой серверный код | `NOT_STARTED` | после visual samples + следующих инструкций |

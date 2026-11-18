@@ -113,7 +113,7 @@ battle_side = 1
 show_facing_debug = true
 
 [node name="Floaters" type="Node2D" parent="."]
-z_index = 3000
+z_index = 40
 
 [node name="HUD" type="CanvasLayer" parent="."]
 process_mode = 3

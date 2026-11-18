@@ -27,6 +27,9 @@ godot --path apps/android-godot --resolution 1080x1920 \
 - `CharacterVisualDef` — спрайты, `source_facing`, attach points  
 - `AbilityCatalog` — ID → kit/анимации/VFX (**без** путей PNG)  
 - QA: `godot --headless -s res://tools/check_facing_batch.gd`  
+- Import QA: `godot --headless -s res://tools/check_sprite_import.gd`  
+- Roster stubs: `content/hero_roster_batch01.json`  
+- Formation: `BattleFormation` (2 front + 3 back, both sides)  
 - PvP side-swap: `BASH_SWAP_SIDES=1` или `tools/run_pvp_swap_demo.sh`
 
 PWA не разрабатывается (DEC-003).
