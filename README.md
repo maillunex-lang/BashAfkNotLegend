@@ -9,10 +9,9 @@
 
 ## Статус
 
-- **Visual-first + Android-first:** бой = **2D side-view** ([DEC-005](DECISIONS.md)); концепт D на утверждении.
-- Браксор/Никсара: облик утверждён; side-view спрайты — после approve D.
-- PWA **не разрабатывается** ([DEC-003](DECISIONS.md)). Массовый арт — стоп.
-- Детали: [`docs/visual/`](docs/visual/), [`ROAD.md`](ROAD.md).
+- **Стиль:** Bashkir Anime Sarcastic Fantasy 2D ([DEC-007](DECISIONS.md)) · бой side-view ([DEC-005](DECISIONS.md)).
+- **На утверждении:** бой E + Браксор anime + Никсара anime (`docs/visual/`, `assets/source/concepts/`).
+- PWA **не разрабатывается**. Godot/масштаб — после approve эталонов.
 
 ## Структура репозитория
 

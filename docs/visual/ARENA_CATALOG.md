@@ -1,33 +1,15 @@
 # ARENA_CATALOG.md
 
-## Утверждённый layout боя (DEC-005)
+## Layout (DEC-005) + стиль (DEC-007)
 
-**Классический 2D side-view** (ориентир AFK Legend / классические 2D AFK RPG).  
-Это изменение **визуального представления**, не механик (5v5, автобой, ручные ульты, x1/x2/x3 — как в GDD).
+Side-view 5 слева / 5 справа сохранён. Персонажи и свет — **Anime Fantasy 2D**, крупнее, ярче.
 
-| Правило | Значение |
-|---------|----------|
-| Камера | Strict side, fixed; без наклона, вращения, перспективного сокращения |
-| Стороны | Игрок **слева** ×5 · враги **справа** ×5 |
-| Плоскость | Горизонтальная; лёгкий вертикальный сдвиг рядов (2 front + 3 back) для читаемости |
-| Спрайты | Рисованные 2D, side или ¾ side — **не фронт** |
-| Фон | Многослойный 2D Башкортостан + параллакс; бойцы отделены от фона |
-| HUD верх | Волна, таймер, пауза, x1/x2/x3, Auto |
-| HUD низ | 5 портретов героев, энергия, активация ультимейтов |
-| Рантайм | Анимации и VFX в **Godot 4 Android** |
+| ID | Файл | Статус |
+|----|------|--------|
+| A/B/C | `battle_concept_a\|b\|c.jpg` | rejected (perspective) |
+| D | `battle_concept_sideview_d.jpg` | superseded (стиль слишком realistic) |
+| **E** | `battle_concept_anime_sideview_e.jpg` | **generated → review** |
 
-## Концепты
+## 8 арен (после approve E)
 
-| ID | Описание | Файл | Статус |
-|----|----------|------|--------|
-| `arena.concept.a` | Перспектива / глубина | `battle_concept_a.jpg` | **rejected** (layout) |
-| `arena.concept.b` | Перспектива / яркий UI | `battle_concept_b.jpg` | **rejected** (layout) |
-| `arena.concept.c` | Перспектива / muted | `battle_concept_c.jpg` | **rejected** (layout) |
-| `arena.concept.sideview_d` | **Side-view эталон** | `assets/source/concepts/battle/battle_concept_sideview_d.jpg` | **generated → review** |
-
-Стоп: утвердить `sideview_d` (или запросить правку) → затем Godot-сцена с Браксором/Никсарой side-view.  
-Массовые арены/герои — только после этого.
-
-## 8 тематических арен (план после approve side-view)
-
-Те же 8 локаций (Уфимская Цитадель … Руины Печати), но каждая как **горизонтальный side-view** набор слоёв far/mid/ground/near + parallax, без изометрии.
+Те же локации; слои far/mid/ground/near; ярче/насыщеннее; anime-совместимый свет; без изометрии.

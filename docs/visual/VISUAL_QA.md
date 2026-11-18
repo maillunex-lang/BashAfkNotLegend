@@ -1,20 +1,16 @@
-# VISUAL_QA.md
+# VISUAL_QA.md — VIS-00e (Anime Fantasy)
 
-## Side-view концепт D (на утверждение владельца)
+| Проверка | Бой E (v2 regen) | Браксор anime | Никсара anime (v2) |
+|----------|------------------|---------------|---------------------|
+| Anime fantasy, не фотореализм | closer | OK направление | closer / ярче |
+| Strict side-view flat ground | **проверять владельцем** (усилен промпт flat orthographic) | — | — |
+| 5v5 L/R крупные | цель | — | — |
+| Ярче / читаемее | да vs D | медь/камень OK | crimson accents |
+| Узнаваемость | placeholder squad | щит-хребет, smug | маска, dual blades |
+| Personality / не chibi | TBD | smirk OK | sarcastic eyes |
+| HUD энергия ульта | портреты + READY | — | — |
 
-| Проверка | sideview_d (заметки агента) |
-|----------|------------------------------|
-| Строго боковая камера, без изометрии | OK: left/right plane, flat ground |
-| Игрок слева / враги справа | OK |
-| Ровно 5v5 | OK |
-| HUD верх: волна/таймер/пауза/скорость/Auto | OK (WAVE, timer, pause, x1–x3, AUTO) |
-| HUD низ: 5 портретов + энергия/ульты | частично: портреты + HP есть; **энергия/ready-ульт** усилить в след. итерации при необходимости |
-| Персонажи отделены от фона | OK, многослойный фон |
-| Стиль Bashkir Sarcastic Fantasy | OK направление; герои на кадре — placeholder, не Браксор/Никсара |
-
-Агент не ставит `approved` сам.
-
-## Архив
-
-A/B/C — `rejected` как боевой layout (DEC-005).  
-Браксор/Никсара fullbody — `approved` облик; side-view спрайты ещё не сделаны.
+Замечания агента:
+- На кадре E в поле иногда видно 4+4 при 5 портретах — в Godot будет жёстко 5v5.
+- Финальная сцена: orthographic markers, flat ground line.
+- Массовый арт/Godot — только после approve.

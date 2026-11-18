@@ -2,25 +2,28 @@
 
 Инструмент VIS-00: Cursor `GenerateImage` (доступен). Внешний MJ/SD API не подключён.
 
-## Общий стиль (добавлять к промптам)
+## Общий стиль (актуально — DEC-007)
 
 ```text
-Bashkir sarcastic fantasy RPG, high-quality painterly 2D illustration, 2.5D game feel,
-Ural mountains forests copper stone motifs, epic 60% ironic 40%, vertical mobile,
-no 3D models, no AFK Arena copy, no meme UI, no photoreal modern clothing,
-do not present invented ornaments as authentic sacred folklore
+Bashkir Anime Sarcastic Fantasy 2D, high-quality anime fantasy mobile RPG art,
+stylized proportions expressive eyes slightly larger head, bright saturated harmonious colors,
+bold readable silhouettes, simplify tiny details, epic 60% ironic 40%,
+Ural Bashkortostan fantasy motifs on gear/architecture, NOT photoreal NOT 3D render,
+NOT cheap chibi, do not copy AFK Arena characters/UI/art, original designs only
 ```
 
-## Боевой экран — side-view (актуально)
+## Боевой экран — anime side-view E
 
 ```text
-STRICT classic 2D side-view AFK Legend style, NOT isometric NOT perspective.
-Player five heroes LEFT facing right, enemies five RIGHT facing left.
-Flat horizontal ground, slight row offset only, layered parallax Bashkir landscape.
-Top HUD: wave timer pause x1 x2 x3 Auto. Bottom: five portraits energy ultimates.
+STRICT 2D side-view, five LARGE anime heroes LEFT, five LARGE anime enemies RIGHT,
+less empty sky, brighter layered parallax Bashkir mountains/forest,
+compact premium HUD top wave/timer/pause/x1x2x3/Auto, bottom five large portraits + ult energy
 ```
 
-A/B/C (перспектива) — архив, не использовать для новых генераций.
+## Герои-эталоны
+
+- Braxor: copper-stone tank, huge ridge shield, smug smirk, anime fantasy fullbody
+- Nixara: masked dual-blade assassin, ash-crimson, sarcastic eyes, anime fantasy fullbody
 
 ## Эталонные герои
 

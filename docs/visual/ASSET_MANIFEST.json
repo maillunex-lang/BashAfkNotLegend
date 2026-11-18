@@ -1,58 +1,67 @@
 {
-  "version": "0.1.0-vis00",
+  "version": "0.2.0-vis00e",
+  "art_style": "bashkir_anime_sarcastic_fantasy_2d",
+  "battle_view": "classic_2d_side_view",
   "platform_priority": "android_godot_first",
   "pwa_status": "blocked_until_permission",
-  "note": "Statuses planned|generated|reviewed|animated|integrated|approved|rejected. Do not mark approved without owner.",
-  "battle_view": "classic_2d_side_view",
+  "note": "Do not mark approved without owner.",
   "assets": [
     {
       "id": "arena.concept.a",
       "source_path": "assets/source/concepts/battle/battle_concept_a.jpg",
-      "status": "rejected",
-      "reject_reason": "DEC-005 non-side-view layout"
+      "status": "rejected"
     },
     {
       "id": "arena.concept.b",
       "source_path": "assets/source/concepts/battle/battle_concept_b.jpg",
-      "status": "rejected",
-      "reject_reason": "DEC-005 non-side-view layout"
+      "status": "rejected"
     },
     {
       "id": "arena.concept.c",
       "source_path": "assets/source/concepts/battle/battle_concept_c.jpg",
-      "status": "rejected",
-      "reject_reason": "DEC-005 non-side-view layout"
+      "status": "rejected"
     },
     {
       "id": "arena.concept.sideview_d",
-      "purpose": "Canonical classic 2D side-view battle layout concept",
-      "screen": "combat",
-      "style": "side_view_afk_legend_like",
       "source_path": "assets/source/concepts/battle/battle_concept_sideview_d.jpg",
-      "prompt_ref": "PROMPT_LIBRARY.md#battle-sideview",
+      "status": "superseded",
+      "notes": "Side-view layout OK; character style too realistic for DEC-007"
+    },
+    {
+      "id": "arena.concept.anime_sideview_e",
+      "purpose": "Anime Fantasy 2D side-view battle screen concept",
+      "source_path": "assets/source/concepts/battle/battle_concept_anime_sideview_e.jpg",
       "size_px": [720, 1280],
-      "transparency": false,
-      "states": ["concept"],
-      "license_origin": "generated_cursor_GenerateImage_2026-11-18",
       "status": "generated",
-      "depends_on": ["art_bible", "DEC-005"],
-      "godot_path": "res://assets/concepts/battle/battle_concept_sideview_d.jpg",
-      "phaser_path": "assets/concepts/battle/battle_concept_sideview_d.jpg",
-      "content_hash": "pending"
+      "license_origin": "generated_cursor_GenerateImage_2026-11-18"
     },
     {
-      "id": "hero.braxor.concept_fullbody",
-      "purpose": "Approved appearance reference Braxor (needs side-view redraw)",
+      "id": "hero.braxor.concept_fullbody_v1",
       "source_path": "assets/source/concepts/heroes/braxor_reference.jpg",
-      "status": "approved",
-      "notes": "Appearance only; battle sprite side-view pending"
+      "status": "archived",
+      "notes": "Pre-anime appearance archive"
     },
     {
-      "id": "hero.nixara.concept_fullbody",
-      "purpose": "Approved appearance reference Nixara (needs side-view redraw)",
+      "id": "hero.nixara.concept_fullbody_v1",
       "source_path": "assets/source/concepts/heroes/nixara_reference.jpg",
-      "status": "approved",
-      "notes": "Appearance only; battle sprite side-view pending"
+      "status": "archived",
+      "notes": "Pre-anime appearance archive"
+    },
+    {
+      "id": "hero.braxor.anime_fullbody",
+      "purpose": "Braxor tank anime fantasy fullbody reference",
+      "source_path": "assets/source/concepts/heroes/braxor_anime_fullbody.jpg",
+      "status": "generated",
+      "faction": "ural_wardens",
+      "class": "tank"
+    },
+    {
+      "id": "hero.nixara.anime_fullbody",
+      "purpose": "Nixara assassin anime fantasy fullbody reference",
+      "source_path": "assets/source/concepts/heroes/nixara_anime_fullbody.jpg",
+      "status": "generated",
+      "faction": "dark_creatures",
+      "class": "assassin"
     }
   ]
 }

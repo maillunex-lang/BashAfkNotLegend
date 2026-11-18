@@ -1,6 +1,7 @@
 {
-  "$schema_comment": "Bashkir Sarcastic Fantasy design tokens — PROPOSAL pending approval (VIS-00)",
-  "version": "0.1.0-draft",
+  "$schema_comment": "Bashkir Anime Sarcastic Fantasy 2D tokens — pending approval (VIS-00e / DEC-007)",
+  "version": "0.2.0-draft",
+  "art_style": "bashkir_anime_sarcastic_fantasy_2d",
   "color": {
     "slate_night": "#172632",
     "forest_jade": "#28665A",
@@ -9,6 +10,8 @@
     "ice_teal": "#7DD4CB",
     "parchment": "#F3E7CF",
     "danger": "#D65B62",
+    "sky_bright": "#7EC8E3",
+    "leaf_pop": "#3FAF7A",
     "text_primary": "#F8F4E9",
     "text_on_parchment": "#172632",
     "faction": {
@@ -46,7 +49,18 @@
     "isometric": false,
     "speed_options": [1, 2, 3],
     "hud_top": ["wave", "timer", "pause", "speed", "auto"],
-    "hud_bottom": ["five_portraits", "energy", "ultimates"]
+    "hud_bottom": ["five_large_portraits", "ultimate_energy", "ult_ready", "status_overlay"],
+    "character_scale": "large_readable_on_phone",
+    "empty_sky_budget": "reduced",
+    "lighting": "bright_anime_cel",
+    "outline": "medium_readable"
+  },
+  "character": {
+    "proportions": "stylized_anime",
+    "head_scale": "slightly_enlarged",
+    "eyes": "expressive_enlarged",
+    "detail_level": "bold_shapes_simplify_micro",
+    "forbid": ["photoreal", "realistic_3d_render", "cheap_chibi"]
   },
   "motion": {
     "screen_enter_ms": 280,
