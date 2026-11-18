@@ -1,0 +1,50 @@
+{
+  "$schema_comment": "Bashkir Sarcastic Fantasy design tokens — PROPOSAL pending approval (VIS-00)",
+  "version": "0.1.0-draft",
+  "color": {
+    "slate_night": "#172632",
+    "forest_jade": "#28665A",
+    "copper": "#C78348",
+    "amber": "#F3C36A",
+    "ice_teal": "#7DD4CB",
+    "parchment": "#F3E7CF",
+    "danger": "#D65B62",
+    "text_primary": "#F8F4E9",
+    "text_on_parchment": "#172632",
+    "faction": {
+      "ural_wardens": { "primary": "#C78348", "secondary": "#6B7280", "glow": "#F3C36A" },
+      "forest_spirits": { "primary": "#28665A", "secondary": "#7CB342", "glow": "#A8E6A1" },
+      "dark_creatures": { "primary": "#3B1F2B", "secondary": "#D65B62", "glow": "#C4A484" },
+      "skyborn": { "primary": "#F3C36A", "secondary": "#7DD4CB", "glow": "#E8F7FF" },
+      "ancients": { "primary": "#8B7355", "secondary": "#1A1A1A", "glow": "#D4A574" },
+      "renegades": { "primary": "#B8860B", "secondary": "#7CFC00", "glow": "#FFE08A" }
+    }
+  },
+  "typography": {
+    "display_family_proposal": "Expressive grotesque with Cyrillic (TBD font license)",
+    "body_family_proposal": "Humanist sans with Cyrillic (TBD font license)",
+    "flavor_family_proposal": "Optional narrow serif for quotes",
+    "sizes_dp": { "caption": 12, "body": 14, "title": 18, "display": 28, "hero_name": 22 }
+  },
+  "spacing_dp": { "xs": 4, "sm": 8, "md": 12, "lg": 16, "xl": 24, "xxl": 32 },
+  "touch": { "min_target_dp": 48 },
+  "radius_dp": { "sm": 8, "md": 12, "lg": 16, "frame": 10 },
+  "elevation": { "panel": "soft copper rim + 1px slate shadow", "modal": "deeper slate scrim 60%" },
+  "layout": {
+    "orientation": "portrait",
+    "reference_widths_px": [360, 390, 412, 428],
+    "safe_areas": ["notch", "home_indicator", "camera_cutout"]
+  },
+  "combat": {
+    "formation": "2_front_3_back",
+    "aspect": "9:16",
+    "camera": "fixed",
+    "speed_options": [1, 2, 3]
+  },
+  "motion": {
+    "screen_enter_ms": 280,
+    "button_press_ms": 120,
+    "ult_ready_pulse_ms": 900,
+    "note": "Motion for presence; not meme spam"
+  }
+}
