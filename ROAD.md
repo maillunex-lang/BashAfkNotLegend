@@ -21,13 +21,14 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 
 | ID | Этап | Статус | Платформа | Док |
 |----|------|--------|-----------|-----|
-| VIS-00 | Арт-библия **Anime Fantasy 2D** + эталоны | `IN_PROGRESS` | Android-first art | [docs/visual/ART_BIBLE.md](docs/visual/ART_BIBLE.md) |
+| VIS-00 | Арт-библия **Anime Fantasy 2D** + эталоны | `DONE` (V1) | DEC-012 VISUAL-APPROVAL-001 | [docs/visual/ART_BIBLE.md](docs/visual/ART_BIBLE.md) |
 | VIS-00e | Бой E + Браксор/Никсара anime | `DONE` | Approved + правки DEC-008 | concepts/ |
 | VIS-00b | Godot prototype 2v2 + screenshot/video | `DONE` (на review) | Evidence в artifacts | `apps/android-godot/` |
-| BATTLE-POLISH-002 | Facing/slots/YSort/speed x1 | `IN_PROGRESS` | Braxor v2 RIGHT + source_facing | `apps/android-godot/` |
+| BATTLE-POLISH-002 | Facing/slots/YSort/speed x1 | `IN_PROGRESS` | V1 art locked; facing system | `apps/android-godot/` |
+| VIS-APPROVAL-001 | Универсальная система анимаций/направлений | `IN_PROGRESS` | CharacterData ≠ VisualDef | DEC-012 |
 | VIS-01…09 | UI → герои → бои → карта → бестиарий → … | `NOT_STARTED` | Godot Android Showcase | [VISUAL_ROAD.md](docs/visual/VISUAL_ROAD.md) |
 
-**Стоп-гейт сейчас (DEC-007):** утвердить стиль Anime Fantasy + 3 кадра (бой E, Браксор anime, Никсара anime). Side-view layout (DEC-005) сохранён. Массовая генерация и Godot — после approve. PWA не разрабатывается.
+**После VISUAL-APPROVAL-001 (DEC-012):** графика/анимации V1 утверждены. Приоритет — универсальная система facing/анимаций и поэтапные партии ассетов с проверкой направления. Не бесконечно полировать одного героя. PWA не разрабатывается.
 
 ## Сводка: механики (TECH-005 B) — после visual gate на Android
 
@@ -51,8 +52,9 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 |-----------|--------|--------|
 | Аудит GDD / docs foundation | `DONE` | GAME.md + пакет контрактов |
 | Visual-first + Android-first зафиксированы | `DONE` | DEC-003, VISUAL_ROAD |
-| VIS-00 арт-библия Anime Fantasy | `IN_PROGRESS` | DEC-007; эталоны E на review |
-| Браксор/Никсара anime | `IN_PROGRESS` | review; v1 realistic archived |
+| VIS-00 арт-библия Anime Fantasy | `DONE` (V1) | DEC-012 VISUAL-APPROVAL-001 |
+| Браксор/Никсара anime | `DONE` (V1) | approved combat sprites; swappable later |
+| CharacterData / VisualDef split | `IN_PROGRESS` | `apps/android-godot/scripts/data/` |
 | Блокирующие BQ (сервер/платежи и т.д.) | `BLOCKED` | DECISIONS — не блокируют арт VIS-00 |
 | PWA реализация | `BLOCKED` | ждёт разрешения |
 | Docker / игровой серверный код | `NOT_STARTED` | после visual samples + следующих инструкций |

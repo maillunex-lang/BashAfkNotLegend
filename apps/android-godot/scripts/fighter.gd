@@ -1,11 +1,11 @@
 extends Node2D
 class_name Fighter
 
-## Facing model (BATTLE-POLISH-002):
-## source_facing  = direction on the source PNG
-## desired_facing = direction we want in battle (usually toward target)
-## battle_side    = which half of the field this fighter occupies (LEFT/RIGHT)
-## flip_h         = (source_facing != desired_facing)  — applied ONLY on the sprite
+## Facing model (BATTLE-POLISH-002 / VISUAL-APPROVAL-001):
+## source_facing  = direction on the source PNG (from CharacterVisualDef)
+## desired_facing = direction toward current target / battle intent
+## battle_side    = which half of the field (LEFT/RIGHT) — NOT the same as facing
+## Body.scale.x flips when source != desired; UI sibling stays unflipped
 
 signal died(fighter)
 signal energy_changed(fighter, value, max_value)
@@ -33,7 +33,11 @@ enum BattleSide { LEFT, RIGHT }
 @export var source_facing: Facing = Facing.RIGHT
 @export var battle_side: BattleSide = BattleSide.LEFT
 @export var show_facing_debug: bool = true
+## If set before add_child, loads CharacterData from CharacterRegistry in _ready.
+@export var character_id: String = ""
 
+var character_data: CharacterData = null
+var visual_def: CharacterVisualDef = null
 var hp: float
 var energy: float = 40.0
 var alive: bool = true
@@ -58,7 +62,49 @@ var knockback_vel: Vector2 = Vector2.ZERO
 
 var home_pos: Vector2 = Vector2.ZERO
 
+func apply_character_data(data: CharacterData) -> void:
+	## Bind logic + visual packages without rewriting combat.
+	character_data = data
+	if data == null:
+		return
+	character_id = data.character_id
+	fighter_id = data.character_id
+	display_name = data.display_name
+	max_hp = data.max_hp
+	max_energy = data.max_energy
+	attack_power = data.attack_power
+	preferred_range = data.preferred_range
+	move_speed = data.move_speed
+	is_front_row = data.is_front_row_default
+	match data.role_style:
+		CharacterData.RoleStyle.TANK:
+			style = Style.TANK
+		CharacterData.RoleStyle.ASSASSIN:
+			style = Style.ASSASSIN
+		CharacterData.RoleStyle.BRUTE:
+			style = Style.BRUTE
+		CharacterData.RoleStyle.BEAST:
+			style = Style.BEAST
+		_:
+			style = Style.TANK
+	visual_def = data.visual
+	if visual_def:
+		sprite_folder = visual_def.sprite_folder
+		personal_space = visual_def.personal_space
+		source_facing = Facing.RIGHT if visual_def.source_facing == CharacterVisualDef.Facing.RIGHT else Facing.LEFT
+
+func attach_point(kind: String) -> Vector2:
+	## Local attach in body space; X mirrored when Body is flipped.
+	if visual_def == null:
+		return Vector2.ZERO
+	var p: Vector2 = visual_def.attach_point(kind)
+	if body != null and body.scale.x < 0.0:
+		p.x = -p.x
+	return p
+
 func _ready() -> void:
+	if character_id != "" and character_data == null:
+		apply_character_data(CharacterRegistry.get_character(character_id))
 	hp = max_hp
 	home_y = global_position.y
 	home_pos = global_position

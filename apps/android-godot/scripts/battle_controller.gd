@@ -1,7 +1,8 @@
 extends Node2D
 
-## BATTLE-POLISH-002: simultaneous side-view battle with source_facing,
-## engagement slots, soft separation, YSort feet, readable x1 tempo.
+## BATTLE-POLISH-002 + VISUAL-APPROVAL-001:
+## CharacterRegistry supplies CharacterData + CharacterVisualDef.
+## Facing follows target/side; source_facing from visual package.
 
 @onready var braxor: Fighter = $Fighters/Braxor
 @onready var nixara: Fighter = $Fighters/Nixara
@@ -78,42 +79,32 @@ func _print_facing_diagnostics() -> void:
 		print("[FACING] ", f.debug_facing_report())
 
 func _configure_fighters() -> void:
-	# Source facing from PNG audit (pixel mass). Desired facing follows target.
-	braxor.style = Fighter.Style.TANK
-	braxor.preferred_range = 135.0
-	braxor.move_speed = 32.0
-	braxor.personal_space = 88.0
-	# Canonical PNG faces RIGHT (see assets/sprites/braxor/_authored_right).
-	# Never flop these again without visual QA of face+shield toward enemy.
-	braxor.source_facing = Fighter.Facing.RIGHT
+	# Logic + visuals from CharacterRegistry (swap PNGs without rewriting combat).
+	braxor.apply_character_data(CharacterRegistry.get_character("braxor"))
+	nixara.apply_character_data(CharacterRegistry.get_character("nixara"))
+	stonekin.apply_character_data(CharacterRegistry.get_character("stonekin"))
+	shadewolf.apply_character_data(CharacterRegistry.get_character("shadewolf"))
+
+	# Side of field only — facing is toward target / desired_facing.
 	braxor.battle_side = Fighter.BattleSide.LEFT
-	braxor.set_desired_facing(Fighter.Facing.RIGHT)
-
-	nixara.style = Fighter.Style.ASSASSIN
-	nixara.preferred_range = 110.0
-	nixara.move_speed = 58.0
-	nixara.personal_space = 64.0
-	# Remade anime sprites face RIGHT on disk (verified QA)
-	nixara.source_facing = Fighter.Facing.RIGHT
 	nixara.battle_side = Fighter.BattleSide.LEFT
-	nixara.set_desired_facing(Fighter.Facing.RIGHT)
-
-
-	stonekin.style = Fighter.Style.BRUTE
-	stonekin.preferred_range = 140.0
-	stonekin.move_speed = 24.0
-	stonekin.personal_space = 96.0
-	stonekin.source_facing = Fighter.Facing.RIGHT
 	stonekin.battle_side = Fighter.BattleSide.RIGHT
-	stonekin.set_desired_facing(Fighter.Facing.LEFT) # flip_h true
-
-	shadewolf.style = Fighter.Style.BEAST
-	shadewolf.preferred_range = 115.0
-	shadewolf.move_speed = 62.0
-	shadewolf.personal_space = 70.0
-	shadewolf.source_facing = Fighter.Facing.LEFT
 	shadewolf.battle_side = Fighter.BattleSide.RIGHT
-	shadewolf.set_desired_facing(Fighter.Facing.LEFT) # flip_h false
+
+	braxor.set_desired_facing(Fighter.Facing.RIGHT)
+	nixara.set_desired_facing(Fighter.Facing.RIGHT)
+	stonekin.set_desired_facing(Fighter.Facing.LEFT)
+	shadewolf.set_desired_facing(Fighter.Facing.LEFT)
+
+	# Rebuild frames if sprites already ready (apply after scene export defaults).
+	for f in [braxor, nixara, stonekin, shadewolf]:
+		if f.sprite != null and f.sprite.sprite_frames != null:
+			f._build_frames()
+			f.hp = f.max_hp
+			f._update_bars()
+			f.name_label.text = f.display_name
+			f._apply_facing()
+			f.play_anim("idle")
 
 func _process(delta: float) -> void:
 	var d := delta
