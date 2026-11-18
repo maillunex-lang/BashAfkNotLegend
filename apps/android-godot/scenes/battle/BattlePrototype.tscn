@@ -61,7 +61,7 @@ y_sort_enabled = true
 z_index = 1
 
 [node name="Braxor" parent="Fighters" instance=ExtResource("3_fighter")]
-position = Vector2(250, 1040)
+position = Vector2(280, 1040)
 fighter_id = "braxor"
 display_name = "Браксор"
 team = "player"
@@ -74,7 +74,7 @@ battle_side = 0
 show_facing_debug = true
 
 [node name="Nixara" parent="Fighters" instance=ExtResource("3_fighter")]
-position = Vector2(160, 910)
+position = Vector2(170, 900)
 fighter_id = "nixara"
 display_name = "Никсара"
 team = "player"
@@ -82,7 +82,7 @@ is_front_row = false
 max_hp = 950.0
 attack_power = 160.0
 sprite_folder = "nixara"
-source_facing = 0
+source_facing = 1
 battle_side = 0
 show_facing_debug = true
 

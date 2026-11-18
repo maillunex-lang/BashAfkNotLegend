@@ -56,14 +56,16 @@ var knockback_vel: Vector2 = Vector2.ZERO
 @onready var name_label: Label = $UI/NameLabel
 @onready var vfx: Sprite2D = $Body/VFX
 
+var home_pos: Vector2 = Vector2.ZERO
+
 func _ready() -> void:
 	hp = max_hp
 	home_y = global_position.y
+	home_pos = global_position
 	desired_facing = Facing.RIGHT if battle_side == BattleSide.LEFT else Facing.LEFT
-	# Never flip the Body node — only the sprite. Prevents double-mirror + UI flip.
-	body.scale = Vector2.ONE
 	scale = Vector2.ONE
 	sprite.flip_h = false
+	body.scale = Vector2.ONE
 	_build_frames()
 	_apply_facing()
 	_update_bars()
@@ -76,15 +78,18 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	_update_depth()
-	# Keep UI upright / unflipped regardless of sprite.flip_h
+	# UI is sibling of Body — keep upright even when Body.scale.x flips
 	ui.scale = Vector2.ONE
 	ui.global_rotation = 0.0
-	body.scale = Vector2.ONE # hard guard against accidental parent flips
 	_apply_facing()
 	_sync_dir_arrow()
 	if knockback_vel.length() > 0.5:
 		global_position += knockback_vel * _delta
 		knockback_vel = knockback_vel.lerp(Vector2.ZERO, clampf(6.0 * _delta, 0.0, 1.0))
+
+func remember_home() -> void:
+	home_pos = global_position
+	home_y = global_position.y
 
 func foot_y() -> float:
 	return global_position.y + foot_offset_y
@@ -125,26 +130,26 @@ func _build_frames() -> void:
 		frames.add_animation(anim)
 		var loop: bool = anim == "idle" or anim == "walk" or anim == "run"
 		frames.set_animation_loop(anim, loop)
-		# Readable x1 timings — not hyperspeed FPS
-		var spd := 6.0
+		# Target display ~30 FPS pipeline; frame rates chosen for readable poses
+		var spd := 10.0
 		match anim:
-			"idle": spd = 3.0
+			"idle": spd = 6.0
 			"walk":
 				match style:
-					Style.TANK, Style.BRUTE: spd = 4.5
-					Style.ASSASSIN, Style.BEAST: spd = 7.0
-					_: spd = 5.5
+					Style.TANK, Style.BRUTE: spd = 8.0
+					Style.ASSASSIN, Style.BEAST: spd = 12.0
+					_: spd = 10.0
 			"run":
 				match style:
-					Style.ASSASSIN, Style.BEAST: spd = 9.0
-					_: spd = 6.5
-			"attack1", "attack2": spd = 6.0
-			"skill1", "skill2": spd = 5.5
-			"ultimate": spd = 5.0
-			"hit": spd = 5.0
-			"stagger": spd = 4.5
-			"death": spd = 3.5
-			"victory", "block", "personality": spd = 4.0
+					Style.ASSASSIN, Style.BEAST: spd = 14.0
+					_: spd = 11.0
+			"attack1", "attack2": spd = 12.0
+			"skill1", "skill2": spd = 11.0
+			"ultimate": spd = 10.0
+			"hit": spd = 10.0
+			"stagger": spd = 8.0
+			"death": spd = 6.0
+			"victory", "block", "personality": spd = 8.0
 		frames.set_animation_speed(anim, spd)
 		for file_name in list:
 			var path: String = base + str(file_name)
@@ -172,10 +177,9 @@ func play_anim(anim_name: String) -> void:
 
 func _on_sprite_anim_finished() -> void:
 	var finished: String = sprite.animation
-	if alive and finished not in ["idle", "walk", "run", "death"]:
+	# Do NOT clear busy here — turn controller owns busy via attack/return tweens.
+	if alive and not busy and finished not in ["idle", "walk", "run", "death"]:
 		play_anim("idle")
-	if finished != "walk" and finished != "run":
-		busy = false
 	animation_finished.emit(self, finished)
 
 func face_towards(target_pos: Vector2) -> void:
@@ -201,17 +205,14 @@ func facing_sign() -> float:
 	return 1.0 if desired_facing == Facing.RIGHT else -1.0
 
 func _apply_facing() -> void:
-	# flip_h = (source_facing != desired_facing). Apply on sprite ONLY.
-	# Body/UI/Shadow stay at scale.x = +1 to prevent double-mirror.
-	body.scale = Vector2.ONE
+	# Rule: flip when source_facing != desired_facing.
+	# Use Body.scale.x only (UI is a sibling, stays upright). Never also flip_h.
 	var need_flip: bool = source_facing != desired_facing
-	sprite.flip_h = need_flip
-	# Hard assert: never also scale-flip the body
-	if absf(body.scale.x + 1.0) < 0.01:
-		push_warning("Fighter %s: body.scale.x was -1 (double flip risk); reset" % fighter_id)
-		body.scale.x = 1.0
+	sprite.flip_h = false
+	body.scale = Vector2(-1.0 if need_flip else 1.0, 1.0)
 	if vfx:
 		vfx.flip_h = false
+		vfx.scale.x = absf(vfx.scale.x)
 
 func _ensure_dir_arrow() -> void:
 	if ui.get_node_or_null("DirArrow") != null:
@@ -241,7 +242,7 @@ func debug_facing_report() -> String:
 		"L" if battle_side == BattleSide.LEFT else "R",
 		str(sprite.flip_h),
 		body.scale.x,
-	]
+	] # expected: allies body.sx=+1 when src=R want=R
 
 func _update_bars() -> void:
 	hp_bar.max_value = max_hp

@@ -189,3 +189,9 @@
   - `source_facing = RIGHT`; `flip_h` только когда `desired_facing != source_facing`.
   - Не утверждать ассет без визуальной проверки лица+щита.
 - Ссылки: BATTLE-POLISH-002, `fighter.gd` facing model
+
+
+### DEC-011 — Turn-based strike-and-return + anime remakes
+- Дата: 2026-11-18
+- Статус: IN_PROGRESS
+- Решение: бой по очереди (удар/умение → возврат на home); Engine.max_fps=30; Braxor idle = shield-forward RIGHT; Nixara remade RIGHT; ghost trails отключены.

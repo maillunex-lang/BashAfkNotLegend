@@ -31,12 +31,17 @@ const MAX_VFX: int = 14
 var demo_phase: int = 0
 var demo_timer: float = 0.0
 
-# Engagement slot bookkeeping: target_id -> Array of {fighter, angle}
+# Turn-based: one actor strikes then returns home
 var _slots: Dictionary = {}
+var turn_queue: Array[Fighter] = []
+var turn_index: int = 0
+var turn_lock: bool = false
+var between_turn_cd: float = 0.0
 
 func _ready() -> void:
 	wall_start_ms = Time.get_ticks_msec()
 	Engine.time_scale = 1.0
+	Engine.max_fps = 30
 	players = [braxor, nixara]
 	enemies = [stonekin, shadewolf]
 	all_fighters = players + enemies
@@ -46,16 +51,27 @@ func _ready() -> void:
 		f.died.connect(_on_fighter_died)
 		f.energy_changed.connect(_on_energy_changed)
 		f.ult_ready.connect(_on_ult_ready)
+		f.remember_home()
+	_rebuild_turn_queue()
 	hud.setup(players)
 	hud.ult_pressed.connect(_on_ult_pressed)
 	hud.speed_changed.connect(_on_speed_changed)
 	hud.auto_toggled.connect(_on_auto_toggled)
 	wave_label.text = "WAVE 1/1"
-	_log("Бой: source_facing + слоты. Браксор → вправо.")
+	_log("Очередь: удар → назад. FPS 30. Лицом →")
 	_print_facing_diagnostics()
 	var tw := create_tween().set_loops()
 	tw.tween_property($ParallaxRoot/Mountains, "position:x", -14.0, 9.0).as_relative()
 	tw.tween_property($ParallaxRoot/Mountains, "position:x", 14.0, 9.0).as_relative()
+
+func _rebuild_turn_queue() -> void:
+	turn_queue.clear()
+	# Speed order: assassin/beast first, then tank/brute; alternate sides
+	var order: Array[Fighter] = [nixara, shadewolf, braxor, stonekin]
+	for f in order:
+		if f != null and f.alive:
+			turn_queue.append(f)
+	turn_index = 0
 
 func _print_facing_diagnostics() -> void:
 	for f in all_fighters:
@@ -77,9 +93,11 @@ func _configure_fighters() -> void:
 	nixara.preferred_range = 110.0
 	nixara.move_speed = 58.0
 	nixara.personal_space = 64.0
-	nixara.source_facing = Fighter.Facing.LEFT # PNG faces left
+	# Remade anime sprites face RIGHT on disk (verified QA)
+	nixara.source_facing = Fighter.Facing.RIGHT
 	nixara.battle_side = Fighter.BattleSide.LEFT
-	nixara.set_desired_facing(Fighter.Facing.RIGHT) # flip_h true
+	nixara.set_desired_facing(Fighter.Facing.RIGHT)
+
 
 	stonekin.style = Fighter.Style.BRUTE
 	stonekin.preferred_range = 140.0
@@ -98,7 +116,6 @@ func _configure_fighters() -> void:
 	shadewolf.set_desired_facing(Fighter.Facing.LEFT) # flip_h false
 
 func _process(delta: float) -> void:
-	# Engine.time_scale drives unified battle tempo; delta is already scaled.
 	var d := delta
 	elapsed += d
 	demo_timer += d
@@ -111,32 +128,72 @@ func _process(delta: float) -> void:
 		screenshot_done = true
 
 	if ended:
-		_soft_separate(d)
 		return
 
 	for f in all_fighters:
 		if f.alive:
-			f.gain_energy(3.2 * d)
-			f.attack_cd = max(0.0, f.attack_cd - d)
+			f.gain_energy(2.4 * d)
 			f.skill_cd = max(0.0, f.skill_cd - d)
+			# Idle at home facing target side
+			if not f.busy and not turn_lock:
+				f.global_position = f.global_position.lerp(f.home_pos, clampf(4.0 * d, 0.0, 1.0))
+				if f.current_target != null and f.current_target.alive:
+					f.face_towards(f.current_target.global_position)
+				else:
+					f.lock_team_facing()
+				if f.sprite.animation not in ["idle", "victory"]:
+					f.play_anim("idle")
 
 	_update_targets()
-	_assign_engagement_slots()
 	_demo_scripted_skills()
-	for f in all_fighters:
-		if f.alive and not f.busy:
-			_ai_step(f, d)
-	_soft_separate(d)
 
-	if auto_mode:
-		_try_auto_ults()
+	if between_turn_cd > 0.0:
+		between_turn_cd = max(0.0, between_turn_cd - d)
+	elif not turn_lock:
+		_try_next_turn()
 
 	_check_end()
 	var quit_after := float(OS.get_environment("BASH_DEMO_SECONDS"))
 	if quit_after <= 0.0:
-		quit_after = 45.0
+		quit_after = 40.0
 	if OS.get_environment("BASH_DEMO_QUIT") == "1" and wall_s >= quit_after:
 		get_tree().quit()
+
+func _try_next_turn() -> void:
+	if turn_queue.is_empty():
+		_rebuild_turn_queue()
+	if turn_queue.is_empty():
+		return
+	# Find next living actor
+	for _i in range(turn_queue.size()):
+		if turn_index >= turn_queue.size():
+			turn_index = 0
+		var actor: Fighter = turn_queue[turn_index]
+		turn_index = (turn_index + 1) % max(turn_queue.size(), 1)
+		if actor == null or not actor.alive or actor.busy:
+			continue
+		var target := actor.current_target
+		if target == null or not target.alive:
+			target = _nearest_living(actor, enemies if actor.team == "player" else players)
+			actor.current_target = target
+		if target == null:
+			continue
+		turn_lock = true
+		# Ult if ready and auto
+		if auto_mode and actor.can_ult() and actor.team == "player" and randf() < 0.45:
+			_perform_ultimate(actor)
+		else:
+			_start_attack(actor, target)
+		return
+
+func _end_turn(actor: Fighter) -> void:
+	if actor != null and actor.alive:
+		actor.busy = false
+		actor.play_anim("idle")
+		actor.lock_team_facing()
+	turn_lock = false
+	between_turn_cd = 0.35
+	_rebuild_turn_queue()
 
 func _update_targets() -> void:
 	for f in players:
@@ -210,75 +267,25 @@ func _assign_engagement_slots() -> void:
 			f.reserved_slot = slot
 			f.has_reserved_slot = true
 
-func _ai_step(f: Fighter, d: float) -> void:
-	var target := f.current_target
-	if target == null or not target.alive:
-		f.play_anim("idle")
-		return
-	f.face_towards(target.global_position)
-	var dest := f.reserved_slot if f.has_reserved_slot else Vector2(
-		target.global_position.x - f.facing_sign() * f.preferred_range,
-		lerpf(f.global_position.y, target.global_position.y, 0.3)
+func _contact_pos(f: Fighter, target: Fighter, gap: float = 70.0) -> Vector2:
+	var p := Vector2(target.global_position.x - f.facing_sign() * gap, lerpf(f.home_pos.y, target.global_position.y, 0.35))
+	p.x = clampf(p.x, 120.0, 960.0)
+	p.y = clampf(p.y, 880.0, 1120.0)
+	return p
+
+func _return_home(f: Fighter, tw: Tween, after: float = 0.28) -> void:
+	tw.tween_interval(0.12)
+	tw.tween_callback(func():
+		if f.alive:
+			f.play_anim("walk")
 	)
-	var dist := f.global_position.distance_to(dest)
-	var to_target := f.distance_to_fighter(target)
-	if dist > 22.0 and to_target > f.preferred_range * 0.72:
-		_move_towards(f, dest, d)
-		var moving_fast := f.style == Fighter.Style.ASSASSIN or f.style == Fighter.Style.BEAST
-		f.play_anim("run" if moving_fast and dist > 60.0 else "walk")
-	elif to_target < f.preferred_range * 0.55:
-		_move_towards(f, dest, d * 0.65)
-		f.play_anim("walk")
-	else:
-		if f.attack_cd <= 0.0:
-			_start_attack(f, target)
-		elif f.sprite.animation in ["walk", "run"]:
-			f.play_anim("idle")
-
-func _move_towards(f: Fighter, dest: Vector2, d: float) -> void:
-	var dir := dest - f.global_position
-	if dir.length() < 1.0:
-		return
-	dir = dir.normalized()
-	var next := f.global_position + dir * f.move_speed * d
-	next.y = lerpf(f.global_position.y, dest.y, clampf(2.2 * d, 0.0, 1.0))
-	next.x = clampf(next.x, 110.0, 970.0)
-	next.y = clampf(next.y, 860.0, 1125.0)
-	f.global_position = next
-
-func _soft_separate(d: float) -> void:
-	# Soft personal-space push — no jitter oscillation
-	for i in range(all_fighters.size()):
-		var a: Fighter = all_fighters[i]
-		if not a.alive:
-			continue
-		for j in range(i + 1, all_fighters.size()):
-			var b: Fighter = all_fighters[j]
-			if not b.alive:
-				continue
-			var delta_pos := a.global_position - b.global_position
-			# Elliptical: stronger X separation so silhouettes don't stack
-			var min_dist := (a.personal_space + b.personal_space) * 0.5
-			var dx := delta_pos.x
-			var dy := delta_pos.y * 1.35
-			var dist := sqrt(dx * dx + dy * dy)
-			if dist < 0.001 or dist >= min_dist:
-				continue
-			var push := (min_dist - dist) / min_dist
-			var n := Vector2(dx, dy).normalized()
-			var force := n * push * 55.0 * d
-			if not a.busy:
-				a.global_position += force
-			if not b.busy:
-				b.global_position -= force
-			a.global_position.x = clampf(a.global_position.x, 110.0, 970.0)
-			b.global_position.x = clampf(b.global_position.x, 110.0, 970.0)
-			a.global_position.y = clampf(a.global_position.y, 860.0, 1125.0)
-			b.global_position.y = clampf(b.global_position.y, 860.0, 1125.0)
+	tw.tween_property(f, "global_position", f.home_pos, after)
+	tw.tween_callback(func():
+		_end_turn(f)
+	)
 
 func _start_attack(f: Fighter, target: Fighter) -> void:
 	f.busy = true
-	f.attack_cd = _attack_cooldown(f)
 	f.face_towards(target.global_position)
 	match f.style:
 		Fighter.Style.TANK:
@@ -290,166 +297,122 @@ func _start_attack(f: Fighter, target: Fighter) -> void:
 		Fighter.Style.BEAST:
 			_shadewolf_attack(f, target)
 
-func _attack_cooldown(f: Fighter) -> float:
-	# x1 readable cadence (BATTLE-SPEED-001)
-	match f.style:
-		Fighter.Style.TANK: return 2.15
-		Fighter.Style.ASSASSIN: return 1.35
-		Fighter.Style.BRUTE: return 2.55
-		Fighter.Style.BEAST: return 1.55
-	return 1.8
-
 func _braxor_attack(f: Fighter, target: Fighter) -> void:
-	# Block → shield bash (skill1) OR axe (attack2) alternating by skill_cd
 	var use_shield := f.skill_cd <= 0.0
 	if use_shield:
-		f.skill_cd = 4.5
+		f.skill_cd = 5.0
 		_log("%s: удар щитом" % f.display_name)
-		f.play_anim("block")
 	else:
 		_log("%s: удар топором" % f.display_name)
-		f.play_anim("attack1")
+	f.play_anim("walk")
+	var contact := _contact_pos(f, target, 85.0)
 	var tw := create_tween()
-	tw.tween_interval(0.35 if use_shield else 0.28)
+	tw.tween_property(f, "global_position", contact, 0.38)
 	tw.tween_callback(func():
 		if not f.alive or not target.alive:
-			f.busy = false
+			_end_turn(f)
 			return
 		f.face_towards(target.global_position)
-		f.play_anim("attack1" if use_shield else "attack2")
-		f.global_position.x = clampf(f.global_position.x + 18.0 * f.facing_sign(), 110.0, 970.0)
-		if use_shield:
-			_spawn_ring(f.global_position + Vector2(40 * f.facing_sign(), -40), Color(0.95, 0.8, 0.4, 0.85), 1.6)
-	)
-	tw.tween_interval(0.42)
-	tw.tween_callback(func():
-		if not f.alive or not target.alive:
-			f.busy = false
-			return
-		var dmg := f.attack_power * (1.2 if use_shield else 1.05)
-		_resolve_hit(f, target, dmg, Color(1.0, 0.85, 0.35, 0.95), "shield" if use_shield else "axe")
-		f.gain_energy(18.0)
-	)
-	tw.tween_interval(0.45)
-	tw.tween_callback(func():
-		if f.alive:
-			f.busy = false
-			f.play_anim("idle")
-	)
-
-func _nixara_attack(f: Fighter, target: Fighter) -> void:
-	_log("%s: теневой рывок" % f.display_name)
-	f.play_anim("skill2")
-	_spawn_trail(f, Color(0.75, 0.2, 0.85, 0.7))
-	var contact := Vector2(target.global_position.x - f.facing_sign() * 58.0, lerpf(f.global_position.y, target.global_position.y, 0.55))
-	contact.x = clampf(contact.x, 110.0, 970.0)
-	var tw := create_tween()
-	tw.tween_property(f, "global_position", contact, 0.22)
-	tw.tween_callback(func():
-		if not f.alive:
-			return
-		f.face_towards(target.global_position)
-		f.play_anim("attack2")
-		_spawn_slash(f.global_position + Vector2(30 * f.facing_sign(), -70), f.facing_sign(), Color(0.9, 0.3, 1.0, 0.9))
-	)
-	tw.tween_interval(0.22)
-	tw.tween_callback(func():
-		if not f.alive or not target.alive:
-			f.busy = false
-			return
-		_resolve_hit(f, target, f.attack_power * 0.65, Color(0.9, 0.3, 1.0, 0.9), "slash")
-	)
-	tw.tween_interval(0.16)
-	tw.tween_callback(func():
-		if not f.alive or not target.alive:
-			f.busy = false
-			return
-		f.play_anim("attack1")
-		_spawn_slash(f.global_position + Vector2(26 * f.facing_sign(), -50), f.facing_sign(), Color(1.0, 0.4, 0.8, 0.95))
-		_resolve_hit(f, target, f.attack_power * 0.8, Color(1.0, 0.4, 0.8, 0.95), "slash")
-		f.gain_energy(16.0)
-		# Flank slip — stay on ally side of target
-		f.global_position.x = clampf(target.global_position.x - f.facing_sign() * 70.0, 110.0, 970.0)
-		f.global_position.y = clampf(f.global_position.y + randf_range(-18, 18), 860.0, 1125.0)
-	)
-	tw.tween_interval(0.38)
-	tw.tween_callback(func():
-		if f.alive:
-			f.busy = false
-			f.play_anim("idle")
-	)
-
-func _stonekin_attack(f: Fighter, target: Fighter) -> void:
-	_log("%s: каменный удар" % f.display_name)
-	f.face_towards(target.global_position)
-	f.play_anim("attack1")
-	var tw := create_tween()
-	tw.tween_interval(0.55) # heavy windup
-	tw.tween_callback(func():
-		if not f.alive:
-			return
-		f.play_anim("attack2")
-		_spawn_ring(f.global_position + Vector2(0, 36), Color(0.65, 0.55, 0.4, 0.85), 1.5)
-		_spawn_dust(f.global_position + Vector2(20 * f.facing_sign(), 30))
+		f.play_anim("block" if use_shield else "attack1")
 	)
 	tw.tween_interval(0.28)
 	tw.tween_callback(func():
 		if not f.alive or not target.alive:
-			f.busy = false
+			_end_turn(f)
 			return
+		f.play_anim("attack1" if use_shield else "attack2")
+		_spawn_ring(f.global_position + Vector2(36 * f.facing_sign(), -40), Color(0.95, 0.8, 0.4, 0.85), 1.5)
+		_spawn_hit_flash(target.global_position + Vector2(0, -80), Color(1.0, 0.85, 0.35, 0.95))
+		_resolve_hit(f, target, f.attack_power * (1.2 if use_shield else 1.05), Color(1.0, 0.85, 0.35, 0.95), "melee")
+		f.gain_energy(18.0)
+	)
+	_return_home(f, tw, 0.32)
+
+func _nixara_attack(f: Fighter, target: Fighter) -> void:
+	_log("%s: теневой рывок" % f.display_name)
+	f.play_anim("run")
+	var contact := _contact_pos(f, target, 60.0)
+	var tw := create_tween()
+	tw.tween_property(f, "global_position", contact, 0.26)
+	tw.tween_callback(func():
+		if not f.alive or not target.alive:
+			_end_turn(f)
+			return
+		f.face_towards(target.global_position)
+		f.play_anim("attack2")
+		_spawn_slash(f.global_position + Vector2(28 * f.facing_sign(), -70), f.facing_sign(), Color(0.9, 0.3, 1.0, 0.9))
+		_resolve_hit(f, target, f.attack_power * 0.7, Color(0.9, 0.3, 1.0, 0.9), "slash")
+	)
+	tw.tween_interval(0.18)
+	tw.tween_callback(func():
+		if not f.alive or not target.alive:
+			_end_turn(f)
+			return
+		f.play_anim("attack1")
+		_spawn_slash(f.global_position + Vector2(24 * f.facing_sign(), -50), f.facing_sign(), Color(1.0, 0.4, 0.8, 0.95))
+		_resolve_hit(f, target, f.attack_power * 0.85, Color(1.0, 0.4, 0.8, 0.95), "slash")
+		f.gain_energy(16.0)
+	)
+	_return_home(f, tw, 0.28)
+
+func _stonekin_attack(f: Fighter, target: Fighter) -> void:
+	_log("%s: каменный удар" % f.display_name)
+	f.play_anim("walk")
+	var contact := _contact_pos(f, target, 95.0)
+	var tw := create_tween()
+	tw.tween_property(f, "global_position", contact, 0.45)
+	tw.tween_callback(func():
+		if not f.alive or not target.alive:
+			_end_turn(f)
+			return
+		f.face_towards(target.global_position)
+		f.play_anim("attack1")
+	)
+	tw.tween_interval(0.35)
+	tw.tween_callback(func():
+		if not f.alive or not target.alive:
+			_end_turn(f)
+			return
+		f.play_anim("attack2")
+		_spawn_dust(f.global_position + Vector2(20 * f.facing_sign(), 30))
+		_spawn_ring(target.global_position + Vector2(0, 20), Color(0.7, 0.55, 0.35, 0.75), 2.0)
 		_resolve_hit(f, target, f.attack_power * 1.4, Color(0.8, 0.7, 0.45, 0.95), "slam")
-		_spawn_ring(target.global_position + Vector2(0, 20), Color(0.7, 0.55, 0.35, 0.7), 2.0)
-		if target.alive and not target.busy:
-			target.play_anim("stagger")
 		f.gain_energy(14.0)
 	)
-	tw.tween_interval(0.55)
-	tw.tween_callback(func():
-		if f.alive:
-			f.busy = false
-			f.play_anim("idle")
-	)
+	_return_home(f, tw, 0.4)
 
 func _shadewolf_attack(f: Fighter, target: Fighter) -> void:
 	_log("%s: прыжок-укус" % f.display_name)
-	f.face_towards(target.global_position)
 	f.play_anim("run")
-	var leap := Vector2(target.global_position.x - f.facing_sign() * 48.0, target.global_position.y - 8.0)
-	leap.x = clampf(leap.x, 110.0, 970.0)
+	var contact := _contact_pos(f, target, 55.0)
 	var tw := create_tween()
-	tw.tween_property(f, "global_position", leap, 0.26)
-	tw.tween_callback(func():
-		if not f.alive:
-			return
-		f.play_anim("attack2")
-		_spawn_trail(f, Color(0.35, 0.1, 0.45, 0.8))
-	)
-	tw.tween_interval(0.2)
+	tw.tween_property(f, "global_position", contact, 0.24)
 	tw.tween_callback(func():
 		if not f.alive or not target.alive:
-			f.busy = false
+			_end_turn(f)
 			return
+		f.face_towards(target.global_position)
+		f.play_anim("attack2")
+		_spawn_hit_flash(target.global_position + Vector2(0, -70), Color(0.6, 0.2, 0.7, 0.95))
 		_resolve_hit(f, target, f.attack_power * 1.05, Color(0.6, 0.2, 0.7, 0.95), "bite")
 		f.gain_energy(13.0)
 	)
-	tw.tween_interval(0.32)
-	tw.tween_callback(func():
-		if f.alive:
-			f.busy = false
-			f.play_anim("idle")
-	)
+	_return_home(f, tw, 0.3)
 
 func _perform_ultimate(actor: Fighter) -> void:
 	if not actor.can_ult():
+		_end_turn(actor)
 		return
 	var target := actor.current_target
 	if target == null or not target.alive:
 		target = _nearest_living(actor, enemies if actor.team == "player" else players)
 	if target == null:
+		_end_turn(actor)
 		return
 	actor.energy = 0.0
 	actor._update_bars()
 	actor.busy = true
+	turn_lock = true
 	actor.face_towards(target.global_position)
 	if actor.style == Fighter.Style.ASSASSIN:
 		_nixara_ult(actor, target)
@@ -460,70 +423,63 @@ func _perform_ultimate(actor: Fighter) -> void:
 
 func _braxor_ult(f: Fighter, target: Fighter) -> void:
 	_log("УЛЬТ Браксор: Хребет не сдаётся")
-	f.face_towards(target.global_position)
-	f.play_anim("ultimate")
-	_spawn_ring(f.global_position, Color(1.0, 0.75, 0.3, 0.95), 2.4)
+	f.play_anim("walk")
+	var contact := _contact_pos(f, target, 90.0)
 	var tw := create_tween()
-	tw.tween_interval(0.55)
+	tw.tween_property(f, "global_position", contact, 0.35)
 	tw.tween_callback(func():
 		if not f.alive:
+			_end_turn(f)
+			return
+		f.face_towards(target.global_position)
+		f.play_anim("ultimate")
+		_spawn_ring(f.global_position, Color(1.0, 0.75, 0.3, 0.95), 2.4)
+	)
+	tw.tween_interval(0.45)
+	tw.tween_callback(func():
+		if not f.alive:
+			_end_turn(f)
 			return
 		f.play_anim("attack2")
-		_spawn_ring(f.global_position + Vector2(30 * f.facing_sign(), -20), Color(1.0, 0.85, 0.4, 1.0), 2.8)
+		_spawn_ring(f.global_position + Vector2(30 * f.facing_sign(), -20), Color(1.0, 0.85, 0.4, 1.0), 2.6)
 		_spawn_dust(f.global_position)
 		for e in enemies:
-			if e.alive and f.distance_to_fighter(e) < 260.0:
+			if e.alive and f.distance_to_fighter(e) < 280.0:
 				_resolve_hit(f, e, f.attack_power * 1.7, Color(1.0, 0.8, 0.3, 1.0), "ult")
 	)
-	tw.tween_interval(0.7)
-	tw.tween_callback(func():
-		if f.alive:
-			f.busy = false
-			f.play_anim("victory" if ended else "idle")
-	)
+	_return_home(f, tw, 0.35)
 
 func _nixara_ult(f: Fighter, _target: Fighter) -> void:
 	_log("УЛЬТ Никсара: Ночь без свидетелей")
-	f.play_anim("ultimate")
-	_spawn_trail(f, Color(0.6, 0.1, 0.9, 0.9))
 	var marks: Array[Fighter] = []
 	for e in enemies:
 		if e.alive:
 			marks.append(e)
 	var tw := create_tween()
+	f.play_anim("run")
 	for e in marks:
 		tw.tween_callback(func():
 			if not f.alive or not e.alive:
 				return
-			f.global_position = Vector2(e.global_position.x - 55.0, e.global_position.y)
-			f.global_position.x = clampf(f.global_position.x, 110.0, 970.0)
+			f.global_position = Vector2(e.global_position.x - 55.0, e.home_pos.y)
+			f.global_position.x = clampf(f.global_position.x, 120.0, 960.0)
 			f.face_towards(e.global_position)
 			f.play_anim("attack2")
-			_spawn_trail(f, Color(0.8, 0.2, 1.0, 0.85))
 			_spawn_slash(f.global_position + Vector2(30, -60), 1.0, Color(0.85, 0.25, 1.0, 1.0))
 			_resolve_hit(f, e, f.attack_power * 1.45, Color(0.85, 0.25, 1.0, 1.0), "ult")
 		)
-		tw.tween_interval(0.38)
-	tw.tween_callback(func():
-		if f.alive:
-			f.busy = false
-			f.play_anim("idle")
-	)
+		tw.tween_interval(0.32)
+	_return_home(f, tw, 0.3)
 
 func _generic_ult(f: Fighter, target: Fighter) -> void:
 	f.play_anim("ultimate")
 	var tw := create_tween()
-	tw.tween_interval(0.4)
+	tw.tween_interval(0.35)
 	tw.tween_callback(func():
 		if f.alive and target.alive:
 			_resolve_hit(f, target, f.attack_power * 1.8, Color(1, 1, 1, 0.9), "ult")
 	)
-	tw.tween_interval(0.45)
-	tw.tween_callback(func():
-		if f.alive:
-			f.busy = false
-			f.play_anim("idle")
-	)
+	_return_home(f, tw, 0.3)
 
 func _resolve_hit(attacker: Fighter, target: Fighter, amount: float, vfx_color: Color, _kind: String) -> void:
 	if not attacker.alive or not target.alive:
@@ -553,23 +509,9 @@ func _spawn_damage_number(pos: Vector2, value: int, is_crit: bool) -> void:
 	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 0.85)
 	tw.tween_callback(lbl.queue_free)
 
-func _spawn_trail(f: Fighter, color: Color) -> void:
-	if active_vfx >= MAX_VFX:
-		return
-	active_vfx += 1
-	var poly := Polygon2D.new()
-	poly.color = color
-	poly.polygon = PackedVector2Array([Vector2(-22, -12), Vector2(24, -8), Vector2(18, 12), Vector2(-26, 10)])
-	poly.global_position = f.global_position + Vector2(-10 * f.facing_sign(), -24)
-	poly.z_as_relative = false
-	poly.z_index = 3200
-	floaters.add_child(poly)
-	var tw := create_tween()
-	tw.tween_property(poly, "modulate:a", 0.0, 0.4)
-	tw.tween_callback(func():
-		active_vfx = max(0, active_vfx - 1)
-		poly.queue_free()
-	)
+func _spawn_trail(_f: Fighter, _color: Color) -> void:
+	# Disabled: character-shaped afterimages looked like a ghost trail.
+	return
 
 func _spawn_slash(pos: Vector2, dir: float, color: Color) -> void:
 	if active_vfx >= MAX_VFX:
@@ -671,39 +613,20 @@ func _spawn_dust(pos: Vector2) -> void:
 		)
 
 func _demo_scripted_skills() -> void:
-	# Showcase at readable x1 pace
-	if demo_phase == 0 and demo_timer > 2.0 and braxor.alive and stonekin.alive and not braxor.busy:
+	# Force ult showcase once mid-fight without breaking turn lock
+	if demo_phase == 0 and demo_timer > 14.0 and braxor.alive and not turn_lock:
 		demo_phase = 1
-		_braxor_attack(braxor, stonekin)
-	elif demo_phase == 1 and demo_timer > 5.5 and nixara.alive and not nixara.busy:
-		demo_phase = 2
-		_nixara_attack(nixara, shadewolf if shadewolf.alive else stonekin)
-	elif demo_phase == 2 and demo_timer > 9.0 and stonekin.alive and not stonekin.busy:
-		demo_phase = 3
-		_stonekin_attack(stonekin, braxor if braxor.alive else nixara)
-	elif demo_phase == 3 and demo_timer > 12.5 and shadewolf.alive and not shadewolf.busy:
-		demo_phase = 4
-		_shadewolf_attack(shadewolf, nixara if nixara.alive else braxor)
-	elif demo_phase == 4 and demo_timer > 17.0 and braxor.alive:
-		demo_phase = 5
 		braxor.energy = braxor.max_energy
-		_perform_ultimate(braxor)
-	elif demo_phase == 5 and demo_timer > 21.0 and nixara.alive:
-		demo_phase = 6
+	elif demo_phase == 1 and demo_timer > 22.0 and nixara.alive and not turn_lock:
+		demo_phase = 2
 		nixara.energy = nixara.max_energy
-		_perform_ultimate(nixara)
-
-func _try_auto_ults() -> void:
-	if demo_phase < 6:
-		return
-	for f in players:
-		if f.can_ult() and randf() < 0.12:
-			_perform_ultimate(f)
-			return
 
 func _on_ult_pressed(fighter_id: String) -> void:
+	if turn_lock:
+		return
 	for f in players:
-		if f.fighter_id == fighter_id:
+		if f.fighter_id == fighter_id and f.can_ult():
+			turn_lock = true
 			_perform_ultimate(f)
 			return
 
