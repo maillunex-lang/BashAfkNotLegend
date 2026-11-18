@@ -28,7 +28,8 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 | VIS-APPROVAL-001 | Универсальная система анимаций/направлений | `DONE` (foundation) | flip + AbilityCatalog + Formation | DEC-012 |
 | MASS-01 | 8 героев (Урал+Лес) | `DONE` | packed | `content/hero_roster_batch01.json` |
 | MASS-02 | 8 героев (Тёмные+Небожители) | `DONE` | packed | `content/hero_roster_batch02.json` |
-| MASS-03 | следующая группа 8 | `NOT_STARTED` | Фаэлис…Ксалия | CHARACTER_BIBLE |
+| MASS-03 | 8 героев (Фаэлис+Древние+Отступники) | `DONE` | packed | `content/hero_roster_batch03.json` |
+| MASS-04 | финал 30 (Равенкор, Мелтрис, Флинтар) | `NOT_STARTED` | CHARACTER_BIBLE | |
 | VIS-01…09 | UI → герои → бои → карта → бестиарий → … | `NOT_STARTED` | Godot Android Showcase | [VISUAL_ROAD.md](docs/visual/VISUAL_ROAD.md) |
 
 **После VISUAL-APPROVAL-001 (DEC-012):** графика/анимации V1 утверждены. Приоритет — универсальная система facing/анимаций и поэтапные партии ассетов с проверкой направления. Не бесконечно полировать одного героя. PWA не разрабатывается.

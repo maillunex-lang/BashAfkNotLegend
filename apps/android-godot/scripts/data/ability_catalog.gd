@@ -119,6 +119,55 @@ static func get_ability(ability_id: String) -> AbilityDef:
 			return _def("orionex_bulwark", "Купольный заслон", AbilityDef.Kit.SHIELD_BASH, "walk", "block", "attack1", 1.15, 0.0, 95.0, 0.38, 0.34, 14.0, 5.5, Color(0.5, 0.65, 0.9, 0.95), "melee")
 		"orionex_dome":
 			return _def("orionex_dome", "Купол небес", AbilityDef.Kit.ULT_AOE_STOMP, "walk", "ultimate", "attack2", 1.6, 0.0, 100.0, 0.38, 0.36, 0.0, 0.0, Color(0.6, 0.8, 1.0, 1.0), "ult")
+		# MASS-03
+		"phaelis_star":
+			return _def("phaelis_star", "Звезда гида", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 0.9, 0.0, 145.0, 0.3, 0.3, 14.0, 0.0, Color(0.85, 0.9, 1.0, 0.95), "melee")
+		"phaelis_guide":
+			return _def("phaelis_guide", "Путеводная нить", AbilityDef.Kit.MELEE_STEP, "walk", "block", "attack1", 0.8, 0.0, 150.0, 0.3, 0.3, 14.0, 5.0, Color(0.7, 0.85, 1.0, 0.95), "melee")
+		"phaelis_constellation":
+			return _def("phaelis_constellation", "Созвездие победы", AbilityDef.Kit.GENERIC_BURST, "idle", "ultimate", "victory", 1.45, 0.0, 145.0, 0.25, 0.3, 0.0, 0.0, Color(0.9, 0.95, 1.0, 1.0), "ult")
+		"cronax_bash":
+			return _def("cronax_bash", "Удар монолита", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.25, 0.0, 95.0, 0.42, 0.38, 14.0, 0.0, Color(0.7, 0.55, 0.35, 0.95), "slam")
+		"cronax_bulwark":
+			return _def("cronax_bulwark", "Хронощит", AbilityDef.Kit.SHIELD_BASH, "walk", "block", "attack1", 1.2, 0.0, 95.0, 0.4, 0.36, 14.0, 5.5, Color(0.65, 0.5, 0.3, 0.95), "melee")
+		"cronax_monolith":
+			return _def("cronax_monolith", "Пробуждение монолита", AbilityDef.Kit.ULT_AOE_STOMP, "walk", "ultimate", "attack2", 1.7, 0.0, 100.0, 0.4, 0.38, 0.0, 0.0, Color(0.85, 0.65, 0.35, 1.0), "ult")
+		"eontara_tick":
+			return _def("eontara_tick", "Тик времени", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.05, 0.0, 155.0, 0.26, 0.28, 15.0, 0.0, Color(0.35, 0.85, 0.8, 0.95), "melee")
+		"eontara_fault":
+			return _def("eontara_fault", "Разлом часов", AbilityDef.Kit.MELEE_STEP, "run", "attack2", "attack1", 1.15, 0.0, 150.0, 0.26, 0.28, 15.0, 5.0, Color(0.3, 0.75, 0.85, 0.95), "melee")
+		"eontara_chronology":
+			return _def("eontara_chronology", "Ошибка хронологии", AbilityDef.Kit.GENERIC_BURST, "run", "ultimate", "attack2", 1.55, 0.0, 150.0, 0.24, 0.3, 0.0, 0.0, Color(0.4, 0.95, 0.9, 1.0), "ult")
+		"relixor_seal":
+			return _def("relixor_seal", "Печать руин", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 0.95, 0.0, 140.0, 0.3, 0.3, 14.0, 0.0, Color(0.8, 0.65, 0.4, 0.95), "melee")
+		"relixor_law":
+			return _def("relixor_law", "Закон реликвий", AbilityDef.Kit.MELEE_STEP, "walk", "block", "attack1", 0.85, 0.0, 145.0, 0.3, 0.3, 14.0, 5.0, Color(0.75, 0.6, 0.35, 0.95), "melee")
+		"relixor_ruins":
+			return _def("relixor_ruins", "Закон руин", AbilityDef.Kit.GENERIC_BURST, "idle", "ultimate", "victory", 1.4, 0.0, 145.0, 0.25, 0.3, 0.0, 0.0, Color(0.9, 0.7, 0.4, 1.0), "ult")
+		"obsidrak_cleave":
+			return _def("obsidrak_cleave", "Обсидиановый рубящий", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.15, 0.0, 85.0, 0.34, 0.3, 16.0, 0.0, Color(0.35, 0.25, 0.45, 0.95), "melee")
+		"obsidrak_shatter":
+			return _def("obsidrak_shatter", "Осколок эпохи", AbilityDef.Kit.MELEE_STEP, "run", "attack2", "attack1", 1.25, 0.0, 80.0, 0.3, 0.28, 16.0, 5.0, Color(0.45, 0.3, 0.55, 0.95), "slash")
+		"obsidrak_epoch":
+			return _def("obsidrak_epoch", "Разрушитель эпох", AbilityDef.Kit.ULT_AOE_STOMP, "walk", "ultimate", "attack2", 1.7, 0.0, 85.0, 0.32, 0.32, 0.0, 0.0, Color(0.55, 0.35, 0.7, 1.0), "ult")
+		"scaria_cut":
+			return _def("scaria_cut", "Пылевой укол", AbilityDef.Kit.DASH_COMBO, "run", "attack2", "attack1", 0.75, 0.9, 55.0, 0.24, 0.26, 15.0, 0.0, Color(0.65, 0.45, 0.35, 0.95), "slash")
+		"scaria_vanish":
+			return _def("scaria_vanish", "Исчезновение", AbilityDef.Kit.DASH_COMBO, "run", "attack1", "attack2", 0.7, 1.0, 50.0, 0.22, 0.24, 15.0, 5.0, Color(0.55, 0.4, 0.5, 0.95), "slash")
+		"scaria_vanished":
+			return _def("scaria_vanished", "Исчезнувшая цивилизация", AbilityDef.Kit.ULT_MULTI_MARK, "run", "ultimate", "attack2", 1.5, 0.0, 55.0, 0.2, 0.28, 0.0, 0.0, Color(0.7, 0.5, 0.4, 1.0), "ult")
+		"zephirox_slash":
+			return _def("zephirox_slash", "Ветровой разрез", AbilityDef.Kit.DASH_COMBO, "run", "attack2", "attack1", 0.7, 0.95, 55.0, 0.22, 0.26, 15.0, 0.0, Color(0.45, 0.9, 0.95, 0.95), "slash")
+		"zephirox_gust":
+			return _def("zephirox_gust", "Порыв", AbilityDef.Kit.DASH_COMBO, "run", "attack1", "attack2", 0.65, 1.05, 50.0, 0.2, 0.24, 15.0, 5.0, Color(0.4, 0.85, 1.0, 0.95), "slash")
+		"zephirox_failure":
+			return _def("zephirox_failure", "Великолепный провал", AbilityDef.Kit.ULT_MULTI_MARK, "run", "ultimate", "attack2", 1.55, 0.0, 55.0, 0.2, 0.28, 0.0, 0.0, Color(0.5, 0.95, 1.0, 1.0), "ult")
+		"xalia_orb":
+			return _def("xalia_orb", "Нестабильная сфера", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.08, 0.0, 155.0, 0.26, 0.28, 15.0, 0.0, Color(0.75, 0.45, 0.95, 0.95), "melee")
+		"xalia_spark":
+			return _def("xalia_spark", "Искровой сбой", AbilityDef.Kit.MELEE_STEP, "run", "attack2", "attack1", 1.18, 0.0, 150.0, 0.26, 0.28, 15.0, 5.0, Color(0.7, 0.4, 1.0, 0.95), "melee")
+		"xalia_almost":
+			return _def("xalia_almost", "Почти контролируемый взрыв", AbilityDef.Kit.GENERIC_BURST, "run", "ultimate", "attack2", 1.6, 0.0, 150.0, 0.24, 0.3, 0.0, 0.0, Color(0.85, 0.5, 1.0, 1.0), "ult")
 		"basic":
 			return _def("basic", "Базовая атака", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.0, 0.0, 70.0, 0.35, 0.3, 12.0, 0.0, Color(1, 1, 1, 0.9), "melee")
 		_:

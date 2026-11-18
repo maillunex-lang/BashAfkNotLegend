@@ -113,4 +113,12 @@
 | `hero.morvex` … `hero.vespira` | Тёмные создания | `sprites/<slug>/` |
 | `hero.aurix` … `hero.orionex` | Небожители | `sprites/<slug>/` |
 
-Следующая группа MASS-03: Фаэлис, Кронакс, Эонтара, Реликсор, Обсидрак, Скария, Зефирокс, Ксалия.
+### MASS-03 (группа 8) — `BATCH_PACKED`
+
+| ID | Фракция | Папка |
+|----|---------|-------|
+| `hero.phaelis` | Небожители | `sprites/phaelis/` |
+| `hero.cronax` … `hero.scaria` | Древние | `sprites/<slug>/` |
+| `hero.zephirox`, `hero.xalia` | Отступники | `sprites/<slug>/` |
+
+Следующая группа MASS-04 (финал 30): Равенкор, Мелтрис, Флинтар (+ добивка любых пропусков bible).

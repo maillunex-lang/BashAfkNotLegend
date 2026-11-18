@@ -43,7 +43,11 @@ func _init() -> void:
 		])
 
 	# Roster batches: STUB_NO_ART must not claim a folder.
-	for roster_path in ["res://content/hero_roster_batch01.json", "res://content/hero_roster_batch02.json"]:
+	for roster_path in [
+		"res://content/hero_roster_batch01.json",
+		"res://content/hero_roster_batch02.json",
+		"res://content/hero_roster_batch03.json",
+	]:
 		if not FileAccess.file_exists(ProjectSettings.globalize_path(roster_path)):
 			warnings.append("roster json missing: %s" % roster_path)
 			continue

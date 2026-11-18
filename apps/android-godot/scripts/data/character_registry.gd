@@ -10,11 +10,15 @@ const MASS01_HEROES: PackedStringArray = [
 const MASS02_HEROES: PackedStringArray = [
 	"morvex", "grimzor", "draxel", "vespira", "aurix", "selestra", "voltario", "orionex",
 ]
+const MASS03_HEROES: PackedStringArray = [
+	"phaelis", "cronax", "eontara", "relixor", "obsidrak", "scaria", "zephirox", "xalia",
+]
 
 static func list_ids() -> PackedStringArray:
 	var ids: PackedStringArray = ["braxor", "nixara"]
 	ids.append_array(MASS01_HEROES)
 	ids.append_array(MASS02_HEROES)
+	ids.append_array(MASS03_HEROES)
 	ids.append_array(PackedStringArray(["stonekin", "shadewolf"]))
 	return ids
 
@@ -56,6 +60,22 @@ static func get_character(character_id: String) -> CharacterData:
 			return _hero("voltario", "Вольтарион", "skyborn", "mage", CharacterData.RoleStyle.MAGE, 870.0, 162.0, 158.0, 44.0, false, "voltario_bolt", "voltario_static", "voltario_sky_objects", 66.0)
 		"orionex":
 			return _hero("orionex", "Орионекс", "skyborn", "tank", CharacterData.RoleStyle.TANK, 1420.0, 128.0, 136.0, 30.0, true, "orionex_bash", "orionex_bulwark", "orionex_dome", 94.0)
+		"phaelis":
+			return _hero("phaelis", "Фаэлис", "skyborn", "support", CharacterData.RoleStyle.SUPPORT, 970.0, 108.0, 150.0, 41.0, false, "phaelis_star", "phaelis_guide", "phaelis_constellation", 68.0)
+		"cronax":
+			return _hero("cronax", "Кронакс", "ancients", "tank", CharacterData.RoleStyle.TANK, 1500.0, 130.0, 135.0, 28.0, true, "cronax_bash", "cronax_bulwark", "cronax_monolith", 96.0)
+		"eontara":
+			return _hero("eontara", "Эонтара", "ancients", "mage", CharacterData.RoleStyle.MAGE, 860.0, 164.0, 158.0, 43.0, false, "eontara_tick", "eontara_fault", "eontara_chronology", 66.0)
+		"relixor":
+			return _hero("relixor", "Реликсор", "ancients", "support", CharacterData.RoleStyle.SUPPORT, 1000.0, 110.0, 145.0, 39.0, false, "relixor_seal", "relixor_law", "relixor_ruins", 70.0)
+		"obsidrak":
+			return _hero("obsidrak", "Обсидрак", "ancients", "warrior", CharacterData.RoleStyle.WARRIOR, 1220.0, 158.0, 115.0, 47.0, true, "obsidrak_cleave", "obsidrak_shatter", "obsidrak_epoch", 74.0)
+		"scaria":
+			return _hero("scaria", "Скария", "ancients", "assassin", CharacterData.RoleStyle.ASSASSIN, 900.0, 170.0, 100.0, 62.0, false, "scaria_cut", "scaria_vanish", "scaria_vanished", 60.0)
+		"zephirox":
+			return _hero("zephirox", "Зефирокс", "renegades", "assassin", CharacterData.RoleStyle.ASSASSIN, 940.0, 172.0, 100.0, 64.0, false, "zephirox_slash", "zephirox_gust", "zephirox_failure", 62.0)
+		"xalia":
+			return _hero("xalia", "Ксалия", "renegades", "mage", CharacterData.RoleStyle.MAGE, 850.0, 166.0, 155.0, 45.0, false, "xalia_orb", "xalia_spark", "xalia_almost", 66.0)
 		"stonekin":
 			return _stonekin()
 		"shadewolf":
