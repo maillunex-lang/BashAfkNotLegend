@@ -30,12 +30,31 @@ func setup(players: Array) -> void:
 		child.queue_free()
 	_slots.clear()
 	await get_tree().process_frame
+	# Always show 5 hero slots (prototype fills first N; rest are empty placeholders)
 	for f in players:
 		slot_box.add_child(_make_slot(f))
+	for _i in range(maxi(0, 5 - players.size())):
+		slot_box.add_child(_make_empty_slot())
+
+func _make_empty_slot() -> Control:
+	var root := VBoxContainer.new()
+	root.custom_minimum_size = Vector2(150, 250)
+	root.alignment = BoxContainer.ALIGNMENT_CENTER
+	var box := ColorRect.new()
+	box.custom_minimum_size = Vector2(120, 120)
+	box.color = Color(0.12, 0.18, 0.24, 0.85)
+	root.add_child(box)
+	var lbl := Label.new()
+	lbl.text = "—"
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.add_theme_font_size_override("font_size", 18)
+	lbl.add_theme_color_override("font_color", Color(0.7, 0.75, 0.8))
+	root.add_child(lbl)
+	return root
 
 func _make_slot(f: Fighter) -> Control:
 	var root := VBoxContainer.new()
-	root.custom_minimum_size = Vector2(190, 250)
+	root.custom_minimum_size = Vector2(160, 250)
 	root.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	root.alignment = BoxContainer.ALIGNMENT_CENTER
 

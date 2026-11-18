@@ -61,7 +61,7 @@ y_sort_enabled = true
 z_index = 1
 
 [node name="Braxor" parent="Fighters" instance=ExtResource("3_fighter")]
-position = Vector2(320, 1020)
+position = Vector2(250, 1040)
 fighter_id = "braxor"
 display_name = "Браксор"
 team = "player"
@@ -69,10 +69,12 @@ is_front_row = true
 max_hp = 1400.0
 attack_power = 140.0
 sprite_folder = "braxor"
-faces_right_by_default = true
+source_facing = 1
+battle_side = 0
+show_facing_debug = true
 
 [node name="Nixara" parent="Fighters" instance=ExtResource("3_fighter")]
-position = Vector2(200, 930)
+position = Vector2(160, 910)
 fighter_id = "nixara"
 display_name = "Никсара"
 team = "player"
@@ -80,10 +82,12 @@ is_front_row = false
 max_hp = 950.0
 attack_power = 160.0
 sprite_folder = "nixara"
-faces_right_by_default = true
+source_facing = 0
+battle_side = 0
+show_facing_debug = true
 
 [node name="Stonekin" parent="Fighters" instance=ExtResource("3_fighter")]
-position = Vector2(760, 1020)
+position = Vector2(820, 1040)
 fighter_id = "stonekin"
 display_name = "Камнегрыз"
 team = "enemy"
@@ -91,10 +95,12 @@ is_front_row = true
 max_hp = 1200.0
 attack_power = 110.0
 sprite_folder = "enemies/stonekin"
-faces_right_by_default = false
+source_facing = 1
+battle_side = 1
+show_facing_debug = true
 
 [node name="Shadewolf" parent="Fighters" instance=ExtResource("3_fighter")]
-position = Vector2(900, 930)
+position = Vector2(940, 910)
 fighter_id = "shadewolf"
 display_name = "Теневолк"
 team = "enemy"
@@ -102,7 +108,9 @@ is_front_row = false
 max_hp = 900.0
 attack_power = 130.0
 sprite_folder = "enemies/shadewolf"
-faces_right_by_default = false
+source_facing = 0
+battle_side = 1
+show_facing_debug = true
 
 [node name="Floaters" type="Node2D" parent="."]
 z_index = 3000

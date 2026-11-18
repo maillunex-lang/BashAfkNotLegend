@@ -37,6 +37,10 @@
 
 ## Текущее состояние
 
+- Godot 2v2 prototype: BATTLE-POLISH-002 — `source_facing`/`desired_facing`/`battle_side`, Braxor combat sprites **v2 смотрят вправо**.
+- PvP-ready facing (не привязан к team name); слоты engagement + soft separation; Engine.time_scale для x1/x2/x3.
+
+
 - Visual-first: стиль **Anime Fantasy 2D**; эталоны бой E + Браксор/Никсара на утверждении.
 - Side-view layout сохранён; A/B/C/D (realistic) не эталон стиля.
 - **PWA не разрабатывается**. Godot/масштаб — после approve трёх кадров.

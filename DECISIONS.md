@@ -177,3 +177,15 @@
   - UI (HP/имена/стрелка QA) не зеркалить вместе с телом.
   - Браксор: канон — `_preflip/*.png` (лицо/щит к врагу справа). Рабочие PNG восстановлены из `_preflip`.
 - Ссылки: `apps/android-godot/scripts/fighter.gd` `lock_team_facing`
+
+
+### DEC-010 — Braxor combat sprites remade facing RIGHT (v2)
+- Дата: 2026-11-18
+- Статус: APPROVED (asset canon)
+- Контекст: Исходный Браксор визуально читался как профиль влево; flip/flop путали пайплайн.
+- Решение:
+  - Новые боевые PNG (`idle/attack/block/walk/hit`) сгенерированы **изначально смотрящими вправо**, щит к врагу справа.
+  - Канон: `apps/android-godot/assets/sprites/braxor/_authored_right_v2/`.
+  - `source_facing = RIGHT`; `flip_h` только когда `desired_facing != source_facing`.
+  - Не утверждать ассет без визуальной проверки лица+щита.
+- Ссылки: BATTLE-POLISH-002, `fighter.gd` facing model

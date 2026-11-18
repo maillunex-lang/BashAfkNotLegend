@@ -24,6 +24,7 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 | VIS-00 | Арт-библия **Anime Fantasy 2D** + эталоны | `IN_PROGRESS` | Android-first art | [docs/visual/ART_BIBLE.md](docs/visual/ART_BIBLE.md) |
 | VIS-00e | Бой E + Браксор/Никсара anime | `DONE` | Approved + правки DEC-008 | concepts/ |
 | VIS-00b | Godot prototype 2v2 + screenshot/video | `DONE` (на review) | Evidence в artifacts | `apps/android-godot/` |
+| BATTLE-POLISH-002 | Facing/slots/YSort/speed x1 | `IN_PROGRESS` | Braxor v2 RIGHT + source_facing | `apps/android-godot/` |
 | VIS-01…09 | UI → герои → бои → карта → бестиарий → … | `NOT_STARTED` | Godot Android Showcase | [VISUAL_ROAD.md](docs/visual/VISUAL_ROAD.md) |
 
 **Стоп-гейт сейчас (DEC-007):** утвердить стиль Anime Fantasy + 3 кадра (бой E, Браксор anime, Никсара anime). Side-view layout (DEC-005) сохранён. Массовая генерация и Godot — после approve. PWA не разрабатывается.
