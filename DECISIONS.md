@@ -150,14 +150,19 @@
 
 ### DEC-007 — Стиль Bashkir Anime Sarcastic Fantasy 2D
 - Дата: 2026-11-18
-- Статус: APPROVED как задание владельца; **визуальные эталоны на review**
-- Контекст: Концепт D слишком реалистичный/мрачный. Нужна anime-fantasy подача коллекционных AFK RPG (ориентир AFK Arena по качеству подачи, без копирования). Side-view 5v5 left/right сохраняется (DEC-005).
+- Статус: **APPROVED** (направление + эталоны Браксор/Никсара + основа боя E)
+- Контекст: Владелец утвердил стиль и эталоны; перед реализацией — правки layout (масштаб −10–15%, ряды 2+3, портреты только игрока, приглушённый фон, side-view спрайты).
+- Решение: см. исходный DEC-007; правки зафиксированы в DEC-008.
+- Ссылки: [docs/visual/ART_BIBLE.md](docs/visual/ART_BIBLE.md)
+
+### DEC-008 — Approve эталонов + Godot battle prototype
+- Дата: 2026-11-18
+- Статус: APPROVED / IN_PROGRESS prototype
+- Контекст: Утверждены Anime Fantasy 2D, Браксор, Никсара, боевая основа E с правками.
 - Решение:
-  - Единый стиль: рисованный 2D anime fantasy, ярче/насыщеннее, стилизованные пропорции, крупные формы, personality-клипы.
-  - Бой: крупнее персонажи, меньше пустого неба, светлее фон, чище HUD.
-  - Перерисовать Браксора и Никсару в новом стиле (класс/характер/мотивы те же).
-  - Эталоны на утверждение: `battle_concept_anime_sideview_e.jpg`, `braxor_anime_fullbody.jpg`, `nixara_anime_fullbody.jpg`.
-  - Godot/анимации/масштаб — только после approve этих трёх кадров.
-  - Механики GAME.md не менять. Android-first. PWA blocked.
-- Последствия: ART_BIBLE переписан; `sideview_d` superseded по стилю персонажей; realistic fullbody v1 → archive.
-- Ссылки: запрос владельца 2026-11-18; [docs/visual/ART_BIBLE.md](docs/visual/ART_BIBLE.md)
+  - Эталон облика: `braxor_anime_fullbody.jpg`, `nixara_anime_fullbody.jpg`.
+  - Бой: side-view; персонажи −10–15%; явные ряды 2+3; HUD-портреты только героев игрока; фон чуть приглушить.
+  - Отдельные side-view боевые спрайты + personality-клипы.
+  - Godot 4 Android прототип: Браксор + Никсара + 2 врага, отдельные объекты/слои/HUD/VFX — не цельный mockup как сцена.
+  - Массовый контент — после проверки прототипа. PWA blocked.
+- Ссылки: `apps/android-godot/`, `assets/source/sprites/`

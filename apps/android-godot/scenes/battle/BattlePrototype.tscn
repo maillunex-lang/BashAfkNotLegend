@@ -1,0 +1,218 @@
+[gd_scene load_steps=9 format=3 uid="uid://bashbattleproto"]
+
+[ext_resource type="Script" path="res://scripts/battle_controller.gd" id="1_ctrl"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="2_hud"]
+[ext_resource type="PackedScene" uid="uid://bashfighter001" path="res://scenes/battle/Fighter.tscn" id="3_fighter"]
+[ext_resource type="Texture2D" path="res://assets/bg/sky.jpg" id="4_sky"]
+[ext_resource type="Texture2D" path="res://assets/bg/mountains.jpg" id="5_mnt"]
+[ext_resource type="Texture2D" path="res://assets/bg/mid_fill.jpg" id="6_trees"]
+[ext_resource type="Texture2D" path="res://assets/bg/ground.png" id="7_ground"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.0901961, 0.14902, 0.196078, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.780392, 0.513726, 0.282353, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="BattlePrototype" type="Node2D"]
+script = ExtResource("1_ctrl")
+
+[node name="ParallaxRoot" type="Node2D" parent="."]
+
+[node name="Backdrop" type="Polygon2D" parent="ParallaxRoot"]
+z_index = -50
+color = Color(0.49, 0.67, 0.78, 1)
+polygon = PackedVector2Array(0, 0, 1080, 0, 1080, 1920, 0, 1920)
+
+[node name="Sky" type="Sprite2D" parent="ParallaxRoot"]
+z_index = -40
+position = Vector2(540, 360)
+scale = Vector2(1.2, 1.0)
+texture = ExtResource("4_sky")
+
+[node name="Mountains" type="Sprite2D" parent="ParallaxRoot"]
+modulate = Color(0.82, 0.86, 0.9, 1)
+z_index = -30
+position = Vector2(540, 640)
+scale = Vector2(1.45, 1.35)
+texture = ExtResource("5_mnt")
+
+[node name="Trees" type="Sprite2D" parent="ParallaxRoot"]
+modulate = Color(0.78, 0.84, 0.76, 1)
+z_index = -20
+position = Vector2(540, 760)
+scale = Vector2(1.3, 1.1)
+texture = ExtResource("6_trees")
+
+[node name="Ground" type="Sprite2D" parent="ParallaxRoot"]
+z_index = -10
+position = Vector2(540, 1080)
+scale = Vector2(1.4, 1.15)
+texture = ExtResource("7_ground")
+
+[node name="Fighters" type="Node2D" parent="."]
+z_index = 1
+
+[node name="Braxor" parent="Fighters" instance=ExtResource("3_fighter")]
+position = Vector2(400, 980)
+fighter_id = "braxor"
+display_name = "Браксор"
+team = "player"
+is_front_row = true
+max_hp = 1400.0
+attack_power = 140.0
+sprite_folder = "braxor"
+
+[node name="Nixara" parent="Fighters" instance=ExtResource("3_fighter")]
+position = Vector2(240, 900)
+fighter_id = "nixara"
+display_name = "Никсара"
+team = "player"
+is_front_row = false
+max_hp = 950.0
+attack_power = 160.0
+sprite_folder = "nixara"
+
+[node name="Stonekin" parent="Fighters" instance=ExtResource("3_fighter")]
+position = Vector2(680, 980)
+fighter_id = "stonekin"
+display_name = "Камнегрыз"
+team = "enemy"
+is_front_row = true
+max_hp = 1200.0
+attack_power = 110.0
+sprite_folder = "enemies/stonekin"
+
+[node name="Shadewolf" parent="Fighters" instance=ExtResource("3_fighter")]
+position = Vector2(850, 900)
+fighter_id = "shadewolf"
+display_name = "Теневолк"
+team = "enemy"
+is_front_row = false
+max_hp = 900.0
+attack_power = 130.0
+sprite_folder = "enemies/shadewolf"
+
+[node name="HUD" type="CanvasLayer" parent="."]
+process_mode = 3
+script = ExtResource("2_hud")
+
+[node name="TopBar" type="PanelContainer" parent="HUD"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 28.0
+offset_right = -20.0
+offset_bottom = 170.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="HUD/TopBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="HUD/TopBar/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Row1" type="HBoxContainer" parent="HUD/TopBar/Margin/VBox"]
+layout_mode = 2
+
+[node name="WaveLabel" type="Label" parent="HUD/TopBar/Margin/VBox/Row1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "WAVE 1/1"
+
+[node name="TimerLabel" type="Label" parent="HUD/TopBar/Margin/VBox/Row1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "00:00"
+horizontal_alignment = 1
+
+[node name="BtnPause" type="Button" parent="HUD/TopBar/Margin/VBox/Row1"]
+custom_minimum_size = Vector2(80, 52)
+layout_mode = 2
+text = "❚❚"
+
+[node name="SpeedRow" type="HBoxContainer" parent="HUD/TopBar/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnX1" type="Button" parent="HUD/TopBar/Margin/VBox/SpeedRow"]
+custom_minimum_size = Vector2(70, 48)
+layout_mode = 2
+text = "x1"
+
+[node name="BtnX2" type="Button" parent="HUD/TopBar/Margin/VBox/SpeedRow"]
+custom_minimum_size = Vector2(70, 48)
+layout_mode = 2
+text = "x2"
+
+[node name="BtnX3" type="Button" parent="HUD/TopBar/Margin/VBox/SpeedRow"]
+custom_minimum_size = Vector2(70, 48)
+layout_mode = 2
+text = "x3"
+
+[node name="BtnAuto" type="Button" parent="HUD/TopBar/Margin/VBox/SpeedRow"]
+custom_minimum_size = Vector2(140, 48)
+layout_mode = 2
+text = "Auto: ON"
+
+[node name="SpeedLabel" type="Label" parent="HUD/TopBar/Margin/VBox/SpeedRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.952941, 0.764706, 0.415686, 1)
+theme_override_font_sizes/font_size = 24
+text = "x1"
+
+[node name="AutoLabel" type="Label" parent="HUD/TopBar/Margin/VBox/SpeedRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "AUTO: ON"
+horizontal_alignment = 2
+
+[node name="BottomBar" type="PanelContainer" parent="HUD"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -300.0
+offset_right = -16.0
+offset_bottom = -20.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="HUD/BottomBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Slots" type="HBoxContainer" parent="HUD/BottomBar/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="LogLabel" type="Label" parent="HUD"]
+offset_left = 40.0
+offset_top = 186.0
+offset_right = 1040.0
+offset_bottom = 230.0
+theme_override_colors/font_color = Color(0.972549, 0.956863, 0.913725, 1)
+theme_override_colors/font_outline_color = Color(0.0901961, 0.14902, 0.196078, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "..."
+horizontal_alignment = 1

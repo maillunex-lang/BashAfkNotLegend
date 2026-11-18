@@ -6,8 +6,8 @@ Layout боя: **side-view** (DEC-005) · Платформа: Android · PWA: bl
 | ID | Этап | Статус | Стоп-гейт |
 |----|------|--------|-----------|
 | VIS-00 | ART_BIBLE anime rewrite | `IN_PROGRESS` | |
-| VIS-00e | Бой E + 2 героя anime | `IN_PROGRESS` | **Approve 3 images** |
-| VIS-00b | Godot анимации + screenshot/video | `NOT_STARTED` | После approve E |
+| VIS-00e | Бой E + 2 героя anime | `DONE` | Approved |
+| VIS-00b | Godot 2v2 prototype + evidence | `DONE` (owner review) | screenshot + video |
 | VIS-01…09 | UI / масштаб героев / арены / … | `NOT_STARTED` | После Godot check |
 
 ## Эталоны на review
