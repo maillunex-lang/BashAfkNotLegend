@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://bashfighter001" path="res://scenes/battle/Fighter.tscn" id="3_fighter"]
 [ext_resource type="Texture2D" path="res://assets/bg/sky.jpg" id="4_sky"]
 [ext_resource type="Texture2D" path="res://assets/bg/mountains.jpg" id="5_mnt"]
-[ext_resource type="Texture2D" path="res://assets/bg/mid_fill.jpg" id="6_trees"]
-[ext_resource type="Texture2D" path="res://assets/bg/ground.png" id="7_ground"]
+[ext_resource type="Texture2D" path="res://assets/bg/forest_mid.jpg" id="6_trees"]
+[ext_resource type="Texture2D" path="res://assets/bg/ground_plate.jpg" id="7_ground"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 bg_color = Color(0.0901961, 0.14902, 0.196078, 0.92)
@@ -44,23 +44,24 @@ scale = Vector2(1.45, 1.35)
 texture = ExtResource("5_mnt")
 
 [node name="Trees" type="Sprite2D" parent="ParallaxRoot"]
-modulate = Color(0.78, 0.84, 0.76, 1)
+modulate = Color(0.86, 0.9, 0.88, 1)
 z_index = -20
-position = Vector2(540, 760)
-scale = Vector2(1.3, 1.1)
+position = Vector2(540, 720)
+scale = Vector2(1.35, 1.15)
 texture = ExtResource("6_trees")
 
 [node name="Ground" type="Sprite2D" parent="ParallaxRoot"]
 z_index = -10
-position = Vector2(540, 1080)
-scale = Vector2(1.4, 1.15)
+position = Vector2(540, 1040)
+scale = Vector2(1.15, 1.05)
 texture = ExtResource("7_ground")
 
 [node name="Fighters" type="Node2D" parent="."]
+y_sort_enabled = true
 z_index = 1
 
 [node name="Braxor" parent="Fighters" instance=ExtResource("3_fighter")]
-position = Vector2(400, 980)
+position = Vector2(320, 1020)
 fighter_id = "braxor"
 display_name = "Браксор"
 team = "player"
@@ -68,9 +69,10 @@ is_front_row = true
 max_hp = 1400.0
 attack_power = 140.0
 sprite_folder = "braxor"
+faces_right_by_default = true
 
 [node name="Nixara" parent="Fighters" instance=ExtResource("3_fighter")]
-position = Vector2(240, 900)
+position = Vector2(200, 930)
 fighter_id = "nixara"
 display_name = "Никсара"
 team = "player"
@@ -78,9 +80,10 @@ is_front_row = false
 max_hp = 950.0
 attack_power = 160.0
 sprite_folder = "nixara"
+faces_right_by_default = true
 
 [node name="Stonekin" parent="Fighters" instance=ExtResource("3_fighter")]
-position = Vector2(680, 980)
+position = Vector2(760, 1020)
 fighter_id = "stonekin"
 display_name = "Камнегрыз"
 team = "enemy"
@@ -88,9 +91,10 @@ is_front_row = true
 max_hp = 1200.0
 attack_power = 110.0
 sprite_folder = "enemies/stonekin"
+faces_right_by_default = false
 
 [node name="Shadewolf" parent="Fighters" instance=ExtResource("3_fighter")]
-position = Vector2(850, 900)
+position = Vector2(900, 930)
 fighter_id = "shadewolf"
 display_name = "Теневолк"
 team = "enemy"
@@ -98,6 +102,10 @@ is_front_row = false
 max_hp = 900.0
 attack_power = 130.0
 sprite_folder = "enemies/shadewolf"
+faces_right_by_default = false
+
+[node name="Floaters" type="Node2D" parent="."]
+z_index = 3000
 
 [node name="HUD" type="CanvasLayer" parent="."]
 process_mode = 3
