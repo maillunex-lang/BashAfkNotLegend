@@ -47,6 +47,7 @@ func _init() -> void:
 		"res://content/hero_roster_batch01.json",
 		"res://content/hero_roster_batch02.json",
 		"res://content/hero_roster_batch03.json",
+		"res://content/hero_roster_batch04.json",
 	]:
 		if not FileAccess.file_exists(ProjectSettings.globalize_path(roster_path)):
 			warnings.append("roster json missing: %s" % roster_path)

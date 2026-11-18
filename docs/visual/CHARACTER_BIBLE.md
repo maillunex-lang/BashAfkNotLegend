@@ -121,4 +121,10 @@
 | `hero.cronax` … `hero.scaria` | Древние | `sprites/<slug>/` |
 | `hero.zephirox`, `hero.xalia` | Отступники | `sprites/<slug>/` |
 
-Следующая группа MASS-04 (финал 30): Равенкор, Мелтрис, Флинтар (+ добивка любых пропусков bible).
+### MASS-04 (финал 30) — `BATCH_PACKED`
+
+| ID | Фракция | Папка |
+|----|---------|-------|
+| `hero.ravencor`, `hero.meltris`, `hero.flintar` | Отступники | `sprites/<slug>/` |
+
+**Release roster 30/30 packed** (V1 Браксор/Никсара + MASS-01…04). Collection target 54 — позже.

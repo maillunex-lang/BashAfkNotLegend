@@ -168,6 +168,25 @@ static func get_ability(ability_id: String) -> AbilityDef:
 			return _def("xalia_spark", "Искровой сбой", AbilityDef.Kit.MELEE_STEP, "run", "attack2", "attack1", 1.18, 0.0, 150.0, 0.26, 0.28, 15.0, 5.0, Color(0.7, 0.4, 1.0, 0.95), "melee")
 		"xalia_almost":
 			return _def("xalia_almost", "Почти контролируемый взрыв", AbilityDef.Kit.GENERIC_BURST, "run", "ultimate", "attack2", 1.6, 0.0, 150.0, 0.24, 0.3, 0.0, 0.0, Color(0.85, 0.5, 1.0, 1.0), "ult")
+		# MASS-04
+		"ravencor_bash":
+			return _def("ravencor_bash", "Вороний удар", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.2, 0.0, 95.0, 0.4, 0.36, 14.0, 0.0, Color(0.35, 0.3, 0.4, 0.95), "slam")
+		"ravencor_guard":
+			return _def("ravencor_guard", "Контрактный заслон", AbilityDef.Kit.SHIELD_BASH, "walk", "block", "attack1", 1.15, 0.0, 95.0, 0.38, 0.34, 14.0, 5.5, Color(0.45, 0.25, 0.35, 0.95), "melee")
+		"ravencor_contract":
+			return _def("ravencor_contract", "Контракт на выживание", AbilityDef.Kit.ULT_AOE_STOMP, "walk", "ultimate", "attack2", 1.65, 0.0, 100.0, 0.38, 0.36, 0.0, 0.0, Color(0.55, 0.2, 0.3, 1.0), "ult")
+		"meltris_dose":
+			return _def("meltris_dose", "Служебная доза", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 0.88, 0.0, 145.0, 0.3, 0.3, 14.0, 0.0, Color(0.45, 0.85, 0.8, 0.95), "melee")
+		"meltris_policy":
+			return _def("meltris_policy", "Политика ухода", AbilityDef.Kit.MELEE_STEP, "walk", "block", "attack1", 0.75, 0.0, 150.0, 0.3, 0.3, 14.0, 5.0, Color(0.4, 0.8, 0.75, 0.95), "melee")
+		"meltris_not_fired":
+			return _def("meltris_not_fired", "Вы ещё не уволены", AbilityDef.Kit.GENERIC_BURST, "idle", "ultimate", "victory", 1.4, 0.0, 145.0, 0.25, 0.3, 0.0, 0.0, Color(0.5, 0.95, 0.9, 1.0), "ult")
+		"flintar_spark":
+			return _def("flintar_spark", "Искра план-Б", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 0.95, 0.0, 140.0, 0.3, 0.3, 14.0, 0.0, Color(0.95, 0.55, 0.3, 0.95), "melee")
+		"flintar_jury":
+			return _def("flintar_jury", "Кустарный ремонт", AbilityDef.Kit.MELEE_STEP, "walk", "block", "attack1", 0.85, 0.0, 145.0, 0.3, 0.3, 14.0, 5.0, Color(0.9, 0.5, 0.25, 0.95), "melee")
+		"flintar_plan_b":
+			return _def("flintar_plan_b", "План Б, которого не было", AbilityDef.Kit.GENERIC_BURST, "run", "ultimate", "attack2", 1.5, 0.0, 145.0, 0.25, 0.3, 0.0, 0.0, Color(1.0, 0.6, 0.3, 1.0), "ult")
 		"basic":
 			return _def("basic", "Базовая атака", AbilityDef.Kit.MELEE_STEP, "walk", "attack1", "attack2", 1.0, 0.0, 70.0, 0.35, 0.3, 12.0, 0.0, Color(1, 1, 1, 0.9), "melee")
 		_:

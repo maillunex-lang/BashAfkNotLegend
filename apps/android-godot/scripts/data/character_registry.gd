@@ -13,12 +13,16 @@ const MASS02_HEROES: PackedStringArray = [
 const MASS03_HEROES: PackedStringArray = [
 	"phaelis", "cronax", "eontara", "relixor", "obsidrak", "scaria", "zephirox", "xalia",
 ]
+const MASS04_HEROES: PackedStringArray = [
+	"ravencor", "meltris", "flintar",
+]
 
 static func list_ids() -> PackedStringArray:
 	var ids: PackedStringArray = ["braxor", "nixara"]
 	ids.append_array(MASS01_HEROES)
 	ids.append_array(MASS02_HEROES)
 	ids.append_array(MASS03_HEROES)
+	ids.append_array(MASS04_HEROES)
 	ids.append_array(PackedStringArray(["stonekin", "shadewolf"]))
 	return ids
 
@@ -76,6 +80,12 @@ static func get_character(character_id: String) -> CharacterData:
 			return _hero("zephirox", "Зефирокс", "renegades", "assassin", CharacterData.RoleStyle.ASSASSIN, 940.0, 172.0, 100.0, 64.0, false, "zephirox_slash", "zephirox_gust", "zephirox_failure", 62.0)
 		"xalia":
 			return _hero("xalia", "Ксалия", "renegades", "mage", CharacterData.RoleStyle.MAGE, 850.0, 166.0, 155.0, 45.0, false, "xalia_orb", "xalia_spark", "xalia_almost", 66.0)
+		"ravencor":
+			return _hero("ravencor", "Равенкор", "renegades", "tank", CharacterData.RoleStyle.TANK, 1400.0, 125.0, 138.0, 30.0, true, "ravencor_bash", "ravencor_guard", "ravencor_contract", 94.0)
+		"meltris":
+			return _hero("meltris", "Мелтрис", "renegades", "healer", CharacterData.RoleStyle.HEALER, 980.0, 100.0, 148.0, 42.0, false, "meltris_dose", "meltris_policy", "meltris_not_fired", 68.0)
+		"flintar":
+			return _hero("flintar", "Флинтар", "renegades", "support", CharacterData.RoleStyle.SUPPORT, 1020.0, 112.0, 140.0, 40.0, false, "flintar_spark", "flintar_jury", "flintar_plan_b", 70.0)
 		"stonekin":
 			return _stonekin()
 		"shadewolf":
