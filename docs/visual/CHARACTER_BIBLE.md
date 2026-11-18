@@ -106,4 +106,11 @@
 | Портреты | `assets/ui/portraits/<slug>.jpg` | |
 | Логика | `CharacterRegistry` + `AbilityCatalog` (ID → kit) | заменяемый VisualDef |
 
-Следующая группа MASS-02: Морвекс, Гримзор, Драксель, Веспира, Аурикс, Селестра, Вольтарион, Орионекс.
+### MASS-02 (группа 8) — `BATCH_PACKED`
+
+| ID | Фракция | Папка |
+|----|---------|-------|
+| `hero.morvex` … `hero.vespira` | Тёмные создания | `sprites/<slug>/` |
+| `hero.aurix` … `hero.orionex` | Небожители | `sprites/<slug>/` |
+
+Следующая группа MASS-03: Фаэлис, Кронакс, Эонтара, Реликсор, Обсидрак, Скария, Зефирокс, Ксалия.
