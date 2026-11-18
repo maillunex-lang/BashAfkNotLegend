@@ -1,7 +1,7 @@
 {
   "schema": "hero_roster_stub_v1",
-  "notes": "Logic/content stubs only — no mass art. Visuals attach later via CharacterVisualDef. Heroes author RIGHT; mobs LEFT (DEC-012).",
-  "batch": "01",
+  "notes": "MASS-01 from CHARACTER_BIBLE only. No invented replacements. Braxor/Nixara = V1_APPROVED (reuse). New 8 = production batch. Heroes author RIGHT; L/R via flip.",
+  "batch": "MASS-01",
   "release_target_heroes": 30,
   "collection_target_heroes": 54,
   "entries": [
@@ -9,7 +9,7 @@
       "id": "hero.braxor",
       "slug": "braxor",
       "name_ru": "Браксор",
-      "faction_id": "ural_guards",
+      "faction_id": "ural_wardens",
       "class_id": "tank",
       "rarity": "SSR",
       "is_hero": true,
@@ -17,7 +17,9 @@
       "visual_status": "V1_APPROVED",
       "sprite_folder": "braxor",
       "basic_attack_id": "braxor_bash",
-      "skill_ids": ["braxor_shield"],
+      "skill_ids": [
+        "braxor_shield"
+      ],
       "ultimate_id": "braxor_spine",
       "front_row_default": true
     },
@@ -25,7 +27,7 @@
       "id": "hero.nixara",
       "slug": "nixara",
       "name_ru": "Никсара",
-      "faction_id": "dark_creations",
+      "faction_id": "dark_creatures",
       "class_id": "assassin",
       "rarity": "SSR",
       "is_hero": true,
@@ -33,75 +35,163 @@
       "visual_status": "V1_APPROVED",
       "sprite_folder": "nixara",
       "basic_attack_id": "nixara_slash",
-      "skill_ids": ["nixara_dash"],
+      "skill_ids": [
+        "nixara_dash"
+      ],
       "ultimate_id": "nixara_night",
       "front_row_default": false
     },
     {
-      "id": "hero.solmira",
-      "slug": "solmira",
-      "name_ru": "Сольмира",
-      "faction_id": "sky_hearth",
-      "class_id": "support",
-      "rarity": "SR",
-      "is_hero": true,
-      "source_facing": "RIGHT",
-      "visual_status": "STUB_NO_ART",
-      "sprite_folder": null,
-      "basic_attack_id": "solmira_bolt",
-      "skill_ids": ["solmira_ward"],
-      "ultimate_id": "solmira_dawn",
-      "front_row_default": false
-    },
-    {
-      "id": "hero.tarkhan",
-      "slug": "tarkhan",
-      "name_ru": "Тархан",
-      "faction_id": "ural_guards",
+      "id": "hero.velkor",
+      "slug": "velkor",
+      "name_ru": "Велкор",
+      "faction_id": "ural_wardens",
       "class_id": "warrior",
       "rarity": "SR",
       "is_hero": true,
       "source_facing": "RIGHT",
-      "visual_status": "STUB_NO_ART",
-      "sprite_folder": null,
-      "basic_attack_id": "tarkhan_cleave",
-      "skill_ids": ["tarkhan_charge"],
-      "ultimate_id": "tarkhan_banner",
-      "front_row_default": true
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "velkor",
+      "basic_attack_id": "velkor_strike",
+      "skill_ids": [
+        "velkor_oreguard"
+      ],
+      "ultimate_id": "velkor_pass_thunder",
+      "front_row_default": true,
+      "silhouette": "рудный дуэлянт"
     },
     {
-      "id": "mob.stonekin",
-      "slug": "stonekin",
-      "name_ru": "Камнегрыз",
-      "faction_id": "mobs",
-      "class_id": "brute",
-      "rarity": "R",
-      "is_hero": false,
-      "source_facing": "LEFT",
-      "source_facing_override": "RIGHT",
-      "source_facing_override_reason": "V1 PNGs authored right; remake later in batch",
-      "visual_status": "V1_APPROVED",
-      "sprite_folder": "enemies/stonekin",
-      "basic_attack_id": "stonekin_slam",
-      "skill_ids": [],
-      "ultimate_id": null,
-      "front_row_default": true
+      "id": "hero.tarvex",
+      "slug": "tarvex",
+      "name_ru": "Тарвекс",
+      "faction_id": "ural_wardens",
+      "class_id": "support",
+      "rarity": "SR",
+      "is_hero": true,
+      "source_facing": "RIGHT",
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "tarvex",
+      "basic_attack_id": "tarvex_hammer",
+      "skill_ids": [
+        "tarvex_forge"
+      ],
+      "ultimate_id": "tarvex_bastion_seal",
+      "front_row_default": false,
+      "silhouette": "кузнец-стратег"
     },
     {
-      "id": "mob.shadewolf",
-      "slug": "shadewolf",
-      "name_ru": "Теневолк",
-      "faction_id": "mobs",
-      "class_id": "beast",
-      "rarity": "R",
-      "is_hero": false,
-      "source_facing": "LEFT",
-      "visual_status": "V1_APPROVED",
-      "sprite_folder": "enemies/shadewolf",
-      "basic_attack_id": "shadewolf_bite",
-      "skill_ids": [],
-      "ultimate_id": null,
-      "front_row_default": false
+      "id": "hero.xorin",
+      "slug": "xorin",
+      "name_ru": "Ксорин",
+      "faction_id": "ural_wardens",
+      "class_id": "mage",
+      "rarity": "SR",
+      "is_hero": true,
+      "source_facing": "RIGHT",
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "xorin",
+      "basic_attack_id": "xorin_stonebolt",
+      "skill_ids": [
+        "xorin_fault"
+      ],
+      "ultimate_id": "xorin_ridge_shift",
+      "front_row_default": false,
+      "silhouette": "геомант-педант"
+    },
+    {
+      "id": "hero.elvirax",
+      "slug": "elvirax",
+      "name_ru": "Эльвиракс",
+      "faction_id": "ural_wardens",
+      "class_id": "healer",
+      "rarity": "SR",
+      "is_hero": true,
+      "source_facing": "RIGHT",
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "elvirax",
+      "basic_attack_id": "elvirax_spring",
+      "skill_ids": [
+        "elvirax_mend"
+      ],
+      "ultimate_id": "elvirax_mountain_heart",
+      "front_row_default": false,
+      "silhouette": "хранительница источников"
+    },
+    {
+      "id": "hero.liorel",
+      "slug": "liorel",
+      "name_ru": "Лиорель",
+      "faction_id": "forest_spirits",
+      "class_id": "healer",
+      "rarity": "SSR",
+      "is_hero": true,
+      "source_facing": "RIGHT",
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "liorel",
+      "basic_attack_id": "liorel_bloom",
+      "skill_ids": [
+        "liorel_regrowth"
+      ],
+      "ultimate_id": "liorel_second_bloom",
+      "front_row_default": false,
+      "silhouette": "лесная целительница"
+    },
+    {
+      "id": "hero.firnax",
+      "slug": "firnax",
+      "name_ru": "Фирнакс",
+      "faction_id": "forest_spirits",
+      "class_id": "assassin",
+      "rarity": "SR",
+      "is_hero": true,
+      "source_facing": "RIGHT",
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "firnax",
+      "basic_attack_id": "firnax_cut",
+      "skill_ids": [
+        "firnax_vanish"
+      ],
+      "ultimate_id": "firnax_unseen",
+      "front_row_default": false,
+      "silhouette": "лесной убийца"
+    },
+    {
+      "id": "hero.mossar",
+      "slug": "mossar",
+      "name_ru": "Моссар",
+      "faction_id": "forest_spirits",
+      "class_id": "tank",
+      "rarity": "SR",
+      "is_hero": true,
+      "source_facing": "RIGHT",
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "mossar",
+      "basic_attack_id": "mossar_rootbash",
+      "skill_ids": [
+        "mossar_barkwall"
+      ],
+      "ultimate_id": "mossar_still_forest",
+      "front_row_default": true,
+      "silhouette": "древесный танк"
+    },
+    {
+      "id": "hero.zefriel",
+      "slug": "zefriel",
+      "name_ru": "Зефриэль",
+      "faction_id": "forest_spirits",
+      "class_id": "mage",
+      "rarity": "SR",
+      "is_hero": true,
+      "source_facing": "RIGHT",
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "zefriel",
+      "basic_attack_id": "zefriel_gust",
+      "skill_ids": [
+        "zefriel_crownstorm"
+      ],
+      "ultimate_id": "zefriel_canopy_tempest",
+      "front_row_default": false,
+      "silhouette": "маг крон"
     }
   ]
 }

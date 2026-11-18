@@ -6,7 +6,7 @@ extends SceneTree
 ## unless visual.source_facing is intentionally overridden for legacy V1 art).
 
 func _init() -> void:
-	var ids := ["braxor", "nixara", "stonekin", "shadewolf"]
+	var ids: PackedStringArray = CharacterRegistry.list_ids()
 	var failures: PackedStringArray = []
 	var warnings: PackedStringArray = []
 	for id in ids:

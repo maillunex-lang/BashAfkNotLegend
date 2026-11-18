@@ -11,7 +11,7 @@ func _init() -> void:
 	var checked := 0
 
 	# Live registry characters must import.
-	for id in ["braxor", "nixara", "stonekin", "shadewolf"]:
+	for id in CharacterRegistry.list_ids():
 		checked += 1
 		var data: CharacterData = CharacterRegistry.get_character(id)
 		if data == null or data.visual == null:
@@ -61,7 +61,7 @@ func _init() -> void:
 					failures.append("%s: mob stub must source_facing=LEFT" % slug)
 				if status == "STUB_NO_ART" and e.get("sprite_folder", null) != null:
 					failures.append("%s: STUB_NO_ART must have sprite_folder=null" % slug)
-				if status == "V1_APPROVED" and e.get("sprite_folder", null) == null:
+				if status in ["V1_APPROVED", "BATCH_PACKED"] and e.get("sprite_folder", null) == null:
 					failures.append("%s: V1_APPROVED needs sprite_folder" % slug)
 				print("[ROSTER] %s status=%s facing=%s" % [slug, status, facing])
 	else:

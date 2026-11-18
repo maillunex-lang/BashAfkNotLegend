@@ -79,9 +79,9 @@ func apply_character_data(data: CharacterData) -> void:
 	match data.role_style:
 		CharacterData.RoleStyle.TANK:
 			style = Style.TANK
-		CharacterData.RoleStyle.ASSASSIN:
+		CharacterData.RoleStyle.ASSASSIN, CharacterData.RoleStyle.MAGE, CharacterData.RoleStyle.HEALER, CharacterData.RoleStyle.SUPPORT:
 			style = Style.ASSASSIN
-		CharacterData.RoleStyle.BRUTE:
+		CharacterData.RoleStyle.BRUTE, CharacterData.RoleStyle.WARRIOR:
 			style = Style.BRUTE
 		CharacterData.RoleStyle.BEAST:
 			style = Style.BEAST

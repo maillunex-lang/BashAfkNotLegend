@@ -3,7 +3,7 @@ class_name CharacterData
 
 ## Logic / balance package — independent of sprites (VISUAL-APPROVAL-001).
 
-enum RoleStyle { TANK, ASSASSIN, BRUTE, BEAST, SUPPORT, MAGE }
+enum RoleStyle { TANK, ASSASSIN, BRUTE, BEAST, SUPPORT, MAGE, HEALER, WARRIOR }
 
 @export var character_id: String = ""
 @export var display_name: String = ""
