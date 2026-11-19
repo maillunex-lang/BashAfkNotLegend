@@ -1,0 +1,134 @@
+[gd_scene load_steps=2 format=3 uid="uid://bashtower"]
+
+[ext_resource type="Script" path="res://scripts/ui/tower.gd" id="1_tower"]
+
+[node name="Tower" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tower")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06, 0.08, 0.12, 1)
+
+[node name="Glow" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.22, 0.16, 0.1, 0.4)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.86, 0.62, 1)
+theme_override_font_sizes/font_size = 34
+text = "Башня испытаний"
+horizontal_alignment = 1
+
+[node name="Blurb" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.8, 0.84, 1)
+theme_override_font_sizes/font_size = 16
+text = "Этаж выше — легенда тоньше."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Progress" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.75, 0.4, 1)
+theme_override_font_sizes/font_size = 18
+text = "Прогресс"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/VBox"]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="List" type="VBoxContainer" parent="Margin/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Detail" type="VBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Name" type="Label" parent="Margin/VBox/Detail"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Этаж"
+horizontal_alignment = 1
+
+[node name="Flavour" type="Label" parent="Margin/VBox/Detail"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.78, 0.55, 1)
+theme_override_font_sizes/font_size = 16
+text = "Флейвор"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Enemies" type="Label" parent="Margin/VBox/Detail"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.82, 0.86, 1)
+theme_override_font_sizes/font_size = 15
+text = "Враги"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Reward" type="Label" parent="Margin/VBox/Detail"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.8, 0.45, 1)
+theme_override_font_sizes/font_size = 16
+text = "Награда"
+horizontal_alignment = 1
+
+[node name="Nav" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="BtnBack" type="Button" parent="Margin/VBox/Nav"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Меню"
+
+[node name="BtnSquad" type="Button" parent="Margin/VBox/Nav"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Отряд"
+
+[node name="BtnFight" type="Button" parent="Margin/VBox/Nav"]
+custom_minimum_size = Vector2(260, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Штурм этажа"

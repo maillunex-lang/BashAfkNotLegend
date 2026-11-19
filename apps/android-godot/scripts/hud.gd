@@ -11,7 +11,6 @@ signal auto_toggled(enabled: bool)
 @onready var btn_auto: Button = $TopBar/Margin/VBox/SpeedRow/BtnAuto
 @onready var btn_pause: Button = $TopBar/Margin/VBox/Row1/BtnPause
 @onready var speed_label: Label = $TopBar/Margin/VBox/SpeedRow/SpeedLabel
-@onready var auto_label: Label = $TopBar/Margin/VBox/SpeedRow/AutoLabel
 
 var _paused: bool = false
 var _slots: Dictionary = {}
@@ -30,12 +29,31 @@ func setup(players: Array) -> void:
 		child.queue_free()
 	_slots.clear()
 	await get_tree().process_frame
+	# Always show 5 hero slots (prototype fills first N; rest are empty placeholders)
 	for f in players:
 		slot_box.add_child(_make_slot(f))
+	for _i in range(maxi(0, 5 - players.size())):
+		slot_box.add_child(_make_empty_slot())
+
+func _make_empty_slot() -> Control:
+	var root := VBoxContainer.new()
+	root.custom_minimum_size = Vector2(150, 250)
+	root.alignment = BoxContainer.ALIGNMENT_CENTER
+	var box := ColorRect.new()
+	box.custom_minimum_size = Vector2(120, 120)
+	box.color = Color(0.12, 0.18, 0.24, 0.85)
+	root.add_child(box)
+	var lbl := Label.new()
+	lbl.text = "—"
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.add_theme_font_size_override("font_size", 18)
+	lbl.add_theme_color_override("font_color", Color(0.7, 0.75, 0.8))
+	root.add_child(lbl)
+	return root
 
 func _make_slot(f: Fighter) -> Control:
 	var root := VBoxContainer.new()
-	root.custom_minimum_size = Vector2(190, 250)
+	root.custom_minimum_size = Vector2(160, 250)
 	root.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	root.alignment = BoxContainer.ALIGNMENT_CENTER
 
@@ -76,7 +94,7 @@ func _make_slot(f: Fighter) -> Control:
 	root.add_child(bar)
 
 	var ready := Label.new()
-	ready.text = "%d%%" % int(100.0 * f.energy / max(f.max_energy, 1.0))
+	ready.text = "ульт %d%%" % int(100.0 * f.energy / max(f.max_energy, 1.0))
 	ready.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ready.add_theme_color_override("font_color", Color("F3C36A"))
 	ready.add_theme_font_size_override("font_size", 18)
@@ -98,18 +116,18 @@ func update_energy(fighter_id: String, value: float, max_value: float) -> void:
 	bar.max_value = max_value
 	bar.value = value
 	if value >= max_value:
-		_slots[fighter_id]["ready"].text = "READY"
+		_slots[fighter_id]["ready"].text = "ГОТОВ"
 	else:
-		_slots[fighter_id]["ready"].text = "%d%%" % int(100.0 * value / max(max_value, 1.0))
+		_slots[fighter_id]["ready"].text = "ульт %d%%" % int(100.0 * value / max(max_value, 1.0))
 
 func set_ready(fighter_id: String, is_ready: bool) -> void:
 	if not _slots.has(fighter_id):
 		return
 	if is_ready:
-		_slots[fighter_id]["ready"].text = "READY"
+		_slots[fighter_id]["ready"].text = "ГОТОВ"
 	else:
 		var bar: ProgressBar = _slots[fighter_id]["bar"]
-		_slots[fighter_id]["ready"].text = "%d%%" % int(100.0 * bar.value / max(bar.max_value, 1.0))
+		_slots[fighter_id]["ready"].text = "ульт %d%%" % int(100.0 * bar.value / max(bar.max_value, 1.0))
 
 func _set_speed(mult: float) -> void:
 	speed_label.text = "x%s" % str(mult).trim_suffix(".0")
@@ -117,8 +135,7 @@ func _set_speed(mult: float) -> void:
 
 func _toggle_auto() -> void:
 	_auto_on = not _auto_on
-	btn_auto.text = "Auto: ON" if _auto_on else "Auto: OFF"
-	auto_label.text = "AUTO: ON" if _auto_on else "AUTO: OFF"
+	btn_auto.text = "Авто: вкл" if _auto_on else "Авто: выкл"
 	auto_toggled.emit(_auto_on)
 
 func _toggle_pause() -> void:

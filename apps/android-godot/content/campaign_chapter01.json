@@ -1,0 +1,79 @@
+{
+  "schema": "campaign_chapter_v1",
+  "chapter_id": "ch01_ural_start",
+  "title_ru": "Глава 1 · Уральский старт",
+  "region_ru": "Центральный Башкортостан (авторский вымысел)",
+  "notes": "Примерные узлы из GAME.md (Уфа→Сибай) — художественная адаптация, не финальная география. Offline only.",
+  "nodes": [
+    {
+      "id": "ufa_gate",
+      "name_ru": "Уфа · Входные ворота",
+      "blurb": "Город ещё не проснулся, а легенды уже опаздывают.",
+      "dialogue": [
+        "Героев без легенд обычно не пускают. Сегодня — исключение. Не гордитесь.",
+        "Камнегрыз охраняет турникет. Он серьёзен. Вы — почти."
+      ],
+      "map_pos": [220, 1480],
+      "enemy_ids": ["stonekin", "shadewolf"],
+      "reward_gold": 40,
+      "afk_rate_bonus": 2,
+      "unlocks": ["sterlitamak_fork"]
+    },
+    {
+      "id": "sterlitamak_fork",
+      "name_ru": "Стерлитамак · Развилка",
+      "blurb": "Две дороги. Обе обещают славу. Одна врёт честнее.",
+      "dialogue": [
+        "Левая тропа пахнет рудой. Правая — сарказмом. Классика.",
+        "Тёмные создания уже заняли лучшие места у костра."
+      ],
+      "map_pos": [420, 1280],
+      "enemy_ids": ["morvex", "draxel", "vespira"],
+      "reward_gold": 70,
+      "afk_rate_bonus": 3,
+      "unlocks": ["beloretsk_ridge", "ufa_patrol"]
+    },
+    {
+      "id": "ufa_patrol",
+      "name_ru": "Уфа · Ночной дозор",
+      "blurb": "Патруль, который никто не просил, но все ждали.",
+      "dialogue": [
+        "Дозорные кивают так, будто вы уже опоздали на свою же победу."
+      ],
+      "map_pos": [160, 1180],
+      "enemy_ids": ["grimzor", "stonekin", "shadewolf"],
+      "reward_gold": 55,
+      "afk_rate_bonus": 2,
+      "unlocks": ["beloretsk_ridge"]
+    },
+    {
+      "id": "beloretsk_ridge",
+      "name_ru": "Белорецк · Горный хребет",
+      "blurb": "Ветер срывает плащи и последнюю скромность.",
+      "dialogue": [
+        "Горы не спрашивают, готовы ли вы. Они уже начали экзамен.",
+        "Небожители смотрят сверху. Оценка: «пока держитесь»."
+      ],
+      "map_pos": [640, 980],
+      "enemy_ids": ["orionex", "voltario", "selestra", "phaelis"],
+      "reward_gold": 110,
+      "afk_rate_bonus": 4,
+      "unlocks": ["sibay_rift"]
+    },
+    {
+      "id": "sibay_rift",
+      "name_ru": "Сибай · Древний разлом",
+      "blurb": "Разлом помнит эпохи. Вы — пока только вчерашний бой.",
+      "dialogue": [
+        "Древние выходят без очереди. Хронология в панике.",
+        "Если победите — AFK-доход вырастет. Если нет — тоже будет история. Короткая."
+      ],
+      "map_pos": [780, 720],
+      "enemy_ids": ["cronax", "eontara", "obsidrak", "scaria", "relixor"],
+      "reward_gold": 180,
+      "afk_rate_bonus": 6,
+      "unlocks": ["chapter_clear"],
+      "is_boss": true
+    }
+  ]
+}

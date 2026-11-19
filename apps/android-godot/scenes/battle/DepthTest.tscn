@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=3 uid="uid://bashdepthtest"]
+
+[ext_resource type="Script" path="res://scripts/depth_test.gd" id="1_dt"]
+[ext_resource type="PackedScene" uid="uid://bashfighter001" path="res://scenes/battle/Fighter.tscn" id="2_fighter"]
+[ext_resource type="Texture2D" path="res://assets/bg/ground_plate.jpg" id="3_ground"]
+
+[node name="DepthTest" type="Node2D"]
+script = ExtResource("1_dt")
+
+[node name="Backdrop" type="Polygon2D" parent="."]
+z_index = -20
+color = Color(0.4, 0.55, 0.62, 1)
+polygon = PackedVector2Array(0, 0, 1080, 0, 1080, 1920, 0, 1920)
+
+[node name="Ground" type="Sprite2D" parent="."]
+z_index = -10
+position = Vector2(540, 1120)
+scale = Vector2(1.1, 0.95)
+texture = ExtResource("3_ground")
+
+[node name="Fighters" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Stonekin" parent="Fighters" instance=ExtResource("2_fighter")]
+position = Vector2(540, 1040)
+fighter_id = "stonekin"
+display_name = "Камнегрыз"
+team = "enemy"
+sprite_folder = "enemies/stonekin"
+source_facing = 1
+battle_side = 1
+show_facing_debug = false
+
+[node name="Shadewolf" parent="Fighters" instance=ExtResource("2_fighter")]
+position = Vector2(320, 980)
+fighter_id = "shadewolf"
+display_name = "Теневолк"
+team = "enemy"
+sprite_folder = "enemies/shadewolf"
+source_facing = 0
+battle_side = 1
+show_facing_debug = false
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Phase" type="Label" parent="UI"]
+offset_left = 40.0
+offset_top = 60.0
+offset_right = 1040.0
+offset_bottom = 120.0
+theme_override_font_sizes/font_size = 28
+text = "DEPTH TEST"

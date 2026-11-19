@@ -1,0 +1,21 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+
+config/name="ARPG 3D Archer Demo"
+config/description="Standalone Godot 4 3D ARPG sample — archer, ice arrow every 3rd shot, enemy freeze."
+run/main_scene="res://scenes/BattleDemo.tscn"
+config/features=PackedStringArray("4.3", "Forward Plus")
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+anti_aliasing/quality/msaa_3d=2
+lights_and_shadows/directional_shadow/size=2048

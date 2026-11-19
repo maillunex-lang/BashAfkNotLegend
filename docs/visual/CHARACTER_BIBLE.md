@@ -95,3 +95,36 @@
 1. Утвердить эталоны Браксор + Никсара.  
 2. Масштабировать VIS-02 на Godot: остальные 28 (концепт → спрайт → кадры).  
 3. Экспорт атласов с общими ID для будущей PWA — **без** разработки PWA сейчас.
+
+### MASS-01 (группа 8) — `BATCH_PACKED`
+
+Без замены согласованных имён. Браксор/Никсара не переделывались (V1).
+
+| ID | Статус визуала | Папка спрайтов |
+|----|----------------|----------------|
+| `hero.velkor` … `hero.zefriel` (8) | fullbody + portrait + combat frames RIGHT | `apps/android-godot/assets/sprites/<slug>/` |
+| Портреты | `assets/ui/portraits/<slug>.jpg` | |
+| Логика | `CharacterRegistry` + `AbilityCatalog` (ID → kit) | заменяемый VisualDef |
+
+### MASS-02 (группа 8) — `BATCH_PACKED`
+
+| ID | Фракция | Папка |
+|----|---------|-------|
+| `hero.morvex` … `hero.vespira` | Тёмные создания | `sprites/<slug>/` |
+| `hero.aurix` … `hero.orionex` | Небожители | `sprites/<slug>/` |
+
+### MASS-03 (группа 8) — `BATCH_PACKED`
+
+| ID | Фракция | Папка |
+|----|---------|-------|
+| `hero.phaelis` | Небожители | `sprites/phaelis/` |
+| `hero.cronax` … `hero.scaria` | Древние | `sprites/<slug>/` |
+| `hero.zephirox`, `hero.xalia` | Отступники | `sprites/<slug>/` |
+
+### MASS-04 (финал 30) — `BATCH_PACKED`
+
+| ID | Фракция | Папка |
+|----|---------|-------|
+| `hero.ravencor`, `hero.meltris`, `hero.flintar` | Отступники | `sprites/<slug>/` |
+
+**Release roster 30/30 packed** (V1 Браксор/Никсара + MASS-01…04). Collection target 54 — позже.
