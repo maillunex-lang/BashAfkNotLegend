@@ -26,6 +26,7 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 | VIS-00b | Godot prototype 2v2 + screenshot/video | `DONE` (на review) | Evidence в artifacts | `apps/android-godot/` |
 | BATTLE-POLISH-002 | Facing/slots/YSort/speed x1 | `DONE` | Formation 2+3 + facing | `apps/android-godot/` |
 | PLAY-LOOP-001 | Меню → отряд → коллекция → 5v5 бой | `DONE` | offline GameState | `scenes/ui/*` + Battle spawn |
+| CAMP-001 | Глава 1 карта + AFK mock + прогресс | `DONE` | offline | `content/campaign_chapter01.json` + WorldMap |
 | VIS-APPROVAL-001 | Универсальная система анимаций/направлений | `DONE` (foundation) | flip + AbilityCatalog + Formation | DEC-012 |
 | MASS-01 | 8 героев (Урал+Лес) | `DONE` | packed | `content/hero_roster_batch01.json` |
 | MASS-02 | 8 героев (Тёмные+Небожители) | `DONE` | packed | `content/hero_roster_batch02.json` |

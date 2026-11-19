@@ -43,6 +43,24 @@ func _init() -> void:
 		])
 
 	# Roster batches: STUB_NO_ART must not claim a folder.
+	# Campaign chapter must parse and reference known characters.
+	var camp_path := "res://content/campaign_chapter01.json"
+	if FileAccess.file_exists(ProjectSettings.globalize_path(camp_path)):
+		var cf := FileAccess.open(camp_path, FileAccess.READ)
+		var camp = JSON.parse_string(cf.get_as_text())
+		cf.close()
+		if typeof(camp) == TYPE_DICTIONARY and camp.has("nodes"):
+			for n in camp["nodes"]:
+				checked += 1
+				for eid in n.get("enemy_ids", []):
+					if CharacterRegistry.get_character(str(eid)) == null:
+						failures.append("campaign node %s unknown enemy %s" % [n.get("id", "?"), eid])
+				print("[CAMPAIGN] %s enemies=%d" % [n.get("id", "?"), (n.get("enemy_ids", []) as Array).size()])
+		else:
+			failures.append("campaign json invalid")
+	else:
+		warnings.append("campaign json missing")
+
 	for roster_path in [
 		"res://content/hero_roster_batch01.json",
 		"res://content/hero_roster_batch02.json",

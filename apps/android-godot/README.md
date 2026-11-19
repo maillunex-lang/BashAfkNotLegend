@@ -4,11 +4,13 @@ Godot 4.3 Android-first клиент. Стиль: **Bashkir Anime Sarcastic Fant
 
 ## Играбельный цикл (offline)
 
-`MainMenu` → `SquadSelect` / `Collection` → `BattlePrototype` (до 5v5) → результат → меню.
+`MainMenu` → **Кампания** (`WorldMap`) / стычка / отряд / коллекция → бой → результат.
 
-- Autoload `GameState`: отряд игрока + волна врагов (герои AI).
-- Бой спавнит `Fighter.tscn` из `CharacterRegistry` по ID отряда.
-- 30 героев CHARACTER_BIBLE packed; V1 Браксор/Никсара не ремейкались.
+- Глава 1: `content/campaign_chapter01.json` (Уфа→Сибай, примеры из GAME.md).
+- Победа на узле: золото + AFK rate; save в `user://bash_save_v1.json`.
+- AFK claim — **offline mock** (серверное время — после BQ).
+- Autoload `GameState`; бой спавнит `Fighter.tscn` из registry.
+- 30 героев CHARACTER_BIBLE packed; V1 не ремейкались.
 
 ### Локальный запуск (desktop preview)
 

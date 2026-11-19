@@ -726,28 +726,45 @@ func _show_result(won: bool) -> void:
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	layer.add_child(panel)
 	var box := VBoxContainer.new()
-	box.set_anchors_preset(Control.PRESET_CENTER)
-	box.position = Vector2(540, 900)
-	box.custom_minimum_size = Vector2(520, 220)
+	box.custom_minimum_size = Vector2(560, 280)
 	box.alignment = BoxContainer.ALIGNMENT_CENTER
 	panel.add_child(box)
-	# Center manually for portrait
-	box.position = Vector2(280, 780)
+	box.position = Vector2(260, 760)
 	var title := Label.new()
 	title.text = "ПОБЕДА" if won else "ПОРАЖЕНИЕ"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 48)
 	title.add_theme_color_override("font_color", Color(0.95, 0.85, 0.45) if won else Color(0.9, 0.45, 0.4))
 	box.add_child(title)
+	var reward := Label.new()
+	reward.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	reward.add_theme_font_size_override("font_size", 20)
+	reward.add_theme_color_override("font_color", Color(0.85, 0.9, 0.75))
+	if won and GameState.battle_mode == "campaign":
+		reward.text = GameState.last_reward_summary()
+	else:
+		reward.text = "Стычка" if GameState.battle_mode == "skirmish" else ""
+	box.add_child(reward)
+	if GameState.battle_mode == "campaign":
+		var btn_map := Button.new()
+		btn_map.text = "На карту"
+		btn_map.custom_minimum_size = Vector2(280, 64)
+		btn_map.pressed.connect(func(): GameState.go_map())
+		box.add_child(btn_map)
 	var btn_menu := Button.new()
 	btn_menu.text = "В меню"
 	btn_menu.custom_minimum_size = Vector2(280, 64)
 	btn_menu.pressed.connect(func(): GameState.go_menu())
 	box.add_child(btn_menu)
 	var btn_again := Button.new()
-	btn_again.text = "Ещё бой"
+	btn_again.text = "Ещё стычка" if GameState.battle_mode == "skirmish" else "Повторить узел"
 	btn_again.custom_minimum_size = Vector2(280, 64)
-	btn_again.pressed.connect(func(): GameState.start_battle())
+	btn_again.pressed.connect(func():
+		if GameState.battle_mode == "campaign" and GameState.active_node_id != "":
+			GameState.start_node_battle(GameState.active_node_id)
+		else:
+			GameState.start_skirmish()
+	)
 	box.add_child(btn_again)
 
 func _log(msg: String) -> void:

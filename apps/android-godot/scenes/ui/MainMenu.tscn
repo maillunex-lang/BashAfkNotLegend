@@ -39,7 +39,7 @@ grow_vertical = 2
 
 [node name="VBox" type="VBoxContainer" parent="Center"]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 16
 alignment = 1
 
 [node name="Title" type="Label" parent="Center/VBox"]
@@ -59,14 +59,20 @@ text = "Герои без легенд"
 horizontal_alignment = 1
 
 [node name="Spacer" type="Control" parent="Center/VBox"]
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 
-[node name="BtnBattle" type="Button" parent="Center/VBox"]
+[node name="BtnCampaign" type="Button" parent="Center/VBox"]
 custom_minimum_size = Vector2(420, 72)
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-text = "В бой"
+text = "Кампания"
+
+[node name="BtnBattle" type="Button" parent="Center/VBox"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Стычка 5v5"
 
 [node name="BtnSquad" type="Button" parent="Center/VBox"]
 custom_minimum_size = Vector2(420, 64)
