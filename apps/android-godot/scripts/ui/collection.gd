@@ -50,9 +50,12 @@ func _show(hero_id: String) -> void:
 		return
 	detail_name.text = data.display_name
 	detail_meta.text = "%s · %s" % [GameState.class_label(data.class_id), GameState.faction_label(data.faction_id)]
-	detail_stats.text = "HP %d · ATK %d · RNG %d · SPD %d\n%s / %s / %s" % [
+	var basic := AbilityCatalog.get_ability(data.basic_attack_id)
+	var skill := AbilityCatalog.get_ability(data.skill1_id)
+	var ult := AbilityCatalog.get_ability(data.ultimate_id)
+	detail_stats.text = "HP %d · ATK %d · RNG %d · SPD %d\n%s · %s · %s" % [
 		int(data.max_hp), int(data.attack_power), int(data.preferred_range), int(data.move_speed),
-		data.basic_attack_id, data.skill1_id, data.ultimate_id,
+		basic.display_name, skill.display_name, ult.display_name,
 	]
 	var path := "res://assets/ui/portraits/%s.jpg" % hero_id
 	if ResourceLoader.exists(path):

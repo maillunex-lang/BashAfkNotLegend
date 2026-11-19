@@ -13,12 +13,12 @@ const BACK_Y := 900.0
 ## Front row: two tanks/bruisers. Back row: three supports/DPS.
 const FRONT_OFFSETS: Array[Vector2] = [
 	Vector2(0, 0),
-	Vector2(0, 70),
+	Vector2(0, 95),
 ]
 const BACK_OFFSETS: Array[Vector2] = [
-	Vector2(-95, -20),
-	Vector2(-110, 55),
-	Vector2(-85, 120),
+	Vector2(-120, -35),
+	Vector2(-135, 55),
+	Vector2(-115, 145),
 ]
 
 static func side_anchor_x(side_left: bool) -> float:

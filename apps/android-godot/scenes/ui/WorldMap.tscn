@@ -143,7 +143,7 @@ text = "Отряд"
 custom_minimum_size = Vector2(170, 58)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-text = "AFK claim"
+text = "Забрать AFK"
 
 [node name="BtnFight" type="Button" parent="Margin/VBox/Nav"]
 custom_minimum_size = Vector2(190, 58)

@@ -107,7 +107,7 @@ func _show(node_id: String) -> void:
 	btn_fight.text = "В бой" if not GameState.is_node_cleared(node_id) else "Повторить"
 
 func _refresh_economy() -> void:
-	economy.text = "Золото: %d · AFK: %.0f/ч (накоплено %d, ≤%.0fч) · offline mock" % [
+	economy.text = "Золото: %d · AFK: %.0f/ч (накоплено %d, ≤%.0fч)" % [
 		GameState.gold,
 		GameState.afk_gold_per_hour(),
 		GameState.afk_pending_gold(),
@@ -120,5 +120,5 @@ func _on_fight() -> void:
 
 func _on_claim() -> void:
 	var g := GameState.claim_afk()
-	economy.text = "Получено %d золота (offline mock). %s" % [g, economy.text]
+	economy.text = "Получено %d золота. %s" % [g, economy.text]
 	_refresh_economy()

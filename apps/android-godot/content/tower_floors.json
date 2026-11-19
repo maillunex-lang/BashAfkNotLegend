@@ -2,7 +2,7 @@
   "schema": "tower_floors_v1",
   "tower_id": "tower_trials_v1",
   "title_ru": "Башня испытаний",
-  "blurb": "Этаж выше — легенда тоньше. Offline MVP (AFK-005).",
+  "blurb": "Этаж выше — легенда тоньше.",
   "floors": [
     {
       "floor": 1,

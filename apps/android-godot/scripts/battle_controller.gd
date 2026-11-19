@@ -10,7 +10,6 @@ const FIGHTER_SCENE: PackedScene = preload("res://scenes/battle/Fighter.tscn")
 @onready var floaters: Node2D = $Floaters
 @onready var fighters_root: Node2D = $Fighters
 @onready var speed_label: Label = $HUD/TopBar/Margin/VBox/SpeedRow/SpeedLabel
-@onready var auto_label: Label = $HUD/TopBar/Margin/VBox/SpeedRow/AutoLabel
 @onready var wave_label: Label = $HUD/TopBar/Margin/VBox/Row1/WaveLabel
 @onready var timer_label: Label = $HUD/TopBar/Margin/VBox/Row1/TimerLabel
 @onready var log_label: Label = $HUD/LogLabel
@@ -682,7 +681,6 @@ func _on_speed_changed(mult: float) -> void:
 
 func _on_auto_toggled(enabled: bool) -> void:
 	auto_mode = enabled
-	auto_label.text = "AUTO: ON" if enabled else "AUTO: OFF"
 
 func _on_fighter_died(f: Fighter) -> void:
 	_log("%s повержен" % f.display_name)
