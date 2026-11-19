@@ -108,8 +108,13 @@ func _physics_process(delta: float) -> void:
 		return
 	var to := target.global_position - global_position
 	to.y = 0.0
+	# Keep 2.5D lane combat on XY
+	if has_meta("side_lock_yaw"):
+		to.z = 0.0
+		rotation_degrees.y = float(get_meta("side_lock_yaw"))
+		global_position.z = 0.0
 	var dist := to.length()
-	if dist > 0.05:
+	if dist > 0.05 and not has_meta("side_lock_yaw"):
 		look_at(global_position + to.normalized(), Vector3.UP)
 	if dist > attack_range:
 		velocity = to.normalized() * move_speed

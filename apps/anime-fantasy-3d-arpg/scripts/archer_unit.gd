@@ -58,14 +58,14 @@ func _load_model() -> void:
 func _attach_showcase_bow() -> void:
 	var bow := BowBuilder.build()
 	bow.name = "FantasyBow"
-	# Character-local left hand; large and in front so camera always sees it
-	bow.position = Vector3(0.55, 1.15, 0.35)
-	bow.rotation_degrees = Vector3(12, -25, -15)
-	bow.scale = Vector3(1.6, 1.6, 1.6)
-	add_child(bow)  # not under _visual so look_at on body keeps bow with character
+	# Character-local: readable from side cam (profile) and orbit cam
+	bow.position = Vector3(0.42, 1.12, 0.28)
+	bow.rotation_degrees = Vector3(8, -20, -12)
+	bow.scale = Vector3(1.55, 1.55, 1.55)
+	add_child(bow)
 	_muzzle = Marker3D.new()
 	_muzzle.name = "Muzzle"
-	_muzzle.position = Vector3(0.2, 1.35, 0.75)
+	_muzzle.position = Vector3(0.1, 1.32, 0.7)
 	add_child(_muzzle)
 
 func _fix_gltf_materials(root: Node) -> void:
@@ -143,7 +143,9 @@ func _play_shot_loop() -> void:
 func _physics_process(delta: float) -> void:
 	if not _alive:
 		return
-	if target and is_instance_valid(target):
+	if has_meta("side_lock_yaw"):
+		rotation_degrees.y = float(get_meta("side_lock_yaw"))
+	elif target and is_instance_valid(target):
 		var look := target.global_position
 		look.y = global_position.y
 		if look.distance_to(global_position) > 0.08:
@@ -163,7 +165,12 @@ func _fire() -> void:
 	if _muzzle:
 		origin = _muzzle.global_position
 	var aim := target.global_position + Vector3(0, 1.2, 0)
-	var dir := (aim - origin).normalized()
+	var dir := (aim - origin)
+	# 2.5D: keep projectiles on the side-view plane
+	if has_meta("side_lock_yaw"):
+		dir.z = 0.0
+		origin.z = global_position.z
+	dir = dir.normalized()
 	var arrow = IceArrowScr.new()
 	get_parent().add_child(arrow)
 	arrow.setup(origin, dir, target)

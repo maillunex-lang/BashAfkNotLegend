@@ -3,8 +3,8 @@ config_version=5
 
 [application]
 
-config/name="Anime Fantasy 3D ARPG — Dual Ice Shot"
-run/main_scene="res://scenes/IceShotDemo.tscn"
+config/name="Anime Fantasy 3D ARPG — 2.5D Side Battle"
+run/main_scene="res://scenes/SideBattle25D.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 
 [display]
