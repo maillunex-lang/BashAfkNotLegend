@@ -740,10 +740,12 @@ func _show_result(won: bool) -> void:
 	reward.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	reward.add_theme_font_size_override("font_size", 20)
 	reward.add_theme_color_override("font_color", Color(0.85, 0.9, 0.75))
-	if won and GameState.battle_mode == "campaign":
+	if won and GameState.battle_mode in ["campaign", "tower"]:
 		reward.text = GameState.last_reward_summary()
+	elif GameState.battle_mode == "skirmish":
+		reward.text = "Стычка"
 	else:
-		reward.text = "Стычка" if GameState.battle_mode == "skirmish" else ""
+		reward.text = ""
 	box.add_child(reward)
 	if GameState.battle_mode == "campaign":
 		var btn_map := Button.new()
@@ -751,17 +753,34 @@ func _show_result(won: bool) -> void:
 		btn_map.custom_minimum_size = Vector2(280, 64)
 		btn_map.pressed.connect(func(): GameState.go_map())
 		box.add_child(btn_map)
+	elif GameState.battle_mode == "tower":
+		var btn_tower := Button.new()
+		btn_tower.text = "В башню"
+		btn_tower.custom_minimum_size = Vector2(280, 64)
+		btn_tower.pressed.connect(func(): GameState.go_tower())
+		box.add_child(btn_tower)
 	var btn_menu := Button.new()
 	btn_menu.text = "В меню"
 	btn_menu.custom_minimum_size = Vector2(280, 64)
 	btn_menu.pressed.connect(func(): GameState.go_menu())
 	box.add_child(btn_menu)
 	var btn_again := Button.new()
-	btn_again.text = "Ещё стычка" if GameState.battle_mode == "skirmish" else "Повторить узел"
+	match GameState.battle_mode:
+		"campaign":
+			btn_again.text = "Повторить узел"
+		"tower":
+			btn_again.text = "Следующий этаж" if won else "Повторить этаж"
+		_:
+			btn_again.text = "Ещё стычка"
 	btn_again.custom_minimum_size = Vector2(280, 64)
 	btn_again.pressed.connect(func():
 		if GameState.battle_mode == "campaign" and GameState.active_node_id != "":
 			GameState.start_node_battle(GameState.active_node_id)
+		elif GameState.battle_mode == "tower":
+			if won:
+				GameState.start_tower_battle()
+			else:
+				GameState.start_tower_battle(GameState.active_tower_floor)
 		else:
 			GameState.start_skirmish()
 	)

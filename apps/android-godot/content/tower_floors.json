@@ -1,0 +1,80 @@
+{
+  "schema": "tower_floors_v1",
+  "tower_id": "tower_trials_v1",
+  "title_ru": "Башня испытаний",
+  "blurb": "Этаж выше — легенда тоньше. Offline MVP (AFK-005).",
+  "floors": [
+    {
+      "floor": 1,
+      "name_ru": "Этаж 1 · Турникет",
+      "flavour": "Охрана просит легенду. У вас абонемент на сарказм.",
+      "enemy_ids": ["stonekin", "shadewolf"],
+      "reward_gold": 25
+    },
+    {
+      "floor": 2,
+      "name_ru": "Этаж 2 · Чернильный холл",
+      "flavour": "Страницы шепчут спойлеры. Игнорируйте.",
+      "enemy_ids": ["morvex", "vespira", "shadewolf"],
+      "reward_gold": 35
+    },
+    {
+      "floor": 3,
+      "name_ru": "Этаж 3 · Зал приговоров",
+      "flavour": "Клинок уже решил. Вы можете оспорить.",
+      "enemy_ids": ["draxel", "grimzor", "scaria"],
+      "reward_gold": 45
+    },
+    {
+      "floor": 4,
+      "name_ru": "Этаж 4 · Чертог кроны",
+      "flavour": "Лес судит без протокола.",
+      "enemy_ids": ["firnax", "zefriel", "liorel", "tarvex"],
+      "reward_gold": 55
+    },
+    {
+      "floor": 5,
+      "name_ru": "Этаж 5 · Небесная канцелярия",
+      "flavour": "Очередь на суд без очереди. Ирония официальная.",
+      "enemy_ids": ["orionex", "voltario", "phaelis", "selestra"],
+      "reward_gold": 70,
+      "is_milestone": true
+    },
+    {
+      "floor": 6,
+      "name_ru": "Этаж 6 · Хронолифт",
+      "flavour": "Время опаздывает на свою же встречу.",
+      "enemy_ids": ["eontara", "relixor", "obsidrak"],
+      "reward_gold": 80
+    },
+    {
+      "floor": 7,
+      "name_ru": "Этаж 7 · Контрактный этаж",
+      "flavour": "План Б отсутствует. Это и есть план.",
+      "enemy_ids": ["ravencor", "flintar", "meltris", "xalia"],
+      "reward_gold": 90
+    },
+    {
+      "floor": 8,
+      "name_ru": "Этаж 8 · Уральский пресс",
+      "flavour": "Руда не прощает мягких ударов.",
+      "enemy_ids": ["tarvex", "xorin", "elvirax", "stonekin"],
+      "reward_gold": 100
+    },
+    {
+      "floor": 9,
+      "name_ru": "Этаж 9 · Теневой архив",
+      "flavour": "Свидетелей нет. Это плюс.",
+      "enemy_ids": ["grimzor", "draxel", "morvex", "vespira", "scaria"],
+      "reward_gold": 120
+    },
+    {
+      "floor": 10,
+      "name_ru": "Этаж 10 · Монолитный потолок",
+      "flavour": "Выше только похвала. Она не выдаётся.",
+      "enemy_ids": ["cronax", "obsidrak", "eontara", "zephirox", "orionex"],
+      "reward_gold": 160,
+      "is_milestone": true
+    }
+  ]
+}

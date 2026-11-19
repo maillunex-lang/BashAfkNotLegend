@@ -61,6 +61,23 @@ func _init() -> void:
 	else:
 		warnings.append("campaign json missing")
 
+	var tower_path := "res://content/tower_floors.json"
+	if FileAccess.file_exists(ProjectSettings.globalize_path(tower_path)):
+		var tf := FileAccess.open(tower_path, FileAccess.READ)
+		var tower = JSON.parse_string(tf.get_as_text())
+		tf.close()
+		if typeof(tower) == TYPE_DICTIONARY and tower.has("floors"):
+			for fl in tower["floors"]:
+				checked += 1
+				for eid in fl.get("enemy_ids", []):
+					if CharacterRegistry.get_character(str(eid)) == null:
+						failures.append("tower floor %s unknown enemy %s" % [fl.get("floor", "?"), eid])
+				print("[TOWER] floor=%s enemies=%d" % [fl.get("floor", "?"), (fl.get("enemy_ids", []) as Array).size()])
+		else:
+			failures.append("tower json invalid")
+	else:
+		warnings.append("tower json missing")
+
 	for roster_path in [
 		"res://content/hero_roster_batch01.json",
 		"res://content/hero_roster_batch02.json",

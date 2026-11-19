@@ -68,6 +68,12 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Кампания"
 
+[node name="BtnTower" type="Button" parent="Center/VBox"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Башня испытаний"
+
 [node name="BtnBattle" type="Button" parent="Center/VBox"]
 custom_minimum_size = Vector2(420, 64)
 layout_mode = 2
