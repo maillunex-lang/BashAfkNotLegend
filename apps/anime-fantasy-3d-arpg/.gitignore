@@ -1,0 +1,4 @@
+.godot/
+*.translation
+assets/models/incoming/
+*.blend1
