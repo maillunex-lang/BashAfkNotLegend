@@ -1,0 +1,57 @@
+{
+  "schema": "hero_roster_stub_v1",
+  "notes": "MASS-04 finale from CHARACTER_BIBLE. Remaining Renegades. Completes release 30 heroes. Heroes author RIGHT; L/R via flip.",
+  "batch": "MASS-04",
+  "release_target_heroes": 30,
+  "collection_target_heroes": 54,
+  "entries": [
+    {
+      "id": "hero.ravencor",
+      "slug": "ravencor",
+      "name_ru": "Равенкор",
+      "faction_id": "renegades",
+      "class_id": "tank",
+      "rarity": "SR",
+      "is_hero": true,
+      "source_facing": "RIGHT",
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "ravencor",
+      "basic_attack_id": "ravencor_bash",
+      "skill_ids": ["ravencor_guard"],
+      "ultimate_id": "ravencor_contract",
+      "front_row_default": true
+    },
+    {
+      "id": "hero.meltris",
+      "slug": "meltris",
+      "name_ru": "Мелтрис",
+      "faction_id": "renegades",
+      "class_id": "healer",
+      "rarity": "SR",
+      "is_hero": true,
+      "source_facing": "RIGHT",
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "meltris",
+      "basic_attack_id": "meltris_dose",
+      "skill_ids": ["meltris_policy"],
+      "ultimate_id": "meltris_not_fired",
+      "front_row_default": false
+    },
+    {
+      "id": "hero.flintar",
+      "slug": "flintar",
+      "name_ru": "Флинтар",
+      "faction_id": "renegades",
+      "class_id": "support",
+      "rarity": "SR",
+      "is_hero": true,
+      "source_facing": "RIGHT",
+      "visual_status": "BATCH_PACKED",
+      "sprite_folder": "flintar",
+      "basic_attack_id": "flintar_spark",
+      "skill_ids": ["flintar_jury"],
+      "ultimate_id": "flintar_plan_b",
+      "front_row_default": false
+    }
+  ]
+}

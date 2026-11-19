@@ -21,12 +21,21 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 
 | ID | Этап | Статус | Платформа | Док |
 |----|------|--------|-----------|-----|
-| VIS-00 | Арт-библия **Anime Fantasy 2D** + эталоны | `IN_PROGRESS` | Android-first art | [docs/visual/ART_BIBLE.md](docs/visual/ART_BIBLE.md) |
+| VIS-00 | Арт-библия **Anime Fantasy 2D** + эталоны | `DONE` (V1) | DEC-012 VISUAL-APPROVAL-001 | [docs/visual/ART_BIBLE.md](docs/visual/ART_BIBLE.md) |
 | VIS-00e | Бой E + Браксор/Никсара anime | `DONE` | Approved + правки DEC-008 | concepts/ |
 | VIS-00b | Godot prototype 2v2 + screenshot/video | `DONE` (на review) | Evidence в artifacts | `apps/android-godot/` |
+| BATTLE-POLISH-002 | Facing/slots/YSort/speed x1 | `DONE` | Formation 2+3 + facing | `apps/android-godot/` |
+| PLAY-LOOP-001 | Меню → отряд → коллекция → 5v5 бой | `DONE` | offline GameState | `scenes/ui/*` + Battle spawn |
+| CAMP-001 | Глава 1 карта + AFK mock + прогресс | `DONE` | offline | `content/campaign_chapter01.json` + WorldMap |
+| TOWER-001 | Башня испытаний 10 этажей | `DONE` | offline MVP AFK-005 | `content/tower_floors.json` + Tower UI |
+| VIS-APPROVAL-001 | Универсальная система анимаций/направлений | `DONE` (foundation) | flip + AbilityCatalog + Formation | DEC-012 |
+| MASS-01 | 8 героев (Урал+Лес) | `DONE` | packed | `content/hero_roster_batch01.json` |
+| MASS-02 | 8 героев (Тёмные+Небожители) | `DONE` | packed | `content/hero_roster_batch02.json` |
+| MASS-03 | 8 героев (Фаэлис+Древние+Отступники) | `DONE` | packed | `content/hero_roster_batch03.json` |
+| MASS-04 | финал 30 (Равенкор, Мелтрис, Флинтар) | `DONE` | packed 30/30 | `content/hero_roster_batch04.json` |
 | VIS-01…09 | UI → герои → бои → карта → бестиарий → … | `NOT_STARTED` | Godot Android Showcase | [VISUAL_ROAD.md](docs/visual/VISUAL_ROAD.md) |
 
-**Стоп-гейт сейчас (DEC-007):** утвердить стиль Anime Fantasy + 3 кадра (бой E, Браксор anime, Никсара anime). Side-view layout (DEC-005) сохранён. Массовая генерация и Godot — после approve. PWA не разрабатывается.
+**После VISUAL-APPROVAL-001 (DEC-012):** графика/анимации V1 утверждены. Приоритет — универсальная система facing/анимаций и поэтапные партии ассетов с проверкой направления. Не бесконечно полировать одного героя. PWA не разрабатывается.
 
 ## Сводка: механики (TECH-005 B) — после visual gate на Android
 
@@ -50,8 +59,11 @@ Visual-first: [VISUAL_FIRST_CURSOR.md](VISUAL_FIRST_CURSOR.md), [docs/visual/VIS
 |-----------|--------|--------|
 | Аудит GDD / docs foundation | `DONE` | GAME.md + пакет контрактов |
 | Visual-first + Android-first зафиксированы | `DONE` | DEC-003, VISUAL_ROAD |
-| VIS-00 арт-библия Anime Fantasy | `IN_PROGRESS` | DEC-007; эталоны E на review |
-| Браксор/Никсара anime | `IN_PROGRESS` | review; v1 realistic archived |
+| VIS-00 арт-библия Anime Fantasy | `DONE` (V1) | DEC-012 VISUAL-APPROVAL-001 |
+| Браксор/Никсара anime | `DONE` (V1) | approved combat sprites; swappable later |
+| CharacterData / VisualDef split | `DONE` | + AbilityCatalog, BattleFormation |
+| Hero roster stubs batch01 | `IN_PROGRESS` | `content/hero_roster_batch01.json` (2 art + 2 stub) |
+| Sprite import / facing QA | `DONE` | `tools/check_facing_batch.gd`, `check_sprite_import.gd` |
 | Блокирующие BQ (сервер/платежи и т.д.) | `BLOCKED` | DECISIONS — не блокируют арт VIS-00 |
 | PWA реализация | `BLOCKED` | ждёт разрешения |
 | Docker / игровой серверный код | `NOT_STARTED` | после visual samples + следующих инструкций |
